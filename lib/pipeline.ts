@@ -35,8 +35,7 @@ async function syncIntervals(athleteId: string) {
   if (!connection?.encrypted_access_token) throw new Error("Intervals.icu is not connected for this athlete.");
   const token = await decryptSecret(connection.encrypted_access_token);
   const newest = new Date().toISOString().slice(0, 10);
-  const oldestDate = new Date(); oldestDate.setUTCFullYear(oldestDate.getUTCFullYear() - 2);
-  const oldest = oldestDate.toISOString().slice(0, 10);
+  const oldest = "2000-01-01";
   const headers = { Authorization: `Bearer ${token}`, Accept: "application/json" };
   const [activitiesResponse, wellnessResponse] = await Promise.all([
     fetch(`https://intervals.icu/api/v1/athlete/0/activities?oldest=${oldest}&newest=${newest}&limit=10000`, { headers }),
@@ -54,6 +53,15 @@ async function syncIntervals(athleteId: string) {
       ON CONFLICT(athlete_id, provider, provider_activity_id) DO UPDATE SET activity_date=excluded.activity_date, activity_type=excluded.activity_type, name=excluded.name, distance_km=excluded.distance_km, duration_seconds=excluded.duration_seconds, elevation_gain_m=excluded.elevation_gain_m, average_hr=excluded.average_hr, training_load=excluded.training_load, raw_summary_json=excluded.raw_summary_json, updated_at=excluded.updated_at`)
       .bind(`intervals_${athleteId}_${providerId}`, athleteId, providerId, String(row.start_date_local ?? row.start_date ?? "").slice(0, 10), String(row.type ?? "activity"), String(row.name ?? ""), metricDistanceKm(row.distance), numberOrNull(row.moving_time ?? row.elapsed_time), numberOrNull(row.total_elevation_gain), numberOrNull(row.average_heartrate ?? row.average_hr), numberOrNull(row.icu_training_load), JSON.stringify(redact(row)), timestamp);
   });
+  const performanceStatements = activities.map((row) => {
+    const date = String(row.start_date_local ?? row.start_date ?? "").slice(0, 10);
+    const vo2max = numberOrNull(row.vo2max ?? row.vo2_max ?? row.icu_vo2max ?? row.icu_vo2_max);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || vo2max === null) return null;
+    const source = deviceSource(row);
+    return db.prepare(`INSERT OR REPLACE INTO performance_snapshots
+      (id, athlete_id, snapshot_date, source, vo2max, created_at) VALUES (?, ?, ?, ?, ?, ?)`)
+      .bind(`performance_${athleteId}_${date}_${source.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`, athleteId, date, source, vo2max, timestamp);
+  }).filter(Boolean) as D1PreparedStatement[];
   const wellnessStatements = wellness.filter((row) => row.id).map((row) => {
     const date = String(row.id).slice(0, 10);
     return db.prepare(`INSERT INTO wellness_entries (id, athlete_id, entry_date, resting_hr, sleep_score, fatigue, weight_kg, raw_json)
@@ -61,7 +69,7 @@ async function syncIntervals(athleteId: string) {
       ON CONFLICT(athlete_id, entry_date) DO UPDATE SET resting_hr=excluded.resting_hr, sleep_score=excluded.sleep_score, fatigue=excluded.fatigue, weight_kg=excluded.weight_kg, raw_json=excluded.raw_json`)
       .bind(`wellness_${athleteId}_${date}`, athleteId, date, numberOrNull(row.restingHR ?? row.resting_hr), numberOrNull(row.sleepScore ?? row.sleep_score), numberOrNull(row.fatigue), numberOrNull(row.weight), JSON.stringify(redact(row)));
   });
-  for (const statements of chunks([...activityStatements, ...wellnessStatements], 30)) await db.batch(statements);
+  for (const statements of chunks([...activityStatements, ...wellnessStatements, ...performanceStatements], 30)) await db.batch(statements);
   await db.batch([
     db.prepare("UPDATE data_connections SET last_sync_at = ?, updated_at = ? WHERE id = ?").bind(timestamp, timestamp, connection.id),
     db.prepare("INSERT OR IGNORE INTO jobs (id, athlete_id, job_type, status, idempotency_key, payload_json, scheduled_at) VALUES (?, ?, 'assessment', 'queued', ?, '{}', ?)").bind(id("job"), athleteId, `assessment:${athleteId}:${newest}`, timestamp),
@@ -110,4 +118,5 @@ async function sendQueuedNotifications() {
 function chunks<T>(values: T[], size: number): T[][] { const result: T[][] = []; for (let index = 0; index < values.length; index += size) result.push(values.slice(index, index + size)); return result; }
 function numberOrNull(value: unknown): number | null { const number = Number(value); return Number.isFinite(number) ? number : null; }
 function metricDistanceKm(value: unknown): number | null { const number = numberOrNull(value); return number === null ? null : number > 500 ? number / 1000 : number; }
+function deviceSource(value: Record<string, unknown>) { const text = JSON.stringify(value).toLowerCase(); if (text.includes("garmin")) return "Garmin"; if (text.includes("suunto")) return "Suunto"; if (text.includes("coros")) return "COROS"; if (text.includes("polar")) return "Polar"; if (text.includes("apple")) return "Apple Watch"; return "Intervals.icu"; }
 function redact(value: Record<string, unknown>) { return Object.fromEntries(Object.entries(value).filter(([key]) => !/(token|secret|password|api.?key)/i.test(key))); }
