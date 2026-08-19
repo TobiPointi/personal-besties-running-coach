@@ -15,14 +15,14 @@ const geistMono = Geist_Mono({
 
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
-  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "athelon.openai.site";
+  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "personalbesties.com";
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
   const origin = `${protocol}://${host}`;
-  const title = "Athelon — Training, in context.";
+  const title = "Personal Besties — Better together.";
   const description = "Private multi-athlete planning, physiological testing, feedback, and training intelligence.";
   return {
     metadataBase: new URL(origin), title, description,
-    openGraph: { title, description, type: "website", images: [{ url: `${origin}/og.png`, width: 1733, height: 909, alt: "Athelon — Training, in context." }] },
+    openGraph: { title, description, type: "website", images: [{ url: `${origin}/og.png`, width: 1733, height: 909, alt: "Personal Besties — Better together." }] },
     twitter: { card: "summary_large_image", title, description, images: [`${origin}/og.png`] },
   };
 }

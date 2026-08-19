@@ -22,6 +22,7 @@ export async function processPendingWork(onlyAthleteId?: string): Promise<{ jobs
       const nextStatus = Number(job.attempts ?? 0) + 1 >= 3 ? "failed" : "queued";
       await db.prepare("UPDATE jobs SET status = ?, last_error = ?, scheduled_at = ? WHERE id = ?")
         .bind(nextStatus, message, new Date(Date.now() + 15 * 60_000).toISOString(), job.id).run();
+      if (nextStatus === "failed") await queueCoachAlert(job.athlete_id, "sync_failed", "Training-data sync needs attention", message);
     }
   }
   const notifications = await sendQueuedNotifications();
@@ -70,10 +71,8 @@ async function syncIntervals(athleteId: string) {
       .bind(`wellness_${athleteId}_${date}`, athleteId, date, numberOrNull(row.restingHR ?? row.resting_hr), numberOrNull(row.sleepScore ?? row.sleep_score), numberOrNull(row.fatigue), numberOrNull(row.weight), JSON.stringify(redact(row)));
   });
   for (const statements of chunks([...activityStatements, ...wellnessStatements, ...performanceStatements], 30)) await db.batch(statements);
-  await db.batch([
-    db.prepare("UPDATE data_connections SET last_sync_at = ?, updated_at = ? WHERE id = ?").bind(timestamp, timestamp, connection.id),
-    db.prepare("INSERT OR IGNORE INTO jobs (id, athlete_id, job_type, status, idempotency_key, payload_json, scheduled_at) VALUES (?, ?, 'assessment', 'queued', ?, '{}', ?)").bind(id("job"), athleteId, `assessment:${athleteId}:${newest}`, timestamp),
-  ]);
+  await db.prepare("UPDATE data_connections SET last_sync_at = ?, updated_at = ? WHERE id = ?").bind(timestamp, timestamp, connection.id).run();
+  await calculateAssessment(athleteId);
 }
 
 async function calculateAssessment(athleteId: string) {
@@ -90,18 +89,23 @@ async function calculateAssessment(athleteId: string) {
   const status = feedback?.pain ? "review" : fatigue >= 70 ? "caution" : "on_track";
   await db.prepare("INSERT INTO assessments (id, athlete_id, assessed_at, status, fitness_score, fatigue_score, summary, evidence_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
     .bind(id("assessment"), athleteId, nowIso(), status, fitness, fatigue, `${weeklyDistance.toFixed(1)} km/week average over the available eight-week window.`, JSON.stringify({ activities: rows.length, distanceKm: distance, trainingLoad: load })).run();
+  if (!rows.length) await queueCoachAlert(athleteId, "missing_data", "Athlete data is missing", "No completed activities were available for the latest assessment.");
+  if (feedback?.pain) await queueCoachAlert(athleteId, "pain", "Athlete reported pain", feedback.pain);
+  else if (fatigue >= 70) await queueCoachAlert(athleteId, "fatigue", "Athlete fatigue needs review", `Current fatigue signal: ${fatigue}/100.`);
 }
 
 async function sendQueuedNotifications() {
   const runtime = platformEnv();
-  if (!runtime.EMAIL_WEBHOOK_URL) return 0;
+  if (!runtime.EMAIL_WEBHOOK_URL && !runtime.RESEND_API_KEY) return 0;
   const result = await runtime.DB.prepare("SELECT * FROM notifications WHERE status = 'queued' ORDER BY created_at LIMIT 10").all<Record<string, unknown>>();
   let sent = 0;
   for (const notification of result.results ?? []) {
     try {
-      const response = await fetch(runtime.EMAIL_WEBHOOK_URL, {
-        method: "POST",
-        headers: { "content-type": "application/json", ...(runtime.EMAIL_WEBHOOK_TOKEN ? { authorization: `Bearer ${runtime.EMAIL_WEBHOOK_TOKEN}` } : {}) },
+      const response = runtime.RESEND_API_KEY ? await fetch("https://api.resend.com/emails", {
+        method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${runtime.RESEND_API_KEY}` },
+        body: JSON.stringify({ from: runtime.RESEND_FROM_EMAIL ?? "Personal Besties <login@auth.personalbesties.com>", to: [notification.recipient_email], subject: notification.subject, text: notification.body }),
+      }) : await fetch(runtime.EMAIL_WEBHOOK_URL!, {
+        method: "POST", headers: { "content-type": "application/json", ...(runtime.EMAIL_WEBHOOK_TOKEN ? { authorization: `Bearer ${runtime.EMAIL_WEBHOOK_TOKEN}` } : {}) },
         body: JSON.stringify({ to: notification.recipient_email, subject: notification.subject, text: notification.body, type: notification.notification_type }),
       });
       if (!response.ok) throw new Error(`Email provider returned ${response.status}.`);
@@ -113,6 +117,14 @@ async function sendQueuedNotifications() {
     }
   }
   return sent;
+}
+
+export async function queueCoachAlert(athleteId: string, kind: string, subject: string, body: string) {
+  const db = platformEnv().DB; const date = new Date().toISOString().slice(0, 10);
+  const coach = await db.prepare(`SELECT u.email, a.display_name AS athlete_name FROM users u JOIN coach_athletes ca ON ca.coach_user_id = u.id JOIN athletes a ON a.id = ca.athlete_id WHERE ca.athlete_id = ? AND ca.status = 'active' ORDER BY CASE ca.relationship_role WHEN 'primary' THEN 0 ELSE 1 END LIMIT 1`).bind(athleteId).first<{ email:string; athlete_name:string }>();
+  if (!coach?.email) return;
+  await db.prepare("INSERT OR IGNORE INTO notifications (id, athlete_id, recipient_email, notification_type, subject, body, status, created_at) VALUES (?, ?, ?, ?, ?, ?, 'queued', ?)")
+    .bind(`alert_${athleteId}_${date}_${kind}`, athleteId, coach.email, `coach_alert_${kind}`, `${subject}: ${coach.athlete_name}`, body, nowIso()).run();
 }
 
 function chunks<T>(values: T[], size: number): T[][] { const result: T[][] = []; for (let index = 0; index < values.length; index += size) result.push(values.slice(index, index + size)); return result; }

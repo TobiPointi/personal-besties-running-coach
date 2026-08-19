@@ -7,7 +7,6 @@ export const dynamic = "force-dynamic";
 export async function GET(request: NextRequest) {
   try {
     const user = await requireApiUser();
-    if (user.role !== "coach") return new Response("Coach access required.", { status: 403 });
     const athleteId = request.nextUrl.searchParams.get("athleteId");
     if (!athleteId) return new Response("Athlete is required.", { status: 400 });
     await requireAthleteAccess(user, athleteId, false);

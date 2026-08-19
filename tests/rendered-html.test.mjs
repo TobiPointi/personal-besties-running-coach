@@ -29,7 +29,7 @@ test("server-renders the independent authentication shell", async () => {
     assert.equal(response.status, 200);
     assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
     const html = await response.text();
-    assert.match(html, /Athelon/);
+    assert.match(html, /Personal Besties/);
     assert.match(html, /Sign in by email|Preparing your coaching workspace/);
     assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
   } finally {

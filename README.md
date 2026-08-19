@@ -1,4 +1,4 @@
-# Athelon coaching workspace
+# Personal Besties coaching workspace
 
 Private coach and athlete dashboards for goals, physiological tests, feedback,
 versioned training plans, activity synchronization, and delivery history.

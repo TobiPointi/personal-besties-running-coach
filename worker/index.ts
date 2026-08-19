@@ -9,9 +9,13 @@ interface Env {
   INTERVALS_CLIENT_ID?: string;
   INTERVALS_CLIENT_SECRET?: string;
   INTERVALS_REDIRECT_URI?: string;
+  INTERVALS_WEBHOOK_SECRET?: string;
   CONNECTION_ENCRYPTION_KEY?: string;
   EMAIL_WEBHOOK_URL?: string;
   EMAIL_WEBHOOK_TOKEN?: string;
+  RESEND_API_KEY?: string;
+  RESEND_FROM_EMAIL?: string;
+  COACH_EMAIL?: string;
   COACH_ENGINE_URL?: string;
   CRON_SECRET?: string;
   SUPABASE_URL?: string;

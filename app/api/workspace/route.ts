@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { requireApiUser, requireAthleteAccess } from "../../../lib/auth";
 import { audit, getWorkspaceState } from "../../../lib/workspace";
 import { generateTrainingPlan } from "../../../lib/planner";
-import { processPendingWork } from "../../../lib/pipeline";
+import { processPendingWork, queueCoachAlert } from "../../../lib/pipeline";
 import { decryptSecret } from "../../../lib/secrets";
 import { id, nowIso, platformEnv, todayIso } from "../../../db/runtime";
 
@@ -12,7 +12,12 @@ export async function GET(request: NextRequest) {
   try {
     const user = await requireApiUser();
     const athleteId = request.nextUrl.searchParams.get("athleteId");
-    return Response.json(await getWorkspaceState(user, athleteId));
+    let state = await getWorkspaceState(user, athleteId);
+    const selectedId = String(state.selectedAthlete?.id ?? "");
+    const connection = state.connections?.find((item: Record<string, unknown>) => item.provider === "intervals" && item.status === "active");
+    const stale = connection && (!connection.last_sync_at || Date.now() - new Date(String(connection.last_sync_at)).getTime() > 24 * 60 * 60 * 1000);
+    if (selectedId && stale) { await queuePipeline(user.id, selectedId); await processPendingWork(selectedId); state = await getWorkspaceState(user, selectedId); }
+    return Response.json(state);
   } catch (error) { return apiError(error); }
 }
 
@@ -34,14 +39,15 @@ export async function POST(request: NextRequest) {
     else if (action === "requestLactateTest") { await requestLactateTest(user, athleteId!, body); await processPendingWork(athleteId!); }
     else if (action === "savePerformanceSnapshot") { coachOnly(user); await savePerformanceSnapshot(user.id, athleteId!, body); }
     else if (action === "submitFeedback") await submitFeedback(user.id, athleteId!, body);
+    else if (action === "completeOnboarding") await completeOnboarding(user.id, athleteId!, body);
     else if (action === "saveCoachNote") { coachOnly(user); await saveCoachNote(user.id, athleteId!, body); }
     else if (action === "updateAthlete") { coachOnly(user); await updateAthlete(user.id, athleteId!, body); }
     else if (action === "generatePlan") { coachOnly(user); await generatePlan(user.id, athleteId!); }
-    else if (action === "publishPlan") { coachOnly(user); await publishPlan(user.id, athleteId!, requiredText(body.planId, "planId")); }
+    else if (action === "publishPlan") { coachOnly(user); await publishPlan(user.id, athleteId!, requiredText(body.planId, "planId")); await processPendingWork(athleteId!); }
     else if (action === "updatePlanSession") { coachOnly(user); await updatePlanSession(user.id, athleteId!, body); }
     else if (action === "logSession") await logSession(user.id, athleteId!, body);
-    else if (action === "runPipeline") { coachOnly(user); await queuePipeline(user.id, athleteId!); await processPendingWork(athleteId!); }
-    else if (action === "disconnectIntervals") { coachOnly(user); await disconnectIntervals(user.id, athleteId!); }
+    else if (action === "runPipeline") { await queuePipeline(user.id, athleteId!); await processPendingWork(athleteId!); }
+    else if (action === "disconnectIntervals") await disconnectIntervals(user.id, athleteId!);
     else throw new Error("Unsupported workspace action.");
     return Response.json({ ok: true, state: await getWorkspaceState(user, athleteId) });
   } catch (error) { return apiError(error); }
@@ -58,8 +64,9 @@ async function inviteAthlete(user: { id: string; role: string }, body: Record<st
     db.prepare("INSERT INTO athletes (id, email, display_name, primary_sport, timezone, status, weekly_target_km, availability_json, created_at, updated_at) VALUES (?, ?, ?, 'running', ?, 'invited', ?, '{}', ?, ?)").bind(athleteId, email, displayName, optionalText(body.timezone) ?? "Europe/Vienna", numberOrNull(body.weeklyTargetKm), timestamp, timestamp),
     db.prepare("INSERT INTO coach_athletes (coach_user_id, athlete_id, relationship_role, status, created_at) VALUES (?, ?, 'primary', 'active', ?)").bind(user.id, athleteId, timestamp),
     db.prepare("INSERT INTO invitations (id, athlete_id, coach_user_id, email, status, created_at) VALUES (?, ?, ?, ?, 'pending', ?)").bind(invitationId, athleteId, user.id, email, timestamp),
-    db.prepare("INSERT INTO notifications (id, athlete_id, recipient_email, notification_type, subject, body, status, created_at) VALUES (?, ?, ?, 'athlete_invitation', ?, ?, 'queued', ?)").bind(id("notification"), athleteId, email, "Your private Athelon coaching dashboard", `${displayName}, your coach has prepared a private training workspace for you. Visit ${origin} and request a secure email sign-in link using this address.`, timestamp),
+    db.prepare("INSERT INTO notifications (id, athlete_id, recipient_email, notification_type, subject, body, status, created_at) VALUES (?, ?, ?, 'athlete_invitation', ?, ?, 'queued', ?)").bind(id("notification"), athleteId, email, "Your Personal Besties training dashboard", `${displayName}, your coach has prepared a private Personal Besties workspace for you. Visit ${origin} and request a secure email sign-in link using this address.`, timestamp),
   ]);
+  await processPendingWork(athleteId);
   await audit(user as never, "invite", "athlete", athleteId, athleteId, { email });
 }
 
@@ -139,6 +146,19 @@ async function submitFeedback(userId: string, athleteId: string, body: Record<st
   await platformEnv().DB.prepare("INSERT INTO athlete_feedback (id, athlete_id, feedback_date, activity_id, rpe, legs, fatigue, sleep, pain, comments, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
     .bind(feedbackId, athleteId, optionalText(body.feedbackDate) ?? todayIso(), optionalText(body.activityId), numberOrNull(body.rpe), numberOrNull(body.legs), numberOrNull(body.fatigue), numberOrNull(body.sleep), optionalText(body.pain), optionalText(body.comments), userId, nowIso()).run();
   await audit({ id: userId } as never, "submit", "feedback", feedbackId, athleteId, { painReported: Boolean(optionalText(body.pain)) });
+  const pain = optionalText(body.pain); const fatigue = numberOrNull(body.fatigue);
+  if (pain) await queueCoachAlert(athleteId, "pain", "Athlete reported pain", pain);
+  else if (fatigue !== null && fatigue >= 8) await queueCoachAlert(athleteId, "fatigue", "Athlete fatigue needs review", `The athlete reported fatigue ${fatigue}/10 in today's check-in.`);
+  if (pain || (fatigue !== null && fatigue >= 8)) await processPendingWork(athleteId);
+}
+
+async function completeOnboarding(userId: string, athleteId: string, body: Record<string, unknown>) {
+  const db = platformEnv().DB; const timestamp = nowIso();
+  const availability = { preferredTrainingDays: optionalText(body.preferredTrainingDays), scheduleNotes: optionalText(body.scheduleNotes) };
+  await db.prepare(`UPDATE athletes SET weekly_target_km = ?, injury_notes = ?, experience_level = ?, training_days = ?, long_run_day = ?, availability_json = ?, onboarding_completed_at = ?, updated_at = ? WHERE id = ?`)
+    .bind(numberOrNull(body.weeklyTargetKm), optionalText(body.injuryNotes), optionalText(body.experienceLevel), numberOrNull(body.trainingDays), optionalText(body.longRunDay), JSON.stringify(availability), timestamp, timestamp, athleteId).run();
+  if (optionalText(body.goalTitle) && optionalText(body.eventDate)) await saveGoal(userId, athleteId, { title: body.goalTitle, eventDate: body.eventDate, distanceKm: body.distanceKm, goalTimeSeconds: body.goalTimeSeconds, priority: "A", notes: body.goalNotes });
+  await audit({ id: userId } as never, "complete", "athlete_onboarding", athleteId, athleteId);
 }
 
 async function saveCoachNote(userId: string, athleteId: string, body: Record<string, unknown>) {

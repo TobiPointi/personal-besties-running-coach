@@ -42,7 +42,16 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
   const athleteRows = user.role === "coach"
     ? await all<Row>("SELECT a.* FROM athletes a JOIN coach_athletes ca ON ca.athlete_id = a.id WHERE ca.coach_user_id = ? AND ca.status = 'active' ORDER BY CASE a.status WHEN 'active' THEN 0 ELSE 1 END, a.display_name", user.id)
     : await all<Row>("SELECT * FROM athletes WHERE user_id = ? ORDER BY display_name", user.id);
-  const selected = athleteRows.find((row) => row.id === requestedAthleteId) ?? athleteRows[0] ?? null;
+  const enrichedAthletes: Row[] = await Promise.all(athleteRows.map(async (row): Promise<Row> => {
+    const athleteId = String(row.id);
+    const counts = await platformEnv().DB.prepare(`SELECT
+      (SELECT COUNT(*) FROM goals WHERE athlete_id = ?) AS goals,
+      (SELECT COUNT(*) FROM lactate_tests WHERE athlete_id = ?) AS tests,
+      (SELECT COUNT(*) FROM data_connections WHERE athlete_id = ? AND status = 'active') AS connections,
+      (SELECT COUNT(*) FROM activities WHERE athlete_id = ?) AS activities`).bind(athleteId, athleteId, athleteId, athleteId).first<Row>();
+    return { ...row, setup_goals: counts?.goals ?? 0, setup_tests: counts?.tests ?? 0, setup_connections: counts?.connections ?? 0, setup_activities: counts?.activities ?? 0 };
+  }));
+  const selected = enrichedAthletes.find((row) => row.id === requestedAthleteId) ?? enrichedAthletes[0] ?? null;
   if (!selected) return { user, athletes: [], selectedAthlete: null };
   const athleteId = String(selected.id);
   const [goalRows, testRows, stageRows, testRequestRows, performanceRows, planRows, sessionRows, activityRows, feedbackRows, assessmentRows, connectionRows, jobRows, notificationRows, noteRows] = await Promise.all([
@@ -79,7 +88,7 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
   const upcoming = visibleSessions.filter((row) => String(row.session_date) >= todayIso()).slice(0, 14);
   return {
     user,
-    athletes: athleteRows.map(publicAthlete),
+    athletes: enrichedAthletes.map(publicAthlete),
     selectedAthlete: publicAthlete(selected),
     goals: goalRows,
     tests: testRows.map((test) => ({ ...test, stages: stageRows.filter((stage) => stage.test_id === test.id) })),
@@ -117,6 +126,8 @@ function publicAthlete(row: Row) {
     id: row.id, userId: row.user_id, email: row.email, displayName: row.display_name,
     primarySport: row.primary_sport, timezone: row.timezone, status: row.status,
     weeklyTargetKm: row.weekly_target_km, availability: parseJson(row.availability_json), injuryNotes: row.injury_notes,
+    experienceLevel: row.experience_level, trainingDays: row.training_days, longRunDay: row.long_run_day, onboardingCompletedAt: row.onboarding_completed_at,
+    setup: { profile:Boolean(row.onboarding_completed_at), goal:Number(row.setup_goals ?? 0)>0, lactate:Number(row.setup_tests ?? 0)>0, connection:Number(row.setup_connections ?? 0)>0, activities:Number(row.setup_activities ?? 0)>0 },
   };
 }
 

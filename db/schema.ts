@@ -29,6 +29,10 @@ export const athletes = sqliteTable("athletes", {
   weeklyTargetKm: real("weekly_target_km"),
   availabilityJson: text("availability_json").notNull().default("{}"),
   injuryNotes: text("injury_notes"),
+  experienceLevel: text("experience_level"),
+  trainingDays: integer("training_days"),
+  longRunDay: text("long_run_day"),
+  onboardingCompletedAt: text("onboarding_completed_at"),
   createdAt: text("created_at").notNull(),
   updatedAt: text("updated_at").notNull(),
 }, (table) => [index("idx_athletes_user_id").on(table.userId), index("idx_athletes_email").on(table.email)]);

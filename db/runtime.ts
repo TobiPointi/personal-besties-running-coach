@@ -9,6 +9,10 @@ export type PlatformEnv = {
   CONNECTION_ENCRYPTION_KEY?: string;
   EMAIL_WEBHOOK_URL?: string;
   EMAIL_WEBHOOK_TOKEN?: string;
+  RESEND_API_KEY?: string;
+  RESEND_FROM_EMAIL?: string;
+  INTERVALS_WEBHOOK_SECRET?: string;
+  COACH_EMAIL?: string;
   COACH_ENGINE_URL?: string;
   CRON_SECRET?: string;
   SUPABASE_URL?: string;
@@ -27,7 +31,7 @@ const schemaStatements = [
   `CREATE TABLE IF NOT EXISTS auth_identities (provider TEXT NOT NULL, provider_subject TEXT NOT NULL, user_id TEXT NOT NULL, email TEXT NOT NULL, created_at TEXT NOT NULL, last_seen_at TEXT NOT NULL, PRIMARY KEY(provider, provider_subject))`,
   `CREATE INDEX IF NOT EXISTS idx_auth_identities_user ON auth_identities(user_id)`,
   `CREATE INDEX IF NOT EXISTS idx_auth_identities_email ON auth_identities(email)`,
-  `CREATE TABLE IF NOT EXISTS athletes (id TEXT PRIMARY KEY, user_id TEXT, email TEXT, display_name TEXT NOT NULL, primary_sport TEXT NOT NULL DEFAULT 'running', timezone TEXT NOT NULL DEFAULT 'Europe/Vienna', status TEXT NOT NULL DEFAULT 'active', weekly_target_km REAL, availability_json TEXT NOT NULL DEFAULT '{}', injury_notes TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL)`,
+  `CREATE TABLE IF NOT EXISTS athletes (id TEXT PRIMARY KEY, user_id TEXT, email TEXT, display_name TEXT NOT NULL, primary_sport TEXT NOT NULL DEFAULT 'running', timezone TEXT NOT NULL DEFAULT 'Europe/Vienna', status TEXT NOT NULL DEFAULT 'active', weekly_target_km REAL, availability_json TEXT NOT NULL DEFAULT '{}', injury_notes TEXT, experience_level TEXT, training_days INTEGER, long_run_day TEXT, onboarding_completed_at TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL)`,
   `CREATE INDEX IF NOT EXISTS idx_athletes_user_id ON athletes(user_id)`,
   `CREATE INDEX IF NOT EXISTS idx_athletes_email ON athletes(email)`,
   `CREATE TABLE IF NOT EXISTS coach_athletes (coach_user_id TEXT NOT NULL, athlete_id TEXT NOT NULL, relationship_role TEXT NOT NULL DEFAULT 'primary', status TEXT NOT NULL DEFAULT 'active', created_at TEXT NOT NULL, PRIMARY KEY(coach_user_id, athlete_id))`,
@@ -84,6 +88,10 @@ export async function ensureSchema(db = platformEnv().DB): Promise<void> {
   await ensureColumn(db, "planned_sessions", "completion_rpe", "REAL");
   await ensureColumn(db, "planned_sessions", "athlete_comment", "TEXT");
   await ensureColumn(db, "planned_sessions", "completed_at", "TEXT");
+  await ensureColumn(db, "athletes", "experience_level", "TEXT");
+  await ensureColumn(db, "athletes", "training_days", "INTEGER");
+  await ensureColumn(db, "athletes", "long_run_day", "TEXT");
+  await ensureColumn(db, "athletes", "onboarding_completed_at", "TEXT");
   await db.prepare("PRAGMA optimize").run();
 }
 

@@ -45,6 +45,21 @@ async function resolveIdentity(provider: "supabase" | "chatgpt", subject: string
     return direct;
   }
 
+  // Keep the original coach account reachable when a public Supabase login
+  // replaces the identity supplied by the private ChatGPT host.
+  const designatedCoachEmail = platformEnv().COACH_EMAIL?.trim().toLowerCase();
+  if (provider === "supabase" && designatedCoachEmail && normalizedEmail === designatedCoachEmail) {
+    const coach = await db.prepare("SELECT id, email, display_name AS displayName, role FROM users WHERE role = 'coach' ORDER BY created_at LIMIT 1").first<AppUser>();
+    if (coach) {
+      await db.batch([
+        db.prepare("INSERT OR REPLACE INTO auth_identities (provider, provider_subject, user_id, email, created_at, last_seen_at) VALUES (?, ?, ?, ?, ?, ?)")
+          .bind(provider, subject, coach.id, normalizedEmail, nowIso(), nowIso()),
+        db.prepare("UPDATE OR IGNORE users SET email = ?, last_seen_at = ? WHERE id = ?").bind(normalizedEmail, nowIso(), coach.id),
+      ]);
+      return { ...coach, email: normalizedEmail };
+    }
+  }
+
   const invited = await db.prepare(`SELECT i.athlete_id AS athleteId, a.display_name AS displayName
     FROM invitations i JOIN athletes a ON a.id = i.athlete_id
     WHERE lower(i.email) = lower(?) AND i.status = 'pending' ORDER BY i.created_at DESC LIMIT 1`)
