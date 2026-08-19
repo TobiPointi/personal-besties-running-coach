@@ -31,6 +31,8 @@ export async function POST(request: NextRequest) {
     if (action === "inviteAthlete") await inviteAthlete(user, body, request.nextUrl.origin);
     else if (action === "saveGoal") { coachOnly(user); await saveGoal(user.id, athleteId!, body); }
     else if (action === "saveLactateTest") { coachOnly(user); await saveLactateTest(user.id, athleteId!, body); }
+    else if (action === "requestLactateTest") { await requestLactateTest(user, athleteId!, body); await processPendingWork(athleteId!); }
+    else if (action === "savePerformanceSnapshot") { coachOnly(user); await savePerformanceSnapshot(user.id, athleteId!, body); }
     else if (action === "submitFeedback") await submitFeedback(user.id, athleteId!, body);
     else if (action === "saveCoachNote") { coachOnly(user); await saveCoachNote(user.id, athleteId!, body); }
     else if (action === "updateAthlete") { coachOnly(user); await updateAthlete(user.id, athleteId!, body); }
@@ -104,6 +106,32 @@ async function saveLactateTest(userId: string, athleteId: string, body: Record<s
   if (stages.length) await db.batch(stages.slice(0, 30).map((stage, index) => db.prepare("INSERT INTO lactate_stages (id, test_id, stage_number, duration_seconds, pace_seconds_km, speed_kph, heart_rate, lactate_mmol, rpe) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
     .bind(id("stage"), testId, index + 1, numberOrNull(stage.durationSeconds), numberOrNull(stage.paceSecondsKm), numberOrNull(stage.speedKph), numberOrNull(stage.heartRate), requiredNumber(stage.lactateMmol, "stage lactate"), numberOrNull(stage.rpe))));
   await audit({ id: userId } as never, "create", "lactate_test", testId, athleteId, { stages: stages.length });
+}
+
+async function requestLactateTest(user: { id: string; role: string }, athleteId: string, body: Record<string, unknown>) {
+  const db = platformEnv().DB;
+  const athlete = await db.prepare("SELECT display_name FROM athletes WHERE id = ?").bind(athleteId).first<{ display_name: string }>();
+  const coach = await db.prepare(`SELECT u.email, u.display_name FROM users u JOIN coach_athletes ca ON ca.coach_user_id = u.id
+    WHERE ca.athlete_id = ? AND ca.status = 'active' ORDER BY CASE ca.relationship_role WHEN 'primary' THEN 0 ELSE 1 END LIMIT 1`).bind(athleteId).first<{ email: string; display_name: string }>();
+  if (!athlete || !coach?.email) throw new Error("No coach email is assigned to this athlete yet.");
+  const requestId = id("test_request"); const timestamp = nowIso();
+  const preferredDate = optionalText(body.preferredDate); const availability = optionalText(body.availability); const note = optionalText(body.note);
+  const timing = preferredDate ? `Preferred date: ${preferredDate}.` : "No exact date requested yet.";
+  await db.batch([
+    db.prepare("INSERT INTO lactate_test_requests (id, athlete_id, requested_by, preferred_date, availability, note, status, created_at) VALUES (?, ?, ?, ?, ?, ?, 'requested', ?)")
+      .bind(requestId, athleteId, user.id, preferredDate, availability, note, timestamp),
+    db.prepare("INSERT INTO notifications (id, athlete_id, recipient_email, notification_type, subject, body, status, created_at) VALUES (?, ?, ?, 'lactate_test_request', ?, ?, 'queued', ?)")
+      .bind(id("notification"), athleteId, coach.email, `Lactate test request from ${athlete.display_name}`, `${athlete.display_name} would like to arrange a lactate test. ${timing}${availability ? ` Availability: ${availability}.` : ""}${note ? ` Note: ${note}` : ""}`, timestamp),
+  ]);
+  await audit(user as never, "request", "lactate_test", requestId, athleteId, { preferredDate });
+}
+
+async function savePerformanceSnapshot(userId: string, athleteId: string, body: Record<string, unknown>) {
+  const snapshotId = id("performance");
+  await platformEnv().DB.prepare(`INSERT INTO performance_snapshots
+    (id, athlete_id, snapshot_date, source, vo2max, prediction_5k_seconds, prediction_10k_seconds, prediction_half_seconds, prediction_marathon_seconds, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).bind(snapshotId, athleteId, requiredDate(body.snapshotDate), requiredText(body.source, "source"), numberOrNull(body.vo2max), numberOrNull(body.prediction5kSeconds), numberOrNull(body.prediction10kSeconds), numberOrNull(body.predictionHalfSeconds), numberOrNull(body.predictionMarathonSeconds), nowIso()).run();
+  await audit({ id: userId } as never, "create", "performance_snapshot", snapshotId, athleteId, { source: optionalText(body.source) });
 }
 
 async function submitFeedback(userId: string, athleteId: string, body: Record<string, unknown>) {

@@ -94,6 +94,30 @@ export const lactateStages = sqliteTable("lactate_stages", {
   rpe: real("rpe"),
 }, (table) => [uniqueIndex("idx_lactate_stages_test_stage").on(table.testId, table.stageNumber)]);
 
+export const lactateTestRequests = sqliteTable("lactate_test_requests", {
+  id: text("id").primaryKey(),
+  athleteId: text("athlete_id").notNull(),
+  requestedBy: text("requested_by").notNull(),
+  preferredDate: text("preferred_date"),
+  availability: text("availability"),
+  note: text("note"),
+  status: text("status").notNull().default("requested"),
+  createdAt: text("created_at").notNull(),
+}, (table) => [index("idx_lactate_requests_athlete_date").on(table.athleteId, table.createdAt)]);
+
+export const performanceSnapshots = sqliteTable("performance_snapshots", {
+  id: text("id").primaryKey(),
+  athleteId: text("athlete_id").notNull(),
+  snapshotDate: text("snapshot_date").notNull(),
+  source: text("source").notNull(),
+  vo2max: real("vo2max"),
+  prediction5kSeconds: integer("prediction_5k_seconds"),
+  prediction10kSeconds: integer("prediction_10k_seconds"),
+  predictionHalfSeconds: integer("prediction_half_seconds"),
+  predictionMarathonSeconds: integer("prediction_marathon_seconds"),
+  createdAt: text("created_at").notNull(),
+}, (table) => [index("idx_performance_snapshots_athlete_date").on(table.athleteId, table.snapshotDate)]);
+
 export const activities = sqliteTable("activities", {
   id: text("id").primaryKey(),
   athleteId: text("athlete_id").notNull(),

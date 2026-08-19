@@ -45,17 +45,19 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
   const selected = athleteRows.find((row) => row.id === requestedAthleteId) ?? athleteRows[0] ?? null;
   if (!selected) return { user, athletes: [], selectedAthlete: null };
   const athleteId = String(selected.id);
-  const [goalRows, testRows, stageRows, planRows, sessionRows, activityRows, feedbackRows, assessmentRows, connectionRows, jobRows, notificationRows, noteRows] = await Promise.all([
+  const [goalRows, testRows, stageRows, testRequestRows, performanceRows, planRows, sessionRows, activityRows, feedbackRows, assessmentRows, connectionRows, jobRows, notificationRows, noteRows] = await Promise.all([
     all<Row>("SELECT * FROM goals WHERE athlete_id = ? ORDER BY event_date", athleteId),
     all<Row>("SELECT * FROM lactate_tests WHERE athlete_id = ? ORDER BY test_date DESC", athleteId),
     all<Row>("SELECT ls.* FROM lactate_stages ls JOIN lactate_tests lt ON lt.id = ls.test_id WHERE lt.athlete_id = ? ORDER BY ls.test_id, ls.stage_number", athleteId),
+    all<Row>("SELECT * FROM lactate_test_requests WHERE athlete_id = ? ORDER BY created_at DESC", athleteId),
+    all<Row>("SELECT * FROM performance_snapshots WHERE athlete_id = ? ORDER BY snapshot_date ASC", athleteId),
     user.role === "coach"
       ? all<Row>("SELECT * FROM training_plans WHERE athlete_id = ? ORDER BY version DESC", athleteId)
       : all<Row>("SELECT * FROM training_plans WHERE athlete_id = ? AND status = 'published' ORDER BY version DESC", athleteId),
     all<Row>("SELECT * FROM planned_sessions WHERE athlete_id = ? ORDER BY session_date LIMIT 200", athleteId),
     all<Row>("SELECT * FROM activities WHERE athlete_id = ? ORDER BY activity_date DESC LIMIT 80", athleteId),
     all<Row>("SELECT * FROM athlete_feedback WHERE athlete_id = ? ORDER BY feedback_date DESC, created_at DESC LIMIT 30", athleteId),
-    all<Row>("SELECT * FROM assessments WHERE athlete_id = ? ORDER BY assessed_at DESC LIMIT 10", athleteId),
+    all<Row>("SELECT * FROM assessments WHERE athlete_id = ? ORDER BY assessed_at DESC", athleteId),
     all<Row>("SELECT id, provider, external_athlete_id, scope, status, last_sync_at, created_at, updated_at FROM data_connections WHERE athlete_id = ?", athleteId),
     all<Row>("SELECT * FROM jobs WHERE athlete_id = ? ORDER BY scheduled_at DESC LIMIT 15", athleteId),
     all<Row>("SELECT * FROM notifications WHERE athlete_id = ? ORDER BY created_at DESC LIMIT 15", athleteId),
@@ -81,6 +83,8 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
     selectedAthlete: publicAthlete(selected),
     goals: goalRows,
     tests: testRows.map((test) => ({ ...test, stages: stageRows.filter((stage) => stage.test_id === test.id) })),
+    testRequests: testRequestRows,
+    performanceSnapshots: performanceRows,
     plans: planRows,
     sessions: visibleSessions,
     upcoming,
