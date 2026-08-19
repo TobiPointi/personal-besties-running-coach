@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
       if (!athleteId) throw new Error("An athlete must be selected.");
       await requireAthleteAccess(user, athleteId, false);
     }
-    if (action === "inviteAthlete") await inviteAthlete(user, body);
+    if (action === "inviteAthlete") await inviteAthlete(user, body, request.nextUrl.origin);
     else if (action === "saveGoal") { coachOnly(user); await saveGoal(user.id, athleteId!, body); }
     else if (action === "saveLactateTest") { coachOnly(user); await saveLactateTest(user.id, athleteId!, body); }
     else if (action === "submitFeedback") await submitFeedback(user.id, athleteId!, body);
@@ -36,6 +36,8 @@ export async function POST(request: NextRequest) {
     else if (action === "updateAthlete") { coachOnly(user); await updateAthlete(user.id, athleteId!, body); }
     else if (action === "generatePlan") { coachOnly(user); await generatePlan(user.id, athleteId!); }
     else if (action === "publishPlan") { coachOnly(user); await publishPlan(user.id, athleteId!, requiredText(body.planId, "planId")); }
+    else if (action === "updatePlanSession") { coachOnly(user); await updatePlanSession(user.id, athleteId!, body); }
+    else if (action === "logSession") await logSession(user.id, athleteId!, body);
     else if (action === "runPipeline") { coachOnly(user); await queuePipeline(user.id, athleteId!); await processPendingWork(athleteId!); }
     else if (action === "disconnectIntervals") { coachOnly(user); await disconnectIntervals(user.id, athleteId!); }
     else throw new Error("Unsupported workspace action.");
@@ -43,7 +45,7 @@ export async function POST(request: NextRequest) {
   } catch (error) { return apiError(error); }
 }
 
-async function inviteAthlete(user: { id: string; role: string }, body: Record<string, unknown>) {
+async function inviteAthlete(user: { id: string; role: string }, body: Record<string, unknown>, origin: string) {
   coachOnly(user);
   const db = platformEnv().DB;
   const email = requiredText(body.email, "email").trim().toLowerCase();
@@ -54,9 +56,35 @@ async function inviteAthlete(user: { id: string; role: string }, body: Record<st
     db.prepare("INSERT INTO athletes (id, email, display_name, primary_sport, timezone, status, weekly_target_km, availability_json, created_at, updated_at) VALUES (?, ?, ?, 'running', ?, 'invited', ?, '{}', ?, ?)").bind(athleteId, email, displayName, optionalText(body.timezone) ?? "Europe/Vienna", numberOrNull(body.weeklyTargetKm), timestamp, timestamp),
     db.prepare("INSERT INTO coach_athletes (coach_user_id, athlete_id, relationship_role, status, created_at) VALUES (?, ?, 'primary', 'active', ?)").bind(user.id, athleteId, timestamp),
     db.prepare("INSERT INTO invitations (id, athlete_id, coach_user_id, email, status, created_at) VALUES (?, ?, ?, ?, 'pending', ?)").bind(invitationId, athleteId, user.id, email, timestamp),
-    db.prepare("INSERT INTO notifications (id, athlete_id, recipient_email, notification_type, subject, body, status, created_at) VALUES (?, ?, ?, 'athlete_invitation', ?, ?, 'queued', ?)").bind(id("notification"), athleteId, email, "Your private Athelon coaching dashboard", `${displayName}, your coach has prepared a private training workspace for you. Use the secure access invitation to view your plan and submit feedback.`, timestamp),
+    db.prepare("INSERT INTO notifications (id, athlete_id, recipient_email, notification_type, subject, body, status, created_at) VALUES (?, ?, ?, 'athlete_invitation', ?, ?, 'queued', ?)").bind(id("notification"), athleteId, email, "Your private Athelon coaching dashboard", `${displayName}, your coach has prepared a private training workspace for you. Visit ${origin} and request a secure email sign-in link using this address.`, timestamp),
   ]);
   await audit(user as never, "invite", "athlete", athleteId, athleteId, { email });
+}
+
+async function updatePlanSession(userId: string, athleteId: string, body: Record<string, unknown>) {
+  const sessionId = requiredText(body.sessionId, "sessionId");
+  const db = platformEnv().DB;
+  const session = await db.prepare(`SELECT ps.id FROM planned_sessions ps JOIN training_plans tp ON tp.id = ps.plan_id
+    WHERE ps.id = ? AND ps.athlete_id = ? AND tp.status = 'draft'`).bind(sessionId, athleteId).first();
+  if (!session) throw new Error("Only sessions in the current draft can be edited.");
+  await db.prepare(`UPDATE planned_sessions SET session_date = ?, title = ?, details = ?, planned_distance_km = ?,
+    pace_guidance = ?, hr_guidance = ?, purpose = ?, major_stimulus = ? WHERE id = ?`)
+    .bind(requiredDate(body.sessionDate), requiredText(body.title, "title"), requiredText(body.details, "details"), numberOrNull(body.plannedDistanceKm), optionalText(body.paceGuidance), optionalText(body.hrGuidance), optionalText(body.purpose), body.majorStimulus ? 1 : 0, sessionId).run();
+  await audit({ id: userId } as never, "update", "planned_session", sessionId, athleteId);
+}
+
+async function logSession(userId: string, athleteId: string, body: Record<string, unknown>) {
+  const sessionId = requiredText(body.sessionId, "sessionId");
+  const status = requiredText(body.status, "status");
+  if (!new Set(["completed", "skipped"]).has(status)) throw new Error("Choose completed or skipped.");
+  const db = platformEnv().DB;
+  const session = await db.prepare(`SELECT ps.id FROM planned_sessions ps JOIN training_plans tp ON tp.id = ps.plan_id
+    WHERE ps.id = ? AND ps.athlete_id = ? AND tp.status = 'published'`).bind(sessionId, athleteId).first();
+  if (!session) throw new Error("Only sessions from the published plan can be logged.");
+  await db.prepare(`UPDATE planned_sessions SET status = ?, actual_distance_km = ?, actual_duration_minutes = ?,
+    completion_rpe = ?, athlete_comment = ?, completed_at = ? WHERE id = ?`)
+    .bind(status, numberOrNull(body.actualDistanceKm), numberOrNull(body.actualDurationMinutes), numberOrNull(body.completionRpe), optionalText(body.athleteComment), nowIso(), sessionId).run();
+  await audit({ id: userId } as never, "log", "planned_session", sessionId, athleteId, { status });
 }
 
 async function saveGoal(userId: string, athleteId: string, body: Record<string, unknown>) {

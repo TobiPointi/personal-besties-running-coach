@@ -9,6 +9,15 @@ export const users = sqliteTable("users", {
   lastSeenAt: text("last_seen_at").notNull(),
 }, (table) => [uniqueIndex("idx_users_email").on(table.email)]);
 
+export const authIdentities = sqliteTable("auth_identities", {
+  provider: text("provider").notNull(),
+  providerSubject: text("provider_subject").notNull(),
+  userId: text("user_id").notNull(),
+  email: text("email").notNull(),
+  createdAt: text("created_at").notNull(),
+  lastSeenAt: text("last_seen_at").notNull(),
+}, (table) => [primaryKey({ columns: [table.provider, table.providerSubject] }), index("idx_auth_identities_user").on(table.userId), index("idx_auth_identities_email").on(table.email)]);
+
 export const athletes = sqliteTable("athletes", {
   id: text("id").primaryKey(),
   userId: text("user_id"),
@@ -156,6 +165,11 @@ export const plannedSessions = sqliteTable("planned_sessions", {
   fatigueModification: text("fatigue_modification"),
   majorStimulus: integer("major_stimulus", { mode: "boolean" }).notNull().default(false),
   status: text("status").notNull().default("planned"),
+  actualDistanceKm: real("actual_distance_km"),
+  actualDurationMinutes: integer("actual_duration_minutes"),
+  completionRpe: real("completion_rpe"),
+  athleteComment: text("athlete_comment"),
+  completedAt: text("completed_at"),
 }, (table) => [index("idx_sessions_athlete_date").on(table.athleteId, table.sessionDate), index("idx_sessions_plan").on(table.planId)]);
 
 export const athleteFeedback = sqliteTable("athlete_feedback", {

@@ -14,6 +14,8 @@ interface Env {
   EMAIL_WEBHOOK_TOKEN?: string;
   COACH_ENGINE_URL?: string;
   CRON_SECRET?: string;
+  SUPABASE_URL?: string;
+  SUPABASE_PUBLISHABLE_KEY?: string;
   IMAGES: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {

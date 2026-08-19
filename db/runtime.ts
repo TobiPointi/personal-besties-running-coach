@@ -11,6 +11,8 @@ export type PlatformEnv = {
   EMAIL_WEBHOOK_TOKEN?: string;
   COACH_ENGINE_URL?: string;
   CRON_SECRET?: string;
+  SUPABASE_URL?: string;
+  SUPABASE_PUBLISHABLE_KEY?: string;
 };
 
 export function platformEnv(): PlatformEnv {
@@ -22,6 +24,9 @@ export function platformEnv(): PlatformEnv {
 const schemaStatements = [
   `CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, email TEXT NOT NULL, display_name TEXT NOT NULL, role TEXT NOT NULL, created_at TEXT NOT NULL, last_seen_at TEXT NOT NULL)`,
   `CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email ON users(email)`,
+  `CREATE TABLE IF NOT EXISTS auth_identities (provider TEXT NOT NULL, provider_subject TEXT NOT NULL, user_id TEXT NOT NULL, email TEXT NOT NULL, created_at TEXT NOT NULL, last_seen_at TEXT NOT NULL, PRIMARY KEY(provider, provider_subject))`,
+  `CREATE INDEX IF NOT EXISTS idx_auth_identities_user ON auth_identities(user_id)`,
+  `CREATE INDEX IF NOT EXISTS idx_auth_identities_email ON auth_identities(email)`,
   `CREATE TABLE IF NOT EXISTS athletes (id TEXT PRIMARY KEY, user_id TEXT, email TEXT, display_name TEXT NOT NULL, primary_sport TEXT NOT NULL DEFAULT 'running', timezone TEXT NOT NULL DEFAULT 'Europe/Vienna', status TEXT NOT NULL DEFAULT 'active', weekly_target_km REAL, availability_json TEXT NOT NULL DEFAULT '{}', injury_notes TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL)`,
   `CREATE INDEX IF NOT EXISTS idx_athletes_user_id ON athletes(user_id)`,
   `CREATE INDEX IF NOT EXISTS idx_athletes_email ON athletes(email)`,
@@ -45,7 +50,7 @@ const schemaStatements = [
   `CREATE TABLE IF NOT EXISTS training_plans (id TEXT PRIMARY KEY, athlete_id TEXT NOT NULL, goal_id TEXT, version INTEGER NOT NULL, status TEXT NOT NULL, start_date TEXT NOT NULL, end_date TEXT NOT NULL, rationale TEXT, created_by TEXT NOT NULL, created_at TEXT NOT NULL, published_at TEXT)`,
   `CREATE UNIQUE INDEX IF NOT EXISTS idx_plans_athlete_version ON training_plans(athlete_id, version)`,
   `CREATE INDEX IF NOT EXISTS idx_plans_athlete_status ON training_plans(athlete_id, status)`,
-  `CREATE TABLE IF NOT EXISTS planned_sessions (id TEXT PRIMARY KEY, plan_id TEXT NOT NULL, athlete_id TEXT NOT NULL, session_date TEXT NOT NULL, workout_type TEXT NOT NULL, title TEXT NOT NULL, details TEXT NOT NULL, planned_distance_km REAL, planned_duration_minutes INTEGER, pace_guidance TEXT, hr_guidance TEXT, purpose TEXT, fatigue_modification TEXT, major_stimulus INTEGER NOT NULL DEFAULT 0, status TEXT NOT NULL DEFAULT 'planned')`,
+  `CREATE TABLE IF NOT EXISTS planned_sessions (id TEXT PRIMARY KEY, plan_id TEXT NOT NULL, athlete_id TEXT NOT NULL, session_date TEXT NOT NULL, workout_type TEXT NOT NULL, title TEXT NOT NULL, details TEXT NOT NULL, planned_distance_km REAL, planned_duration_minutes INTEGER, pace_guidance TEXT, hr_guidance TEXT, purpose TEXT, fatigue_modification TEXT, major_stimulus INTEGER NOT NULL DEFAULT 0, status TEXT NOT NULL DEFAULT 'planned', actual_distance_km REAL, actual_duration_minutes INTEGER, completion_rpe REAL, athlete_comment TEXT, completed_at TEXT)`,
   `CREATE INDEX IF NOT EXISTS idx_sessions_athlete_date ON planned_sessions(athlete_id, session_date)`,
   `CREATE INDEX IF NOT EXISTS idx_sessions_plan ON planned_sessions(plan_id)`,
   `CREATE TABLE IF NOT EXISTS athlete_feedback (id TEXT PRIMARY KEY, athlete_id TEXT NOT NULL, feedback_date TEXT NOT NULL, activity_id TEXT, rpe REAL, legs REAL, fatigue REAL, sleep REAL, pain TEXT, comments TEXT, created_by TEXT NOT NULL, created_at TEXT NOT NULL)`,
@@ -70,7 +75,17 @@ export async function ensureSchema(db = platformEnv().DB): Promise<void> {
   for (let index = 0; index < schemaStatements.length; index += 40) {
     await db.batch(schemaStatements.slice(index, index + 40).map((statement) => db.prepare(statement)));
   }
+  await ensureColumn(db, "planned_sessions", "actual_distance_km", "REAL");
+  await ensureColumn(db, "planned_sessions", "actual_duration_minutes", "INTEGER");
+  await ensureColumn(db, "planned_sessions", "completion_rpe", "REAL");
+  await ensureColumn(db, "planned_sessions", "athlete_comment", "TEXT");
+  await ensureColumn(db, "planned_sessions", "completed_at", "TEXT");
   await db.prepare("PRAGMA optimize").run();
+}
+
+async function ensureColumn(db: D1Database, table: string, column: string, definition: string) {
+  const result = await db.prepare(`PRAGMA table_info(${table})`).all<{ name: string }>();
+  if (!(result.results ?? []).some((row) => row.name === column)) await db.prepare(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`).run();
 }
 
 export function id(prefix: string): string {

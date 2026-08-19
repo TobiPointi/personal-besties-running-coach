@@ -71,6 +71,9 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
   const visibleSessions = user.role === "athlete" && publishedPlan
     ? sessionRows.filter((row) => row.plan_id === publishedPlan.id)
     : sessionRows;
+  const dueSessions = visibleSessions.filter((row) => row.plan_id === publishedPlan?.id && row.workout_type !== "rest" && String(row.session_date) <= todayIso());
+  const completedSessions = dueSessions.filter((row) => row.status === "completed");
+  const adherencePercent = dueSessions.length ? Math.round((completedSessions.length / dueSessions.length) * 100) : null;
   const upcoming = visibleSessions.filter((row) => String(row.session_date) >= todayIso()).slice(0, 14);
   return {
     user,
@@ -97,7 +100,10 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
       recoveryStatus: recoveryLabel(recentFeedback),
       forecastLow: latestAssessment?.race_forecast_low_seconds ?? null,
       forecastHigh: latestAssessment?.race_forecast_high_seconds ?? null,
-      attention: attentionItems({ recentFeedback, testRows, jobRows, connectionRows }),
+      adherencePercent,
+      completedSessions: completedSessions.length,
+      dueSessions: dueSessions.length,
+      attention: attentionItems({ recentFeedback, testRows, jobRows, connectionRows, adherencePercent }),
     },
   };
 }
@@ -119,12 +125,13 @@ function recoveryLabel(feedback?: Row) {
   if (Number(feedback.fatigue ?? 0) >= 6) return "Caution";
   return "Ready";
 }
-function attentionItems(input: { recentFeedback?: Row; testRows: Row[]; jobRows: Row[]; connectionRows: Row[] }) {
+function attentionItems(input: { recentFeedback?: Row; testRows: Row[]; jobRows: Row[]; connectionRows: Row[]; adherencePercent: number | null }) {
   const items: { level: string; label: string }[] = [];
   if (!input.recentFeedback) items.push({ level: "warning", label: "Athlete feedback missing" });
   if (input.recentFeedback?.pain) items.push({ level: "critical", label: "Pain reported — coach review" });
   if (!input.testRows.length) items.push({ level: "info", label: "No physiological test recorded" });
   if (!input.connectionRows.length) items.push({ level: "info", label: "Intervals.icu not connected" });
+  if (input.adherencePercent !== null && input.adherencePercent < 70) items.push({ level: "warning", label: "Plan adherence below 70%" });
   if (input.jobRows.some((job) => job.status === "failed")) items.push({ level: "critical", label: "Data pipeline needs attention" });
   return items.slice(0, 4);
 }
