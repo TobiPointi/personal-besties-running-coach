@@ -85,6 +85,19 @@ async function syncIntervals(athleteId: string) {
       .bind(`wellness_${athleteId}_${date}`, athleteId, date, numberOrNull(row.restingHR ?? row.resting_hr), numberOrNull(row.sleepScore ?? row.sleep_score), numberOrNull(row.fatigue), numberOrNull(row.weight), JSON.stringify(redact(row)));
   });
   for (const statements of chunks([...activityStatements, ...wellnessStatements, ...performanceStatements], 30)) await db.batch(statements);
+  // Mark a planned run as completed when the synchronized activity occurred on that date.
+  // Explicit athlete choices (skipped/completed) are never overwritten.
+  await db.prepare(`UPDATE planned_sessions
+    SET status = 'completed',
+        actual_distance_km = (SELECT ROUND(SUM(a.distance_km), 2) FROM activities a
+          WHERE a.athlete_id = planned_sessions.athlete_id AND a.activity_date = planned_sessions.session_date AND lower(a.activity_type) LIKE '%run%'),
+        actual_duration_minutes = (SELECT ROUND(SUM(a.duration_seconds) / 60.0) FROM activities a
+          WHERE a.athlete_id = planned_sessions.athlete_id AND a.activity_date = planned_sessions.session_date AND lower(a.activity_type) LIKE '%run%'),
+        completed_at = COALESCE(completed_at, ?)
+    WHERE athlete_id = ? AND status = 'planned' AND workout_type != 'rest'
+      AND EXISTS (SELECT 1 FROM activities a WHERE a.athlete_id = planned_sessions.athlete_id
+        AND a.activity_date = planned_sessions.session_date AND lower(a.activity_type) LIKE '%run%')`)
+    .bind(timestamp, athleteId).run();
   await db.prepare("UPDATE data_connections SET last_sync_at = ?, updated_at = ? WHERE id = ?").bind(timestamp, timestamp, connection.id).run();
   await calculateAssessment(athleteId);
   await backfillWeeklyForecasts(athleteId);

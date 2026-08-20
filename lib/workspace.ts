@@ -1,5 +1,6 @@
 import type { AppUser } from "./auth";
 import { id, nowIso, platformEnv, todayIso } from "../db/runtime";
+import { referenceActivities, referencePerformance, referencePlanDays } from "./tobias-reference";
 
 type Row = Record<string, unknown>;
 
@@ -12,7 +13,7 @@ export async function seedWorkspace(user: AppUser): Promise<void> {
   if (user.role !== "coach") return;
   const db = platformEnv().DB;
   const existing = await db.prepare("SELECT athlete_id FROM coach_athletes WHERE coach_user_id = ? LIMIT 1").bind(user.id).first();
-  if (existing) return;
+  if (existing) { await ensureTobiasReferenceData(user); return; }
   const timestamp = nowIso();
   const athleteId = "athlete_tobias";
   const goalId = "goal_bad_ischl_2026";
@@ -35,6 +36,40 @@ export async function seedWorkspace(user: AppUser): Promise<void> {
     await db.prepare("INSERT OR IGNORE INTO planned_sessions (id, plan_id, athlete_id, session_date, workout_type, title, details, planned_distance_km, pace_guidance, hr_guidance, purpose, fatigue_modification, major_stimulus, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'planned')")
       .bind(`session_${date}`, planId, athleteId, date, type, title, title, distance, pace, "Use HR as a secondary check, not a target.", purpose, "Reduce volume or switch to easy running if fatigue or pain is abnormal.", major).run();
   }
+  await ensureTobiasReferenceData(user);
+}
+
+async function ensureTobiasReferenceData(user: AppUser) {
+  const db = platformEnv().DB;
+  const athlete = await db.prepare("SELECT id FROM athletes WHERE id = 'athlete_tobias' AND user_id = ?").bind(user.id).first<{ id: string }>();
+  if (!athlete) return;
+  const alreadyImported = await db.prepare("SELECT id FROM training_plans WHERE id = 'plan_bad_ischl_reference_v2'").first();
+  const timestamp = nowIso();
+  if (!alreadyImported) {
+    await db.batch([
+      db.prepare("UPDATE training_plans SET status = 'archived' WHERE athlete_id = 'athlete_tobias' AND status = 'published'").bind(),
+      db.prepare("INSERT INTO training_plans (id, athlete_id, goal_id, version, status, start_date, end_date, rationale, created_by, created_at, published_at) VALUES ('plan_bad_ischl_reference_v2', 'athlete_tobias', 'goal_bad_ischl_2026', 2, 'published', '2026-08-14', '2026-09-27', ?, ?, ?, ?)")
+        .bind("Original Bad Ischl plan restored from the local coaching engine. Completed sessions are retained; future sessions are the approved reference plan.", user.id, timestamp, timestamp),
+    ]);
+    const statements = referencePlanDays.map((day) => {
+      const actualDistance = Number(day.actual?.distance_km ?? 0);
+      const completed = day.status === "completed" || day.status === "completed-rest";
+      const title = day.details.split(/[.;]/)[0] || day.workout_type;
+      return db.prepare("INSERT INTO planned_sessions (id, plan_id, athlete_id, session_date, workout_type, title, details, planned_distance_km, pace_guidance, hr_guidance, purpose, fatigue_modification, major_stimulus, status, actual_distance_km, completed_at) VALUES (?, 'plan_bad_ischl_reference_v2', 'athlete_tobias', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+        .bind(`reference_session_${day.date}`, day.date, day.workout_type, title, day.details, day.planned_distance_km, day.pace_guidance ?? null, day.hr_guidance ?? null, day.purpose ?? null, day.fatigue_modification ?? null, day.major_stimulus ? 1 : 0, completed ? "completed" : "planned", completed ? actualDistance : null, completed ? timestamp : null);
+    });
+    for (let index = 0; index < statements.length; index += 30) await db.batch(statements.slice(index, index + 30));
+  }
+  const activityStatements = referenceActivities.map(([date, name, distance, duration, elevation, providerId]) => db.prepare(`INSERT INTO activities (id, athlete_id, provider, provider_activity_id, activity_date, activity_type, name, distance_km, duration_seconds, elevation_gain_m, training_load, raw_summary_json, updated_at)
+    VALUES (?, 'athlete_tobias', 'reference', ?, ?, 'Run', ?, ?, ?, ?, NULL, ?, ?)
+    ON CONFLICT(athlete_id, provider, provider_activity_id) DO UPDATE SET distance_km=excluded.distance_km, duration_seconds=excluded.duration_seconds, updated_at=excluded.updated_at`)
+    .bind(`reference_activity_${providerId}`, providerId, date, name, distance, duration, elevation, JSON.stringify({ source: "original local coaching dashboard" }), timestamp));
+  for (let index = 0; index < activityStatements.length; index += 30) await db.batch(activityStatements.slice(index, index + 30));
+  const performanceStatements = referencePerformance.map(([date, source, five, ten, half, marathon]) => db.prepare(`INSERT INTO performance_snapshots (id, athlete_id, snapshot_date, source, prediction_5k_seconds, prediction_10k_seconds, prediction_half_seconds, prediction_marathon_seconds, created_at)
+    VALUES (?, 'athlete_tobias', ?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT(id) DO UPDATE SET prediction_5k_seconds=excluded.prediction_5k_seconds, prediction_10k_seconds=excluded.prediction_10k_seconds, prediction_half_seconds=excluded.prediction_half_seconds, prediction_marathon_seconds=excluded.prediction_marathon_seconds, created_at=excluded.created_at`)
+    .bind(`reference_performance_${date}_${source.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`, date, source, five, ten, half, marathon, timestamp));
+  for (let index = 0; index < performanceStatements.length; index += 30) await db.batch(performanceStatements.slice(index, index + 30));
 }
 
 export async function getWorkspaceState(user: AppUser, requestedAthleteId?: string | null) {
@@ -110,6 +145,7 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
     metrics: {
       daysToGoal: activeGoal ? Math.max(0, Math.ceil((new Date(`${activeGoal.event_date}T12:00:00Z`).getTime() - Date.now()) / 86400000)) : null,
       volume28Km: Math.round(volume28 * 10) / 10,
+      weeklyKm: Math.round((volume28 / 4) * 10) / 10,
       load28: Math.round(load28),
       fitnessScore: Number(latestAssessment?.fitness_score ?? 0),
       fatigueScore: Number(latestAssessment?.fatigue_score ?? recentFeedback?.fatigue ?? 0),
