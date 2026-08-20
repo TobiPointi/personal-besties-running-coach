@@ -52,7 +52,7 @@ export default function DashboardClient() {
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <div className="brand"><span className="brand-mark">PB</span><span>Personal Besties</span></div>
+        <div className="brand"><img className="brand-logo" src="/personal-besties-logo-placeholder.png" alt="Personal Besties" /></div>
         <nav aria-label="Workspace sections">
           <NavButton active={tab === "overview"} label="Overview" icon="⌂" onClick={() => setTab("overview")} />
           <NavButton active={tab === "plan"} label="Training plan" icon="□" onClick={() => setTab("plan")} />
@@ -193,8 +193,8 @@ function SessionLogForm({ session, busy, submit }: { session:AnyRow; busy:string
 function Threshold({ label, pace, hr, lactate, help }: { label:string; pace:any; hr:any; lactate:any; help:string }) { return <div><span>{label} <button className="info-tip" type="button" aria-label={`About ${label}`} data-tooltip={help}>ⓘ</button></span><strong>{formatPace(pace)}</strong><p>{hr ? `${hr} bpm` : "HR —"} · {lactate ? `${lactate} mmol/L` : "lactate —"}</p></div>; }
 function NavButton({ active, label, icon, badge, onClick }: { active:boolean; label:string; icon:string; badge?:string; onClick:()=>void }) { return <button className={`nav-item ${active ? "active" : ""}`} onClick={onClick}><span>{icon}</span>{label}{badge && <b>{badge}</b>}</button>; }
 function EmptyPanel({ title, body }: { title:string; body:string }) { return <div className="panel empty-panel"><span>○</span><h3>{title}</h3><p>{body}</p></div>; }
-function LoadingScreen({ message }: { message?:string }) { return <div className="loading-screen"><span className="brand-mark">PB</span><h1>Preparing your coaching workspace</h1><p>{message || "Loading private athlete records…"}</p></div>; }
-function EmptyWorkspace({ user, onInvite, modal, close, act, busy }: any) { return <div className="loading-screen"><span className="brand-mark">PB</span><h1>Welcome, {user.displayName}</h1><p>Invite your first athlete to begin.</p><button className="primary-button" onClick={onInvite}>Invite athlete</button>{modal && <ModalLayer modal="invite" athlete={null} close={close} act={act} busy={busy} />}</div>; }
+function LoadingScreen({ message }: { message?:string }) { return <div className="loading-screen"><img className="loading-logo" src="/personal-besties-logo-placeholder.png" alt="Personal Besties" /><h1>Preparing your coaching workspace</h1><p>{message || "Loading private athlete records…"}</p></div>; }
+function EmptyWorkspace({ user, onInvite, modal, close, act, busy }: any) { return <div className="loading-screen"><img className="loading-logo" src="/personal-besties-logo-placeholder.png" alt="Personal Besties" /><h1>Welcome, {user.displayName}</h1><p>Invite your first athlete to begin.</p><button className="primary-button" onClick={onInvite}>Invite athlete</button>{modal && <ModalLayer modal="invite" athlete={null} close={close} act={act} busy={busy} />}</div>; }
 
 function ModalLayer({ modal, athlete, close, act, busy }: { modal: Exclude<Modal,null>; athlete: AnyRow | null; close:()=>void; act:(a:string,p?:AnyRow,s?:string)=>void; busy:string }) {
   return <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.currentTarget === event.target) close(); }}><div className="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button className="modal-close" onClick={close} aria-label="Close">×</button>

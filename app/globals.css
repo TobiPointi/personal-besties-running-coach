@@ -9,6 +9,7 @@ button { color:inherit; }
 .app-shell { min-height:100vh; display:grid; grid-template-columns:248px 1fr; }
 .sidebar { position:sticky; top:0; height:100vh; display:flex; flex-direction:column; padding:28px 17px 18px; background:#fbfcfa; border-right:1px solid var(--line); }
 .brand { display:flex; align-items:center; gap:10px; padding:0 8px 28px; font-size:19px; font-weight:750; letter-spacing:-.4px; }
+.brand-logo{display:block;width:154px;height:auto}.auth-brand-logo{width:190px;padding:10px 12px;border-radius:14px;background:#f8faf5}.loading-logo{display:block;width:190px;height:auto;margin:0 auto 20px}
 .brand-mark { display:grid; place-items:center; width:30px; height:30px; border-radius:9px 9px 9px 3px; color:#f7ffe9; background:var(--green); font-family:Georgia,serif; }
 nav { display:grid; gap:5px; }
 .nav-item { width:100%; display:flex; align-items:center; gap:12px; padding:10px 12px; color:#637067; background:transparent; border:0; text-align:left; text-decoration:none; border-radius:9px; font-size:14px; font-weight:560; cursor:pointer; }
