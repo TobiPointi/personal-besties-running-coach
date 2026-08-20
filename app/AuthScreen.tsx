@@ -4,6 +4,7 @@ import { createBrowserClient } from "@supabase/ssr";
 import { FormEvent, useEffect, useState } from "react";
 
 type Language = "en" | "de";
+const OTP_LENGTH = 8;
 
 const copy = {
   en: {
@@ -81,9 +82,9 @@ export default function AuthScreen({ config }: { config: { url: string; publisha
     <div className="language-switch auth-language" aria-label="Language"><button className={language === "de" ? "active" : ""} onClick={() => changeLanguage("de")}>DE</button><button className={language === "en" ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div>
     <section className="auth-story"><div className="brand auth-brand"><img className="brand-logo auth-brand-logo" src="/personal-besties-logo-placeholder.png" alt="Personal Besties" /></div><div><p className="eyebrow">{text.tagline}</p><h1>{text.headline}</h1><p>{text.story}</p></div><div className="auth-proof"><span>{text.invite}</span><span>{text.passwordless}</span><span>{text.reviewed}</span></div></section>
     <section className="auth-panel"><form className="auth-card" onSubmit={step === "email" ? requestCode : verifyCode}><p className="eyebrow">{text.access}</p><h2>{step === "email" ? text.title : text.codeTitle}</h2><p>{step === "email" ? text.intro : text.codeIntro}</p>
-      {step === "email" ? <label className="field"><span>{text.email}</span><input type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@example.com" /></label> : <label className="field otp-field"><span>{text.code}</span><input inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{8}" maxLength={8} required value={code} onChange={(event) => setCode(event.target.value.replace(/\D/g, "").slice(0, 8))} placeholder="00000000" /></label>}
+      {step === "email" ? <label className="field"><span>{text.email}</span><input type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@example.com" /></label> : <label className="field otp-field"><span>{text.code}</span><input inputMode="numeric" autoComplete="one-time-code" pattern={`[0-9]{${OTP_LENGTH}}`} maxLength={OTP_LENGTH} required value={code} onChange={(event) => setCode(event.target.value.replace(/\D/g, "").slice(0, OTP_LENGTH))} placeholder={"0".repeat(OTP_LENGTH)} /></label>}
       <label className="remember-field"><input type="checkbox" checked={remember} onChange={(event) => setRemember(event.target.checked)} /> {text.remember}</label>
-      <button className="primary-button auth-submit" disabled={busy || !config || (step === "code" && code.length !== 6)}>{busy ? (step === "email" ? text.sending : text.verifying) : (step === "email" ? text.send : text.verify)}</button>
+      <button className="primary-button auth-submit" disabled={busy || !config || (step === "code" && code.length !== OTP_LENGTH)}>{busy ? (step === "email" ? text.sending : text.verifying) : (step === "email" ? text.send : text.verify)}</button>
       {!config && <p className="auth-notice">{text.unavailable}</p>}{message && <p className="auth-notice" role="status">{message}</p>}{step === "code" && <button type="button" className="text-button auth-back" onClick={() => { setStep("email"); setCode(""); setMessage(""); }}>{text.resend}</button>}<small>{text.safe}</small></form>
       <a className="auth-privacy" href="/privacy">{text.privacy}</a>
     </section>
