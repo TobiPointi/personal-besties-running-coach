@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 
 type AnyRow = Record<string, any>;
 type WorkspaceState = {
@@ -10,7 +10,8 @@ type WorkspaceState = {
   connections: AnyRow[]; jobs: AnyRow[]; notifications: AnyRow[]; notes: AnyRow[]; metrics: AnyRow;
   testRequests: AnyRow[]; performanceSnapshots: AnyRow[];
 };
-type Tab = "overview" | "plan" | "testing" | "performance" | "goals" | "feedback" | "data";
+type Language = "en" | "de";
+type Tab = "overview" | "activities" | "plan" | "testing" | "performance" | "goals" | "feedback" | "data";
 type Modal = "invite" | "goal" | "test" | "testRequest" | "performance" | "feedback" | "profile" | "onboarding" | null;
 
 export default function DashboardClient() {
@@ -19,6 +20,7 @@ export default function DashboardClient() {
   const [modal, setModal] = useState<Modal>(null);
   const [busy, setBusy] = useState("");
   const [message, setMessage] = useState<{ tone: "good" | "bad"; text: string } | null>(null);
+  const [language, setLanguage] = useState<Language>("en");
 
   const load = useCallback(async (athleteId?: string) => {
     const query = athleteId ? `?athleteId=${encodeURIComponent(athleteId)}` : "";
@@ -28,7 +30,14 @@ export default function DashboardClient() {
     if (next.user?.role === "athlete" && !next.selectedAthlete?.onboardingCompletedAt) setModal((current) => current ?? "onboarding");
   }, []);
 
-  useEffect(() => { load().catch((error) => setMessage({ tone: "bad", text: error.message })); }, [load]);
+  useEffect(() => {
+    const saved = window.localStorage.getItem("pb-language");
+    if (saved === "de" || saved === "en") setLanguage(saved);
+    load().catch((error) => setMessage({ tone: "bad", text: error.message }));
+  }, [load]);
+
+  function changeLanguage(next: Language) { setLanguage(next); window.localStorage.setItem("pb-language", next); document.documentElement.lang = next; }
+  const de = language === "de";
 
   async function act(action: string, payload: AnyRow = {}, success = "Saved") {
     if (!state?.selectedAthlete && action !== "inviteAthlete") return;
@@ -46,7 +55,7 @@ export default function DashboardClient() {
   if (!state.selectedAthlete) return <EmptyWorkspace user={state.user} onInvite={() => setModal("invite")} modal={modal} close={() => setModal(null)} act={act} busy={busy} />;
   const athlete = state.selectedAthlete; const coach = state.user.role === "coach";
   const activeGoal = state.goals.find((goal) => goal.status === "active") ?? state.goals[0];
-  const draft = state.plans.find((plan) => plan.status === "draft");
+  const draft = state.plans.find((plan) => plan.status === "draft"); const adjustment = state.metrics.planAdjustment;
   const latestAssessment = state.assessments[0];
 
   return (
@@ -54,37 +63,39 @@ export default function DashboardClient() {
       <aside className="sidebar">
         <div className="brand"><img className="brand-logo" src="/personal-besties-logo-placeholder.png" alt="Personal Besties" /></div>
         <nav aria-label="Workspace sections">
-          <NavButton active={tab === "overview"} label="Overview" icon="⌂" onClick={() => setTab("overview")} />
-          <NavButton active={tab === "plan"} label="Training plan" icon="□" onClick={() => setTab("plan")} />
-          <NavButton active={tab === "testing"} label="Lactate tests" icon="⌁" onClick={() => setTab("testing")} />
-          <NavButton active={tab === "performance"} label="Performance trends" icon="↗" onClick={() => setTab("performance")} />
-          <NavButton active={tab === "goals"} label="Goals" icon="◇" onClick={() => setTab("goals")} />
+          <NavButton active={tab === "overview"} label={de ? "Übersicht" : "Overview"} icon="⌂" onClick={() => setTab("overview")} />
+          <NavButton active={tab === "activities"} label={de ? "Aktivitätsbericht" : "Activity report"} icon="◎" onClick={() => setTab("activities")} />
+          <NavButton active={tab === "plan"} label={de ? "Trainingsplan" : "Training plan"} icon="□" onClick={() => setTab("plan")} />
+          <NavButton active={tab === "testing"} label={de ? "Laktattests" : "Lactate tests"} icon="⌁" onClick={() => setTab("testing")} />
+          <NavButton active={tab === "performance"} label={de ? "Leistungstrends" : "Performance trends"} icon="↗" onClick={() => setTab("performance")} />
+          <NavButton active={tab === "goals"} label={de ? "Ziele" : "Goals"} icon="◇" onClick={() => setTab("goals")} />
           <NavButton active={tab === "feedback"} label="Feedback" icon="◌" badge={state.feedback.length ? undefined : "1"} onClick={() => setTab("feedback")} />
-          <NavButton active={tab === "data"} label="Data & delivery" icon="↻" onClick={() => setTab("data")} />
+          <NavButton active={tab === "data"} label={de ? "Daten & Versand" : "Data & delivery"} icon="↻" onClick={() => setTab("data")} />
         </nav>
         {coach && <div className="athlete-list">
-          <div className="section-label">YOUR ATHLETES <button onClick={() => setModal("invite")} aria-label="Invite athlete">+</button></div>
+          <div className="section-label">{de ? "DEINE ATHLETEN" : "YOUR ATHLETES"} <button onClick={() => setModal("invite")} aria-label={de ? "Athlet einladen" : "Invite athlete"}>+</button></div>
           {state.athletes.map((item) => <button className={`athlete-row ${item.id === athlete.id ? "selected" : ""}`} key={item.id} onClick={() => load(item.id)}>
             <span className="avatar">{initials(item.displayName)}</span><span><strong>{item.displayName}</strong><small>{athleteStatus(item, state)}</small></span><i aria-hidden="true" />
           </button>)}
         </div>}
-        <div className="coach-profile"><span className="avatar dark">{initials(state.user.displayName)}</span><span><strong>{state.user.displayName.split(" ")[0]}</strong><small>{coach ? "Coach workspace" : "Athlete portal"}</small></span><a href="/auth/signout" aria-label="Sign out">↗</a></div>
+        <div className="coach-profile"><span className="avatar dark">{initials(state.user.displayName)}</span><span><strong>{state.user.displayName.split(" ")[0]}</strong><small>{coach ? (de ? "Coach-Bereich" : "Coach workspace") : (de ? "Athletenportal" : "Athlete portal")}</small></span><a href="/auth/signout" aria-label={de ? "Abmelden" : "Sign out"}>↗</a></div>
       </aside>
 
       <main>
         <header className="topbar">
-          <div><p className="eyebrow">{coach ? "COACH WORKSPACE" : "ATHLETE DASHBOARD"}</p><h1>{coach ? `Good ${dayPart()}, ${state.user.displayName.split(" ")[0]}.` : "Your training, in context."}</h1></div>
-          <div className="top-actions">{coach && <button className="primary-button" onClick={() => setModal("invite")}>+ Invite athlete</button>}</div>
+          <div><p className="eyebrow">{coach ? (de ? "COACH-BEREICH" : "COACH WORKSPACE") : (de ? "ATHLETEN-DASHBOARD" : "ATHLETE DASHBOARD")}</p><h1>{coach ? (de ? `Hallo ${state.user.displayName.split(" ")[0]}.` : `Good ${dayPart()}, ${state.user.displayName.split(" ")[0]}.`) : (de ? "Dein Training im Kontext." : "Your training, in context.")}</h1></div>
+          <div className="top-actions"><div className="language-switch" aria-label="Language"><button className={de ? "active" : ""} onClick={() => changeLanguage("de")}>DE</button><button className={!de ? "active" : ""} onClick={() => changeLanguage("en")}>EN</button></div>{coach && <button className="primary-button" onClick={() => setModal("invite")}>+ {de ? "Athlet einladen" : "Invite athlete"}</button>}</div>
         </header>
         {message && <div className={`toast ${message.tone}`}>{message.text}<button onClick={() => setMessage(null)}>×</button></div>}
         <section className="athlete-heading">
-          <div className="athlete-title"><span className="avatar large">{initials(athlete.displayName)}</span><div><h2>{athlete.displayName}</h2><p>{activeGoal ? `${activeGoal.title} · ${state.metrics.daysToGoal} days to goal` : "No active goal yet"}</p></div></div>
-          <div className="heading-actions">{connectionStatus(state.connections)}<button className="secondary-button" onClick={() => setModal(coach ? "profile" : "onboarding")}>{coach ? "Edit athlete" : "Update profile"}</button></div>
+          <div className="athlete-title"><span className="avatar large">{initials(athlete.displayName)}</span><div><h2>{athlete.displayName}</h2><p>{activeGoal ? `${activeGoal.title} · ${state.metrics.daysToGoal} ${de ? "Tage bis zum Ziel" : "days to goal"}` : (de ? "Noch kein aktives Ziel" : "No active goal yet")}</p></div></div>
+          <div className="heading-actions">{connectionStatus(state.connections, language)}<button className="secondary-button" onClick={() => setModal(coach ? "profile" : "onboarding")}>{coach ? (de ? "Athlet bearbeiten" : "Edit athlete") : (de ? "Profil aktualisieren" : "Update profile")}</button></div>
         </section>
 
         <SetupChecklist athlete={athlete} coach={coach} onOnboard={() => setModal("onboarding")} onGoal={() => setModal(coach ? "goal" : "onboarding")} onTest={() => coach ? setModal("test") : setTab("testing")} onData={() => setTab("data")} />
 
-        {tab === "overview" && <Overview state={state} assessment={latestAssessment} onOpen={(next) => setTab(next)} />}
+        {tab === "overview" && <Overview state={state} assessment={latestAssessment} onOpen={(next) => setTab(next)} language={language} />}
+        {tab === "activities" && <ActivitiesTab state={state} language={language} onOpenPlan={() => setTab("plan")} />}
         {tab === "plan" && <PlanTab state={state} coach={coach} draft={draft} busy={busy} act={act} />}
         {tab === "testing" && <TestingTab state={state} coach={coach} onAdd={() => setModal("test")} onRequest={() => setModal("testRequest")} />}
         {tab === "performance" && <PerformanceTab state={state} coach={coach} onAdd={() => setModal("performance")} />}
@@ -97,25 +108,43 @@ export default function DashboardClient() {
   );
 }
 
-function Overview({ state, assessment, onOpen }: { state: WorkspaceState; assessment?: AnyRow; onOpen: (tab: Tab) => void }) {
-  const metrics = state.metrics; const attention = metrics.attention ?? [];
+function Overview({ state, assessment, onOpen, language }: { state: WorkspaceState; assessment?: AnyRow; onOpen: (tab: Tab) => void; language: Language }) {
+  const metrics = state.metrics; const attention = metrics.attention ?? []; const de = language === "de";
   return <>
     <section className="metric-grid" aria-label="Athlete summary">
-      <article className="metric-card accent-card"><p>Race-day forecast</p><strong>{metrics.forecastLow ? `${formatDuration(metrics.forecastLow)}–${formatDuration(metrics.forecastHigh)}` : "Building evidence"}</strong><div className="metric-meta"><span className="pill positive">{assessment?.status?.replaceAll("_", " ") ?? "Needs data"}</span><small>{state.goals[0]?.goal_time_seconds ? `${formatDuration(state.goals[0].goal_time_seconds)} goal` : "No time goal"}</small></div></article>
-      <article className="metric-card"><p>Training volume · 28 days</p><strong>{metrics.volume28Km || "—"} <em>KM</em></strong><div className="spark-bars" aria-hidden="true"><i /><i /><i /><i /><i /><i /><i /></div><small className="delta">Fitness score {metrics.fitnessScore || "building"}</small></article>
-      <article className="metric-card"><p>Recovery signal</p><strong>{metrics.recoveryStatus}</strong><div className="recovery-line"><span style={{ width: `${Math.max(8, 100 - Number(metrics.fatigueScore ?? 0))}%` }} /></div><small>Combine feedback, pain, sleep, and load</small></article>
-      <article className="metric-card review-card"><p>Coach attention</p><strong>{attention.length}</strong>{attention.length ? attention.slice(0, 2).map((item: AnyRow) => <div key={item.label}><span className={`attention-dot ${item.level === "critical" ? "red" : "amber"}`} />{item.label}</div>) : <div><span className="attention-dot green" />No unresolved flags</div>}</article>
+      <article className="metric-card accent-card"><p>{de ? "Wettkampfprognose" : "Race-day forecast"}</p><strong>{metrics.forecastLow ? `${formatDuration(metrics.forecastLow)}–${formatDuration(metrics.forecastHigh)}` : (de ? "Datengrundlage wird aufgebaut" : "Building evidence")}</strong><div className="metric-meta"><span className="pill positive">{assessment?.status?.replaceAll("_", " ") ?? (de ? "Daten fehlen" : "Needs data")}</span><small>{state.goals[0]?.goal_time_seconds ? `${formatDuration(state.goals[0].goal_time_seconds)} ${de ? "Ziel" : "goal"}` : (de ? "Kein Zeitziel" : "No time goal")}</small></div></article>
+      <article className="metric-card"><p>{de ? "Trainingsumfang · 28 Tage" : "Training volume · 28 days"}</p><strong>{metrics.volume28Km || "—"} <em>KM</em></strong><div className="spark-bars" aria-hidden="true"><i /><i /><i /><i /><i /><i /><i /></div><small className="delta">{de ? "Fitnesswert" : "Fitness score"} {metrics.fitnessScore || (de ? "im Aufbau" : "building")}</small></article>
+      <article className="metric-card"><p>{de ? "Erholungssignal" : "Recovery signal"}</p><strong>{localRecovery(metrics.recoveryStatus, language)}</strong><div className="recovery-line"><span style={{ width: `${Math.max(8, 100 - Number(metrics.fatigueScore ?? 0))}%` }} /></div><small>{de ? "Feedback, Schmerz, Schlaf und Belastung kombiniert" : "Combine feedback, pain, sleep, and load"}</small></article>
+      <article className="metric-card review-card"><p>{de ? "Coach-Aufmerksamkeit" : "Coach attention"}</p><strong>{attention.length}</strong>{attention.length ? attention.slice(0, 2).map((item: AnyRow) => <div key={item.label}><span className={`attention-dot ${item.level === "critical" ? "red" : "amber"}`} />{item.label}</div>) : <div><span className="attention-dot green" />{de ? "Keine offenen Hinweise" : "No unresolved flags"}</div>}</article>
     </section>
     <div className="content-grid">
-      <section className="panel schedule-panel"><div className="panel-header"><div><p className="eyebrow">PUBLISHED PLAN</p><h3>Next sessions</h3></div><button onClick={() => onOpen("plan")}>View full plan →</button></div><SessionList sessions={state.upcoming.slice(0, 6)} /></section>
-      <aside className="right-column"><section className="panel readiness-panel"><div className="panel-header"><div><p className="eyebrow">COACHING SIGNALS</p><h3>Current context</h3></div><span className="pill positive">{metrics.recoveryStatus}</span></div>
-        <div className="signal"><span>Latest test</span><b>{state.tests[0] ? formatDate(state.tests[0].test_date) : "—"}</b><em>{state.tests[0]?.confidence ?? "missing"}</em></div>
-        <div className="signal"><span>Feedback</span><b>{state.feedback[0] ? formatDate(state.feedback[0].feedback_date) : "—"}</b><em>{state.feedback[0]?.fatigue ? `${state.feedback[0].fatigue}/10` : "none"}</em></div>
-        <div className="signal"><span>Data source</span><b>{state.connections[0]?.provider ?? "Manual"}</b><em>{state.connections[0]?.last_sync_at ? "current" : "setup"}</em></div>
+      <section className="panel schedule-panel"><div className="panel-header"><div><p className="eyebrow">{de ? "VERÖFFENTLICHTER PLAN" : "PUBLISHED PLAN"}</p><h3>{de ? "Nächste Einheiten" : "Next sessions"}</h3></div><button onClick={() => onOpen("plan")}>{de ? "Ganzen Plan öffnen" : "View full plan"} →</button></div><SessionList sessions={state.upcoming.slice(0, 6)} /></section>
+      <aside className="right-column"><section className="panel readiness-panel"><div className="panel-header"><div><p className="eyebrow">{de ? "COACHING-SIGNALE" : "COACHING SIGNALS"}</p><h3>{de ? "Aktueller Kontext" : "Current context"}</h3></div><span className="pill positive">{localRecovery(metrics.recoveryStatus, language)}</span></div>
+        <div className="signal"><span>{de ? "Letzter Test" : "Latest test"}</span><b>{state.tests[0] ? formatDate(state.tests[0].test_date, language) : "—"}</b><em>{state.tests[0]?.confidence ?? (de ? "fehlt" : "missing")}</em></div>
+        <div className="signal"><span>Feedback</span><b>{state.feedback[0] ? formatDate(state.feedback[0].feedback_date, language) : "—"}</b><em>{state.feedback[0]?.fatigue ? `${state.feedback[0].fatigue}/10` : (de ? "keins" : "none")}</em></div>
+        <div className="signal"><span>{de ? "Datenquelle" : "Data source"}</span><b>{state.connections[0]?.provider ?? (de ? "Manuell" : "Manual")}</b><em>{state.connections[0]?.last_sync_at ? (de ? "aktuell" : "current") : "setup"}</em></div>
         <p className="insight"><span>✦</span>{assessment?.summary ?? "Add activity data, a goal, and athlete feedback to strengthen the coaching assessment."}</p>
       </section></aside>
     </div>
   </>;
+}
+
+function ActivitiesTab({ state, language, onOpenPlan }: { state: WorkspaceState; language: Language; onOpenPlan: () => void }) {
+  const [range, setRange] = useState("30d"); const de = language === "de";
+  const reviews = useMemo(() => buildActivityReviews(state.activities, state.sessions, state.tests[0], language), [state.activities, state.sessions, state.tests, language]);
+  const cutoffDays = range === "7d" ? 7 : range === "30d" ? 30 : 365;
+  const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - cutoffDays);
+  const points = state.activities.map((item) => ({ ...item, date:String(item.activity_date), pace:Number(item.duration_seconds) / Math.max(.01, Number(item.distance_km)), hr:Number(item.average_hr) })).filter((item) => new Date(`${item.date}T12:00:00Z`) >= cutoff);
+  const pacePoints = points.filter((item) => Number.isFinite(item.pace) && item.pace > 120 && item.pace < 900).reverse().map((item) => ({ date:item.date, value:item.pace, source:item.name || item.activity_type }));
+  const hrPoints = points.filter((item) => Number.isFinite(item.hr) && item.hr > 40).reverse().map((item) => ({ date:item.date, value:item.hr, source:item.name || item.activity_type }));
+  const draft = state.plans.find((plan) => plan.status === "draft");
+  return <section className="workspace-section"><div className="section-hero"><div><p className="eyebrow">{de ? "AKTIVITÄTSANALYSE" : "ACTIVITY REVIEW"}</p><h2>{de ? "Ehrlich, hilfreich und im Kontext" : "Honest, useful, and in context"}</h2><p>{de ? "Die letzten Einheiten werden mit dem veröffentlichten Plan verglichen. Gute Arbeit wird sichtbar—aber auch Auslassen, Überziehen oder unnötig schnelles Laufen." : "Recent activities are compared with the published plan. Good work is recognized, while missed sessions, overreaching, and unnecessary speed are called out clearly."}</p></div>{draft && <button className="secondary-button" onClick={onOpenPlan}>{de ? `Adaptiver Entwurf v${draft.version} prüfen` : `Review adaptive draft v${draft.version}`}</button>}</div>
+    {adjustment && <div className="plan-change-banner"><strong>{de ? `Plananpassung v${adjustment.version} vorgeschlagen` : `Plan adjustment v${adjustment.version} proposed`}</strong><p>{de ? "Der veröffentlichte Plan wurde nicht still geändert. Ein neuer Entwurf erklärt die Anpassung und wartet auf Coach-Prüfung." : "The published plan was not silently changed. A new draft explains the adaptation and waits for coach review."}</p><small>{adjustment.rationale}</small></div>}
+    <div className="activity-review-grid">{reviews.slice(0, 8).map((review) => <article className={`panel activity-review ${review.tone}`} key={review.key}><div className="activity-review-head"><span>{formatDate(review.date, language)}</span><b>{review.badge}</b></div><h3>{review.title}</h3><p>{review.summary}</p><small>{review.detail}</small></article>)}</div>
+    {!reviews.length && <EmptyPanel title={de ? "Noch keine Aktivitäten" : "No activities yet"} body={de ? "Nach der ersten Synchronisierung erscheinen hier ehrliche Aktivitätsberichte." : "Honest activity reviews will appear after the first synchronization."} />}
+    <div className="activity-trend-header"><div><p className="eyebrow">{de ? "PACE & HERZFREQUENZ" : "PACE & HEART RATE"}</p><h3>{de ? "Verlauf" : "Training trends"}</h3></div><div className="range-picker">{[["7d",de?"Woche":"Week"],["30d",de?"Monat":"Month"],["365d",de?"Jahr":"Year"]].map(([key,label])=><button key={key} className={range===key?"active":""} onClick={()=>setRange(key)}>{label}</button>)}</div></div>
+    <div className="activity-chart-grid"><section className="panel performance-panel"><div className="performance-summary"><div><p className="eyebrow">PACE</p><h3>{de ? "Durchschnittspace" : "Average pace"}</h3><small>{de ? "Nur Aktivitäten mit plausibler Distanz und Dauer" : "Activities with plausible distance and duration only"}</small></div></div><TrendChart points={pacePoints} formatter={formatPace} inverted label="Pace" /></section><section className="panel performance-panel hr-panel"><div className="performance-summary"><div><p className="eyebrow">{de ? "HERZFREQUENZ" : "HEART RATE"}</p><h3>{de ? "Durchschnittliche HF" : "Average HR"}</h3><small>{de ? "Im Kontext von Einheit und Pace betrachten" : "Interpret together with workout type and pace"}</small></div></div><TrendChart points={hrPoints} formatter={(value)=>`${Math.round(value)} bpm`} label="Heart rate" /></section></div>
+  </section>;
 }
 
 function SetupChecklist({ athlete, coach, onOnboard, onGoal, onTest, onData }: { athlete:AnyRow; coach:boolean; onOnboard:()=>void; onGoal:()=>void; onTest:()=>void; onData:()=>void }) {
@@ -231,12 +260,12 @@ function Field(props: AnyRow) { const { label, ...inputProps } = props; return <
 function initials(name:string) { return name.split(/\s+/).slice(0,2).map((part) => part[0]).join("").toUpperCase(); }
 function dayPart() { const hour = new Date().getHours(); return hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening"; }
 function athleteStatus(athlete:AnyRow,state:WorkspaceState) { if (athlete.status === "invited") return "Invitation pending"; const setup=athlete.setup??{}; const complete=Object.values(setup).filter(Boolean).length; if(complete<5)return `Setup ${complete}/5`; if (athlete.id === state.selectedAthlete?.id) return state.metrics.recoveryStatus; return "Ready"; }
-function connectionStatus(connections:AnyRow[]) { const connection = connections.find((item) => item.status === "active"); return <span className="sync-state"><i />{connection ? `Synced ${connection.last_sync_at ? formatRelative(connection.last_sync_at) : "pending"}` : "Manual data"}</span>; }
+function connectionStatus(connections:AnyRow[], language:Language="en") { const connection = connections.find((item) => item.status === "active"); const de=language==="de"; return <span className="sync-state"><i />{connection ? `${de?"Synchronisiert":"Synced"} ${connection.last_sync_at ? formatRelative(connection.last_sync_at, language) : (de?"ausständig":"pending")}` : (de?"Manuelle Daten":"Manual data")}</span>; }
 function formatDuration(value:any) { const total = Number(value); if (!Number.isFinite(total)) return "—"; const hours=Math.floor(total/3600),minutes=Math.floor((total%3600)/60),seconds=Math.round(total%60); return hours ? `${hours}:${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}` : `${minutes}:${String(seconds).padStart(2,"0")}`; }
 function formatPace(value:any) { const total=Number(value); return Number.isFinite(total)&&total>0 ? `${Math.floor(total/60)}:${String(Math.round(total%60)).padStart(2,"0")}/km` : "—"; }
-function formatDate(value:any) { if(!value)return "—"; return new Date(`${String(value).slice(0,10)}T12:00:00Z`).toLocaleDateString("en",{day:"numeric",month:"short",year:"numeric",timeZone:"UTC"}); }
-function formatDateTime(value:any) { if(!value)return "—"; return new Date(value).toLocaleString("en",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}); }
-function formatRelative(value:string) { const minutes=Math.max(0,Math.round((Date.now()-new Date(value).getTime())/60000)); return minutes<2?"just now":minutes<60?`${minutes} min ago`:`${Math.round(minutes/60)} h ago`; }
+function formatDate(value:any, language:Language="en") { if(!value)return "—"; return new Date(`${String(value).slice(0,10)}T12:00:00Z`).toLocaleDateString(language==="de"?"de-AT":"en",{day:"numeric",month:"short",year:"numeric",timeZone:"UTC"}); }
+function formatDateTime(value:any, language:Language="en") { if(!value)return "—"; return new Date(value).toLocaleString(language==="de"?"de-AT":"en",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}); }
+function formatRelative(value:string, language:Language="en") { const minutes=Math.max(0,Math.round((Date.now()-new Date(value).getTime())/60000)); if(language==="de")return minutes<2?"gerade eben":minutes<60?`vor ${minutes} Min.`:`vor ${Math.round(minutes/60)} Std.`; return minutes<2?"just now":minutes<60?`${minutes} min ago`:`${Math.round(minutes/60)} h ago`; }
 function weekday(value:string) { return new Date(`${value}T12:00:00Z`).toLocaleDateString("en",{weekday:"short",timeZone:"UTC"}).toUpperCase(); }
 function shortDate(value:string) { return new Date(`${value}T12:00:00Z`).toLocaleDateString("en",{day:"numeric",month:"short",timeZone:"UTC"}); }
 function timeToSeconds(value:string) { if(!value)return null; const parts=value.split(":").map(Number); if(parts.some((part)=>!Number.isFinite(part)))return null; return parts.length===3?parts[0]*3600+parts[1]*60+parts[2]:parts[0]*60+parts[1]; }
@@ -247,3 +276,29 @@ function distanceKm(distance:string) { return distance === "5k" ? 5 : distance =
 function distanceLabel(distance:string) { return distance === "5k" ? "5K" : distance === "10k" ? "10K" : distance === "marathon" ? "Marathon" : "Half-marathon"; }
 function scalePrediction(seconds:number, fromKm:number, toKm:number) { return seconds > 0 && fromKm > 0 ? Math.round(seconds * Math.pow(toKm/fromKm,1.06)) : NaN; }
 function filterRange<T extends {date:string}>(points:T[], range:string) { if(range === "all") return points; const months=range === "3m"?3:range === "6m"?6:12; const cutoff=new Date(); cutoff.setMonth(cutoff.getMonth()-months); return points.filter((point)=>new Date(`${point.date}T12:00:00Z`)>=cutoff); }
+
+function localRecovery(value:string, language:Language) { if(language!=="de")return value; return ({"Check in":"Check-in fehlt","Review pain":"Schmerz prüfen","Recover":"Erholen","Caution":"Vorsicht","Ready":"Bereit"} as Record<string,string>)[value]??value; }
+
+function buildActivityReviews(activities:AnyRow[], sessions:AnyRow[], latestTest:AnyRow|undefined, language:Language) {
+  const de=language==="de", today=new Date().toISOString().slice(0,10), byDate=new Map<string,AnyRow[]>();
+  for(const activity of activities){const date=String(activity.activity_date);byDate.set(date,[...(byDate.get(date)??[]),activity]);}
+  const reviews:any[]=[];
+  for(const activity of activities.slice(0,20)){
+    const date=String(activity.activity_date), planned=sessions.find((session)=>session.session_date===date&&session.workout_type!=="rest");
+    const pace=Number(activity.duration_seconds)/Math.max(.01,Number(activity.distance_km)), hr=Number(activity.average_hr), range=parsePaceRange(String(planned?.pace_guidance??""));
+    let tone="good",badge=de?"GUT ERLEDIGT":"WELL DONE",summary=de?"Die Einheit wurde sauber abgeschlossen.":"The session was completed with useful training evidence.",detail=`${Number(activity.distance_km??0).toFixed(1)} km · ${formatPace(pace)}${hr>40?` · ${Math.round(hr)} bpm`:""}`;
+    if(planned?.status==="skipped") {tone="warning";badge=de?"WIDERSPRUCH":"MISMATCH";summary=de?"Im Plan als ausgelassen markiert, aber eine Aktivität wurde synchronisiert. Bitte den Eintrag prüfen.":"The plan says skipped, but an activity was synchronized. Review the session log.";}
+    else if(range&&pace<range[0]-5){tone="warning";badge=de?"ZU SCHNELL":"TOO FAST";summary=de?`Schneller als die Vorgabe ${formatPace(range[0])}–${formatPace(range[1])}. Das war nicht automatisch besser und kann zusätzliche Ermüdung erzeugen.`:`Faster than the ${formatPace(range[0])}–${formatPace(range[1])} guidance. Faster was not automatically better and may add unnecessary fatigue.`;}
+    else if(planned&&["recovery","easy","long_run"].includes(String(planned.workout_type))&&latestTest?.lt1_hr&&hr>Number(latestTest.lt1_hr)+7){tone="warning";badge=de?"HF HOCH":"HR HIGH";summary=de?"Für eine lockere Einheit lag die durchschnittliche Herzfrequenz deutlich über LT1. Erholung und Bedingungen prüfen.":"Average heart rate was clearly above LT1 for an easy session. Review recovery and conditions.";}
+    else if(!planned){tone="neutral";badge=de?"ZUSATZ":"UNPLANNED";summary=de?"Aktivität ohne passende Planeinheit. Kann sinnvoll sein, sollte aber in die Wochenbelastung einfließen.":"No matching planned session. It may be fine, but it still counts toward weekly load.";}
+    reviews.push({key:`activity-${activity.id}`,date,title:activity.name||activity.activity_type||"Activity",tone,badge,summary,detail});
+  }
+  for(const session of sessions.filter((item)=>item.session_date<today&&item.workout_type!=="rest"&&item.status!=="completed").slice(-14)){
+    if(byDate.has(String(session.session_date)))continue;
+    const skipped=session.status==="skipped";
+    reviews.push({key:`missed-${session.id}`,date:session.session_date,title:session.title,tone:"bad",badge:skipped?(de?"AUSGELASSEN":"SKIPPED"):(de?"NICHT ERFASST":"NOT DONE"),summary:skipped?(de?"Die Einheit wurde ausgelassen. Ehrlich erfasst ist besser als schöngefärbt—entscheidend ist die passende Reaktion.":"The session was skipped. Honest logging is more useful than perfect-looking data—the response matters now."):(de?"Keine passende Aktivität gefunden. Als erledigt markieren oder bewusst auslassen.":"No matching activity was found. Log it accurately or mark it skipped."),detail:session.pace_guidance||session.purpose||"—"});
+  }
+  return reviews.sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+}
+
+function parsePaceRange(value:string):[number,number]|null { const matches=[...value.matchAll(/(\d{1,2}):(\d{2})/g)].map((match)=>Number(match[1])*60+Number(match[2])); return matches.length>=2?[Math.min(matches[0],matches[1]),Math.max(matches[0],matches[1])]:null; }

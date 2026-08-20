@@ -64,7 +64,7 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
       ? all<Row>("SELECT * FROM training_plans WHERE athlete_id = ? ORDER BY version DESC", athleteId)
       : all<Row>("SELECT * FROM training_plans WHERE athlete_id = ? AND status = 'published' ORDER BY version DESC", athleteId),
     all<Row>("SELECT * FROM planned_sessions WHERE athlete_id = ? ORDER BY session_date LIMIT 200", athleteId),
-    all<Row>("SELECT * FROM activities WHERE athlete_id = ? ORDER BY activity_date DESC LIMIT 80", athleteId),
+    all<Row>("SELECT * FROM activities WHERE athlete_id = ? ORDER BY activity_date DESC LIMIT 500", athleteId),
     all<Row>("SELECT * FROM athlete_feedback WHERE athlete_id = ? ORDER BY feedback_date DESC, created_at DESC LIMIT 30", athleteId),
     all<Row>("SELECT * FROM assessments WHERE athlete_id = ? ORDER BY assessed_at DESC", athleteId),
     all<Row>("SELECT id, provider, external_athlete_id, scope, status, last_sync_at, created_at, updated_at FROM data_connections WHERE athlete_id = ?", athleteId),
@@ -79,6 +79,9 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
   const activeGoal = goalRows.find((row) => row.status === "active") ?? goalRows[0];
   const latestAssessment = assessmentRows[0];
   const publishedPlan = planRows.find((row) => row.status === "published");
+  const pendingPlanAdjustment = planRows.find((row) => row.status === "draft") ?? (user.role === "athlete"
+    ? await platformEnv().DB.prepare("SELECT version, rationale, created_at FROM training_plans WHERE athlete_id = ? AND status = 'draft' ORDER BY version DESC LIMIT 1").bind(athleteId).first<Row>()
+    : null);
   const visibleSessions = user.role === "athlete" && publishedPlan
     ? sessionRows.filter((row) => row.plan_id === publishedPlan.id)
     : sessionRows;
@@ -116,6 +119,7 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
       adherencePercent,
       completedSessions: completedSessions.length,
       dueSessions: dueSessions.length,
+      planAdjustment: pendingPlanAdjustment ? { version: pendingPlanAdjustment.version, rationale: pendingPlanAdjustment.rationale, createdAt: pendingPlanAdjustment.created_at } : null,
       attention: attentionItems({ recentFeedback, testRows, jobRows, connectionRows, adherencePercent }),
     },
   };
