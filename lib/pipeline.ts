@@ -1,5 +1,4 @@
 import { decryptSecret } from "./secrets";
-import { generateTrainingPlan } from "./planner";
 import { forecastFromActivities } from "./forecast";
 import { id, nowIso, platformEnv, todayIso } from "../db/runtime";
 
@@ -129,41 +128,10 @@ async function calculateAssessment(athleteId: string) {
 }
 
 async function maybeCreateAdaptiveDraft(athleteId: string, feedback?: { fatigue: number; pain: string }) {
-  const db = platformEnv().DB;
-  const published = await db.prepare("SELECT * FROM training_plans WHERE athlete_id = ? AND status = 'published' ORDER BY version DESC LIMIT 1").bind(athleteId).first<Record<string, unknown>>();
-  if (!published) return;
-  const existingDraft = await db.prepare("SELECT id FROM training_plans WHERE athlete_id = ? AND status = 'draft' LIMIT 1").bind(athleteId).first();
-  if (existingDraft) return;
-  const recent = await db.prepare(`SELECT ps.* FROM planned_sessions ps JOIN training_plans tp ON tp.id = ps.plan_id
-    WHERE ps.athlete_id = ? AND tp.status = 'published' AND ps.workout_type != 'rest' AND ps.session_date BETWEEN date('now','-14 day') AND date('now') ORDER BY ps.session_date`)
-    .bind(athleteId).all<Record<string, unknown>>();
-  const sessions = recent.results ?? [];
-  const missed = sessions.filter((row) => row.status !== "completed").length;
-  const veryHard = sessions.filter((row) => Number(row.completion_rpe ?? 0) >= 9).length;
-  const reasons: string[] = [];
-  if (feedback?.pain) reasons.push("pain was reported");
-  if (Number(feedback?.fatigue ?? 0) >= 8) reasons.push(`fatigue reached ${feedback?.fatigue}/10`);
-  if (missed >= 2) reasons.push(`${missed} planned sessions were missed or remain unlogged in 14 days`);
-  if (veryHard >= 2) reasons.push(`${veryHard} sessions were rated 9–10/10`);
+  const reasons = [feedback?.pain ? "pain was reported" : "", Number(feedback?.fatigue ?? 0) >= 8 ? `fatigue reached ${feedback?.fatigue}/10` : ""].filter(Boolean);
   if (!reasons.length) return;
-
-  const [athlete, goal, latestTest, activities, coach] = await Promise.all([
-    db.prepare("SELECT * FROM athletes WHERE id = ?").bind(athleteId).first<Record<string, unknown>>(),
-    db.prepare("SELECT * FROM goals WHERE athlete_id = ? AND status = 'active' ORDER BY CASE priority WHEN 'A' THEN 0 WHEN 'B' THEN 1 ELSE 2 END, event_date LIMIT 1").bind(athleteId).first<Record<string, unknown>>(),
-    db.prepare("SELECT * FROM lactate_tests WHERE athlete_id = ? ORDER BY test_date DESC LIMIT 1").bind(athleteId).first<Record<string, unknown>>(),
-    db.prepare("SELECT * FROM activities WHERE athlete_id = ? ORDER BY activity_date DESC LIMIT 120").bind(athleteId).all<Record<string, unknown>>(),
-    db.prepare("SELECT coach_user_id FROM coach_athletes WHERE athlete_id = ? AND status = 'active' ORDER BY CASE relationship_role WHEN 'primary' THEN 0 ELSE 1 END LIMIT 1").bind(athleteId).first<{ coach_user_id:string }>(),
-  ]);
-  if (!athlete || !goal || !coach) return;
-  const generated = await generateTrainingPlan({ athlete, goal, latestTest, recentFeedback: feedback as Record<string, unknown>, recentActivities: activities.results ?? [] });
-  const versionRow = await db.prepare("SELECT COALESCE(MAX(version), 0) AS version FROM training_plans WHERE athlete_id = ?").bind(athleteId).first<{ version:number }>();
-  const version = Number(versionRow?.version ?? 0) + 1, planId = id("plan"), timestamp = nowIso();
-  const rationale = `Adaptive draft created because ${reasons.join(", ")}. No published session changed automatically; coach review is required. ${generated.rationale}`;
-  await db.prepare("INSERT INTO training_plans (id, athlete_id, goal_id, version, status, start_date, end_date, rationale, created_by, created_at) VALUES (?, ?, ?, ?, 'draft', ?, ?, ?, ?, ?)")
-    .bind(planId, athleteId, goal.id, version, generated.sessions[0]?.date ?? todayIso(), generated.sessions.at(-1)?.date ?? String(goal.event_date), rationale, coach.coach_user_id, timestamp).run();
-  for (const group of chunks(generated.sessions, 30)) await db.batch(group.map((session) => db.prepare("INSERT INTO planned_sessions (id, plan_id, athlete_id, session_date, workout_type, title, details, planned_distance_km, pace_guidance, hr_guidance, purpose, fatigue_modification, major_stimulus, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'planned')")
-    .bind(id("session"), planId, athleteId, session.date, session.workoutType, session.title, session.details, session.distanceKm, session.paceGuidance, session.hrGuidance, session.purpose, session.fatigueModification, session.majorStimulus ? 1 : 0)));
-  await queueCoachAlert(athleteId, "adaptive_draft", "Adaptive plan draft needs review", `Draft version ${version} was created because ${reasons.join(", ")}. The published plan is unchanged until you review and publish it.`);
+  // Signals may warrant a coach review, but must never replace a tailored plan.
+  await queueCoachAlert(athleteId, "plan_review", "Plan review suggested", `Review the published plan because ${reasons.join(" and ")}. No draft was created and the published plan is unchanged.`);
 }
 
 async function backfillWeeklyForecasts(athleteId: string) {

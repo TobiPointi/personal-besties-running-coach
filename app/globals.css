@@ -16,7 +16,8 @@ nav { display:grid; gap:5px; }
 .nav-item span { width:19px; text-align:center; font-size:17px; }
 .nav-item b { margin-left:auto; display:grid; place-items:center; width:20px; height:20px; border-radius:50%; color:#fff; background:#d66557; font-size:11px; }
 .nav-item.active { color:#153a2e; background:#e9efe9; font-weight:680; }
-.athlete-list { min-height:0; flex:1 1 auto; margin-top:32px; overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; }
+.athlete-list { min-height:0; flex:0 0 clamp(238px,32vh,330px); margin-top:24px; overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; }
+.athlete-search{width:100%;height:32px;margin:0 0 8px;padding:0 10px;border:1px solid var(--line);border-radius:8px;color:#314139;background:#fff;font:10px var(--font-geist-sans),Arial,sans-serif;outline:none}.athlete-search:focus{border-color:#6f927b;box-shadow:0 0 0 3px #e9f1ea}.athlete-search-empty{padding:10px;color:#8b958f;font-size:10px;text-align:center}
 .section-label { display:flex; justify-content:space-between; align-items:center; padding:0 10px 9px; color:#929c95; font-size:10px; font-weight:740; letter-spacing:1.3px; }
 .section-label button { border:0; background:transparent; color:#66736b; font-size:19px; cursor:pointer; }
 .athlete-row { width:100%; display:grid; grid-template-columns:34px 1fr 7px; align-items:center; gap:10px; padding:9px; border:0; border-radius:10px; background:transparent; text-align:left; cursor:pointer; }

@@ -60,6 +60,11 @@ async function ensureTobiasReferenceData(user: AppUser) {
     });
     for (let index = 0; index < statements.length; index += 30) await db.batch(statements.slice(index, index + 30));
   }
+  // The generic adaptive draft was created from missing logs, not an explicit
+  // coaching decision. Keep the imported Bad Ischl plan as Tobias's protected
+  // published baseline and remove that misleading draft from review.
+  await db.prepare("UPDATE training_plans SET status = 'archived' WHERE athlete_id = 'athlete_tobias' AND status = 'draft' AND rationale LIKE 'Adaptive draft created because%'").run();
+  await ensureTobiasLactateTest(db, timestamp);
   const activityStatements = referenceActivities.map(([date, name, distance, duration, elevation, providerId]) => db.prepare(`INSERT INTO activities (id, athlete_id, provider, provider_activity_id, activity_date, activity_type, name, distance_km, duration_seconds, elevation_gain_m, training_load, raw_summary_json, updated_at)
     VALUES (?, 'athlete_tobias', 'reference', ?, ?, 'Run', ?, ?, ?, ?, NULL, ?, ?)
     ON CONFLICT(athlete_id, provider, provider_activity_id) DO UPDATE SET distance_km=excluded.distance_km, duration_seconds=excluded.duration_seconds, updated_at=excluded.updated_at`)
@@ -70,6 +75,21 @@ async function ensureTobiasReferenceData(user: AppUser) {
     ON CONFLICT(id) DO UPDATE SET prediction_5k_seconds=excluded.prediction_5k_seconds, prediction_10k_seconds=excluded.prediction_10k_seconds, prediction_half_seconds=excluded.prediction_half_seconds, prediction_marathon_seconds=excluded.prediction_marathon_seconds, created_at=excluded.created_at`)
     .bind(`reference_performance_${date}_${source.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`, date, source, five, ten, half, marathon, timestamp));
   for (let index = 0; index < performanceStatements.length; index += 30) await db.batch(performanceStatements.slice(index, index + 30));
+}
+
+async function ensureTobiasLactateTest(db: D1Database, timestamp: string) {
+  const testId = "test_tobias_sim_2026_05_26";
+  const stages = [
+    [8.0, 240, 450, 117, 0.82], [10.0, 240, 360, 129, 0.84], [12.0, 240, 300, 147, 0.98],
+    [14.0, 240, 257, 164, 1.46], [16.0, 240, 225, 181, 3.12], [18.0, 240, 200, 191, 5.41], [19.3, 150, 187, 198, 8.58],
+  ];
+  await db.prepare(`INSERT OR IGNORE INTO lactate_tests
+    (id, athlete_id, test_date, protocol, venue, lt1_lactate, lt1_hr, lt1_pace_seconds_km, lt2_lactate, lt2_hr, lt2_pace_seconds_km, interpretation_method, confidence, notes, created_at)
+    VALUES (?, 'athlete_tobias', '2026-05-26', ?, ?, 0.91, 132, 346, 2.40, 176, 232, 'SIM_5_HR_ZONES_V1; individual aerobic threshold + Dmax', 'high', ?, ?)`)
+    .bind(testId, "Treadmill incremental test: 6 × 4 min stages (8–18 km/h) + 2:30 final stage at 19.3 km/h.", "SIM – Sport In Motion, Linz", "Source report: individual aerobic threshold 10.4 km/h, 0.91 mmol/L, 132 bpm (5:47/km). Dmax / Free Freiburg threshold 15.5 km/h, 2.40 mmol/L, 176 bpm (3:52/km). Reported running HR bands: REG <145; GA-ext 145–162; GA-int 162–171; SB 171–178; SB+ ≥178 bpm (report gives 178–181).", timestamp).run();
+  await db.batch(stages.map(([speed, duration, pace, hr, lactate], index) => db.prepare(`INSERT OR IGNORE INTO lactate_stages
+    (id, test_id, stage_number, duration_seconds, pace_seconds_km, speed_kph, heart_rate, lactate_mmol, rpe)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL)`).bind(`${testId}_stage_${index + 1}`, testId, index + 1, duration, pace, speed, hr, lactate)));
 }
 
 export async function getWorkspaceState(user: AppUser, requestedAthleteId?: string | null) {
