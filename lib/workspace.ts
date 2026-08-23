@@ -77,15 +77,21 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
   const athleteRows = user.role === "coach"
     ? await all<Row>("SELECT a.* FROM athletes a JOIN coach_athletes ca ON ca.athlete_id = a.id WHERE ca.coach_user_id = ? AND ca.status = 'active' ORDER BY CASE a.status WHEN 'active' THEN 0 ELSE 1 END, a.display_name", user.id)
     : await all<Row>("SELECT * FROM athletes WHERE user_id = ? ORDER BY display_name", user.id);
-  const enrichedAthletes: Row[] = await Promise.all(athleteRows.map(async (row): Promise<Row> => {
-    const athleteId = String(row.id);
-    const counts = await platformEnv().DB.prepare(`SELECT
-      (SELECT COUNT(*) FROM goals WHERE athlete_id = ?) AS goals,
-      (SELECT COUNT(*) FROM lactate_tests WHERE athlete_id = ?) AS tests,
-      (SELECT COUNT(*) FROM data_connections WHERE athlete_id = ? AND status = 'active') AS connections,
-      (SELECT COUNT(*) FROM activities WHERE athlete_id = ?) AS activities`).bind(athleteId, athleteId, athleteId, athleteId).first<Row>();
+  // Keep the athlete switch path to two database reads for the list, rather than one
+  // count query per athlete. The sidebar may contain considerably more athletes than the
+  // selected dashboard needs to render.
+  const athleteIds = athleteRows.map((row) => String(row.id));
+  const countRows = athleteIds.length ? await all<Row>(`SELECT a.id,
+      (SELECT COUNT(*) FROM goals WHERE athlete_id = a.id) AS goals,
+      (SELECT COUNT(*) FROM lactate_tests WHERE athlete_id = a.id) AS tests,
+      (SELECT COUNT(*) FROM data_connections WHERE athlete_id = a.id AND status = 'active') AS connections,
+      (SELECT COUNT(*) FROM activities WHERE athlete_id = a.id) AS activities
+    FROM athletes a WHERE a.id IN (${athleteIds.map(() => "?").join(", ")})`, ...athleteIds) : [];
+  const countsByAthlete = new Map(countRows.map((row) => [String(row.id), row]));
+  const enrichedAthletes: Row[] = athleteRows.map((row): Row => {
+    const counts = countsByAthlete.get(String(row.id));
     return { ...row, setup_goals: counts?.goals ?? 0, setup_tests: counts?.tests ?? 0, setup_connections: counts?.connections ?? 0, setup_activities: counts?.activities ?? 0 };
-  }));
+  });
   const selected = enrichedAthletes.find((row) => row.id === requestedAthleteId) ?? enrichedAthletes[0] ?? null;
   if (!selected) return { user, athletes: [], selectedAthlete: null };
   const athleteId = String(selected.id);
@@ -99,7 +105,9 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
       ? all<Row>("SELECT * FROM training_plans WHERE athlete_id = ? ORDER BY version DESC", athleteId)
       : all<Row>("SELECT * FROM training_plans WHERE athlete_id = ? AND status = 'published' ORDER BY version DESC", athleteId),
     all<Row>("SELECT * FROM planned_sessions WHERE athlete_id = ? ORDER BY session_date LIMIT 200", athleteId),
-    all<Row>("SELECT * FROM activities WHERE athlete_id = ? ORDER BY activity_date DESC LIMIT 500", athleteId),
+    // The activity report currently offers a one-year view. Avoid transferring an
+    // unbounded training history every time the coach changes athlete.
+    all<Row>("SELECT * FROM activities WHERE athlete_id = ? AND activity_date >= ? ORDER BY activity_date DESC LIMIT 400", athleteId, offsetDate(-365)),
     all<Row>("SELECT * FROM athlete_feedback WHERE athlete_id = ? ORDER BY feedback_date DESC, created_at DESC LIMIT 30", athleteId),
     all<Row>("SELECT * FROM assessments WHERE athlete_id = ? ORDER BY assessed_at DESC", athleteId),
     all<Row>("SELECT id, provider, external_athlete_id, scope, status, last_sync_at, created_at, updated_at FROM data_connections WHERE athlete_id = ?", athleteId),
@@ -108,11 +116,13 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
     user.role === "coach" ? all<Row>("SELECT * FROM coach_notes WHERE athlete_id = ? ORDER BY created_at DESC LIMIT 20", athleteId) : Promise.resolve([]),
   ]);
   const recentActivities = activityRows.filter((row) => String(row.activity_date) >= offsetDate(-27));
-  const volume28 = recentActivities.reduce((sum, row) => sum + Number(row.distance_km ?? 0), 0);
+  const recentRuns = recentActivities.filter((row) => isRunActivity(row.activity_type));
+  const volume28 = recentRuns.reduce((sum, row) => sum + Number(row.distance_km ?? 0), 0);
   const load28 = recentActivities.reduce((sum, row) => sum + Number(row.training_load ?? 0), 0);
   const recentFeedback = feedbackRows[0];
   const activeGoal = goalRows.find((row) => row.status === "active") ?? goalRows[0];
   const latestAssessment = assessmentRows[0];
+  const forecast = parseJson(latestAssessment?.evidence_json).forecast as Row | undefined;
   const publishedPlan = planRows.find((row) => row.status === "published");
   const pendingPlanAdjustment = planRows.find((row) => row.status === "draft") ?? (user.role === "athlete"
     ? await platformEnv().DB.prepare("SELECT version, rationale, created_at FROM training_plans WHERE athlete_id = ? AND status = 'draft' ORDER BY version DESC LIMIT 1").bind(athleteId).first<Row>()
@@ -152,6 +162,8 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
       recoveryStatus: recoveryLabel(recentFeedback),
       forecastLow: latestAssessment?.race_forecast_low_seconds ?? null,
       forecastHigh: latestAssessment?.race_forecast_high_seconds ?? null,
+      forecastConfidence: forecast?.confidence ?? null,
+      forecastEvidence: forecast?.evidence ?? null,
       adherencePercent,
       completedSessions: completedSessions.length,
       dueSessions: dueSessions.length,
@@ -172,6 +184,7 @@ function publicAthlete(row: Row) {
 }
 
 function parseJson(value: unknown) { try { return JSON.parse(String(value ?? "{}")); } catch { return {}; } }
+function isRunActivity(value: unknown) { return /run/i.test(String(value ?? "")); }
 function offsetDate(days: number) { const date = new Date(); date.setUTCDate(date.getUTCDate() + days); return date.toISOString().slice(0, 10); }
 function recoveryLabel(feedback?: Row) {
   if (!feedback) return "Check in";

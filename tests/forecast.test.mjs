@@ -10,4 +10,5 @@ test("forecast model protects marathon estimates with endurance evidence", async
   assert.match(source, /Math\.max\(0, 55 - weeklyKm\)/);
   assert.match(source, /Math\.max\(0, 28 - longestRunKm\)/);
   assert.match(source, /raceLike\.length \? raceLike : candidates/);
+  assert.match(source, /raceLike\.length >= 1 && weeklyKm >= 25/);
 });

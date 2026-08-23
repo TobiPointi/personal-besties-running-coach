@@ -42,7 +42,9 @@ export function forecastFromActivities(activities: ForecastActivity[], asOf: str
   const target = closestDistance(goalDistanceKm);
   const centre = predictions[target];
   const uncertainty = target === "marathon" ? 0.065 : target === "half" ? 0.045 : 0.035;
-  const confidence: RaceForecast["confidence"] = raceLike.length >= 2 && weeklyKm >= 45 ? "high" : raceLike.length || weeklyKm >= 35 ? "moderate" : "low";
+  // Training runs alone can indicate a useful trend, but they do not calibrate a
+  // race prediction. Do not imply moderate confidence merely because volume is high.
+  const confidence: RaceForecast["confidence"] = raceLike.length >= 2 && weeklyKm >= 45 ? "high" : raceLike.length >= 1 && weeklyKm >= 25 ? "moderate" : "low";
   return {
     predictions,
     lowSeconds: Math.round(centre * (1 - uncertainty)),

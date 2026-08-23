@@ -3,6 +3,7 @@ import { requireApiUser } from "../../../../lib/auth";
 import { audit } from "../../../../lib/workspace";
 import { encryptSecret } from "../../../../lib/secrets";
 import { id, nowIso, platformEnv } from "../../../../db/runtime";
+import { processPendingWork } from "../../../../lib/pipeline";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,9 @@ export async function GET(request: NextRequest) {
       runtime.DB.prepare("INSERT OR IGNORE INTO jobs (id, athlete_id, job_type, status, idempotency_key, payload_json, scheduled_at) VALUES (?, ?, 'intervals_sync', 'queued', ?, '{}', ?)").bind(id("job"), stored.athlete_id, `intervals_sync:${stored.athlete_id}:oauth:${state}`, timestamp),
     ]);
     await audit(user, "connect", "data_connection", connectionId, stored.athlete_id, { provider: "intervals", scope: token.scope });
+    // A successful OAuth connection should show its available history immediately.
+    // Failures are retained and retried by the job pipeline, rather than undoing OAuth.
+    await processPendingWork(stored.athlete_id);
     return Response.redirect(`${appOrigin}/?athleteId=${encodeURIComponent(stored.athlete_id)}&connection=success`);
   } catch (error) {
     const message = encodeURIComponent(error instanceof Error ? error.message : "Connection failed.");

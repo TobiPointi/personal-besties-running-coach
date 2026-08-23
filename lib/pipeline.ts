@@ -108,7 +108,8 @@ async function calculateAssessment(athleteId: string) {
   const activityResult = await db.prepare("SELECT activity_date, activity_type, name, distance_km, duration_seconds, elevation_gain_m, training_load FROM activities WHERE athlete_id = ? AND activity_date >= date('now', '-56 day') ORDER BY activity_date")
     .bind(athleteId).all<Record<string, unknown>>();
   const rows = activityResult.results ?? [];
-  const distance = rows.reduce((sum: number, row: Record<string, unknown>) => sum + Number(row.distance_km ?? 0), 0);
+  const runningRows = rows.filter((row) => isRunActivity(row.activity_type));
+  const distance = runningRows.reduce((sum: number, row: Record<string, unknown>) => sum + Number(row.distance_km ?? 0), 0);
   const load = rows.reduce((sum: number, row: Record<string, unknown>) => sum + Number(row.training_load ?? 0), 0);
   const weeklyDistance = distance / 8;
   const fitness = Math.round(Math.min(100, load ? load / 8 : weeklyDistance));
@@ -120,7 +121,7 @@ async function calculateAssessment(athleteId: string) {
   const status = feedback?.pain ? "review" : fatigue >= 70 ? "caution" : "on_track";
   const forecast = forecastFromActivities(rows, todayIso(), Number(goal?.distance_km ?? 0) || null);
   await db.prepare("INSERT INTO assessments (id, athlete_id, assessed_at, status, fitness_score, fatigue_score, race_forecast_low_seconds, race_forecast_high_seconds, summary, evidence_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
-    .bind(id("assessment"), athleteId, nowIso(), status, fitness, fatigue, forecast?.lowSeconds ?? null, forecast?.highSeconds ?? null, forecast ? `${forecast.evidence.weeklyKm.toFixed(1)} km/week, longest run ${forecast.evidence.longestRunKm.toFixed(1)} km; forecast is deliberately conservative when endurance evidence is limited.` : `${weeklyDistance.toFixed(1)} km/week average over the available eight-week window.`, JSON.stringify({ activities: rows.length, distanceKm: distance, trainingLoad: load, forecast })).run();
+    .bind(id("assessment"), athleteId, nowIso(), status, fitness, fatigue, forecast?.lowSeconds ?? null, forecast?.highSeconds ?? null, forecast ? `${forecast.evidence.weeklyKm.toFixed(1)} running km/week, longest run ${forecast.evidence.longestRunKm.toFixed(1)} km; forecast is deliberately conservative when endurance evidence is limited.` : `${weeklyDistance.toFixed(1)} running km/week average over the available eight-week window.`, JSON.stringify({ activities: rows.length, runningActivities: runningRows.length, runningDistanceKm: distance, trainingLoad: load, forecast })).run();
   await maybeCreateAdaptiveDraft(athleteId, feedback);
   if (!rows.length) await queueCoachAlert(athleteId, "missing_data", "Athlete data is missing", "No completed activities were available for the latest assessment.");
   if (feedback?.pain) await queueCoachAlert(athleteId, "pain", "Athlete reported pain", feedback.pain);
@@ -232,6 +233,7 @@ function metricFrom(value: Record<string, unknown> | null): number | null {
   }
   return null;
 }
+function isRunActivity(value: unknown) { return /run/i.test(String(value ?? "")); }
 function metricDistanceKm(value: unknown): number | null { const number = numberOrNull(value); return number === null ? null : number > 500 ? number / 1000 : number; }
 function deviceSource(value: Record<string, unknown>) { const text = JSON.stringify(value).toLowerCase(); if (text.includes("garmin")) return "Garmin"; if (text.includes("suunto")) return "Suunto"; if (text.includes("coros")) return "COROS"; if (text.includes("polar")) return "Polar"; if (text.includes("apple")) return "Apple Watch"; return "Intervals.icu"; }
 function redact(value: Record<string, unknown>) { return Object.fromEntries(Object.entries(value).filter(([key]) => !/(token|secret|password|api.?key)/i.test(key))); }
