@@ -154,9 +154,16 @@ async function submitFeedback(userId: string, athleteId: string, body: Record<st
 
 async function completeOnboarding(userId: string, athleteId: string, body: Record<string, unknown>) {
   const db = platformEnv().DB; const timestamp = nowIso();
-  const availability = { preferredTrainingDays: optionalText(body.preferredTrainingDays), scheduleNotes: optionalText(body.scheduleNotes) };
-  await db.prepare(`UPDATE athletes SET weekly_target_km = ?, injury_notes = ?, experience_level = ?, training_days = ?, long_run_day = ?, availability_json = ?, onboarding_completed_at = ?, updated_at = ? WHERE id = ?`)
-    .bind(numberOrNull(body.weeklyTargetKm), optionalText(body.injuryNotes), optionalText(body.experienceLevel), numberOrNull(body.trainingDays), optionalText(body.longRunDay), JSON.stringify(availability), timestamp, timestamp, athleteId).run();
+  const trainingDays = numberOrNull(body.trainingDays);
+  const preferredTrainingDays = stringArray(body.preferredTrainingDays);
+  const primarySport = optionalText(body.primarySport) ?? "running";
+  const currentRestriction = optionalText(body.currentRestriction) ?? "none";
+  if (!trainingDays || trainingDays < 2 || trainingDays > 7) throw new Error("Choose between 2 and 7 training days per week.");
+  if (preferredTrainingDays.length < trainingDays) throw new Error("Choose each day that is normally available for training.");
+  if (!["running", "cycling", "triathlon", "other"].includes(primarySport)) throw new Error("Choose a supported primary sport.");
+  const availability = { preferredTrainingDays, scheduleNotes: optionalText(body.scheduleNotes), yearsInSport: numberOrNull(body.yearsInSport), longestRecentSessionKm: numberOrNull(body.longestRecentSessionKm), otherEnduranceSports: optionalText(body.otherEnduranceSports), currentRestriction, planReadinessConfirmed: body.planReadinessConfirmed === "yes" };
+  await db.prepare(`UPDATE athletes SET primary_sport = ?, weekly_target_km = ?, injury_notes = ?, experience_level = ?, training_days = ?, long_run_day = ?, availability_json = ?, onboarding_completed_at = ?, updated_at = ? WHERE id = ?`)
+    .bind(primarySport, numberOrNull(body.weeklyTargetKm), optionalText(body.injuryNotes), optionalText(body.experienceLevel), trainingDays, optionalText(body.longRunDay), JSON.stringify(availability), timestamp, timestamp, athleteId).run();
   if (optionalText(body.goalTitle) && optionalText(body.eventDate)) await saveGoal(userId, athleteId, { title: body.goalTitle, eventDate: body.eventDate, distanceKm: body.distanceKm, goalTimeSeconds: body.goalTimeSeconds, priority: "A", notes: body.goalNotes });
   await audit({ id: userId } as never, "complete", "athlete_onboarding", athleteId, athleteId);
 }
@@ -179,6 +186,7 @@ async function generatePlan(userId: string, athleteId: string) {
   const athlete = await db.prepare("SELECT * FROM athletes WHERE id = ?").bind(athleteId).first<Record<string, unknown>>();
   const goal = await db.prepare("SELECT * FROM goals WHERE athlete_id = ? AND status = 'active' ORDER BY CASE priority WHEN 'A' THEN 0 WHEN 'B' THEN 1 ELSE 2 END, event_date LIMIT 1").bind(athleteId).first<Record<string, unknown>>();
   if (!athlete || !goal) throw new Error("Add an active goal before generating a plan.");
+  if (!athlete.onboarding_completed_at) throw new Error("Complete the athlete profile before generating a plan.");
   const latestTest = await db.prepare("SELECT * FROM lactate_tests WHERE athlete_id = ? ORDER BY test_date DESC LIMIT 1").bind(athleteId).first<Record<string, unknown>>();
   const recentFeedback = await db.prepare("SELECT * FROM athlete_feedback WHERE athlete_id = ? ORDER BY feedback_date DESC, created_at DESC LIMIT 1").bind(athleteId).first<Record<string, unknown>>();
   const activities = await db.prepare("SELECT * FROM activities WHERE athlete_id = ? ORDER BY activity_date DESC LIMIT 80").bind(athleteId).all<Record<string, unknown>>();
@@ -231,5 +239,6 @@ function requiredText(value: unknown, label: string) { const text = String(value
 function optionalText(value: unknown) { const text = String(value ?? "").trim(); return text || null; }
 function requiredDate(value: unknown) { const text = requiredText(value, "date"); if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) throw new Error("Use a valid date."); return text; }
 function numberOrNull(value: unknown) { if (value === "" || value === null || value === undefined) return null; const parsed = Number(value); return Number.isFinite(parsed) ? parsed : null; }
+function stringArray(value: unknown) { return Array.isArray(value) ? value.map(String).map((item) => item.trim()).filter(Boolean) : optionalText(value)?.split(",").map((item) => item.trim()).filter(Boolean) ?? []; }
 function requiredNumber(value: unknown, label: string) { const parsed = numberOrNull(value); if (parsed === null) throw new Error(`${label} is required.`); return parsed; }
 function apiError(error: unknown) { if (error instanceof Response) return error; const message = error instanceof Error ? error.message : "Unexpected workspace error."; return Response.json({ error: message }, { status: 400 }); }
