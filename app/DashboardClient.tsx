@@ -22,6 +22,7 @@ export default function DashboardClient() {
   const [loadingAthleteId, setLoadingAthleteId] = useState("");
   const [message, setMessage] = useState<{ tone: "good" | "bad"; text: string } | null>(null);
   const [language, setLanguage] = useState<Language>("en");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const workspaceRequest = useRef<AbortController | null>(null);
 
   const load = useCallback(async (athleteId?: string) => {
@@ -70,20 +71,21 @@ export default function DashboardClient() {
   const activeGoal = state.goals.find((goal) => goal.status === "active") ?? state.goals[0];
   const draft = state.plans.find((plan) => plan.status === "draft"); const adjustment = state.metrics.planAdjustment;
   const latestAssessment = state.assessments[0];
+  const selectTab = (next: Tab) => { setTab(next); setMobileMenuOpen(false); };
 
   return (
     <div className="app-shell">
       <aside className="sidebar">
         <div className="brand"><img className="brand-logo" src="/personal-besties-logo-placeholder.png" alt="Personal Besties" /></div>
         <nav aria-label="Workspace sections">
-          <NavButton active={tab === "overview"} label={de ? "Übersicht" : "Overview"} icon="⌂" onClick={() => setTab("overview")} />
-          <NavButton active={tab === "activities"} label={de ? "Aktivitätsbericht" : "Activity report"} icon="◎" onClick={() => setTab("activities")} />
-          <NavButton active={tab === "plan"} label={de ? "Trainingsplan" : "Training plan"} icon="□" onClick={() => setTab("plan")} />
-          <NavButton active={tab === "testing"} label={de ? "Laktattests" : "Lactate tests"} icon="⌁" onClick={() => setTab("testing")} />
-          <NavButton active={tab === "performance"} label={de ? "Leistungstrends" : "Performance trends"} icon="↗" onClick={() => setTab("performance")} />
-          <NavButton active={tab === "goals"} label={de ? "Ziele" : "Goals"} icon="◇" onClick={() => setTab("goals")} />
-          <NavButton active={tab === "feedback"} label="Feedback" icon="◌" badge={state.feedback.length ? undefined : "1"} onClick={() => setTab("feedback")} />
-          <NavButton active={tab === "data"} label={de ? "Daten & Versand" : "Data & delivery"} icon="↻" onClick={() => setTab("data")} />
+          <NavButton active={tab === "overview"} label={de ? "Übersicht" : "Overview"} icon="⌂" onClick={() => selectTab("overview")} />
+          <NavButton active={tab === "activities"} label={de ? "Aktivitätsbericht" : "Activity report"} icon="◎" onClick={() => selectTab("activities")} />
+          <NavButton active={tab === "plan"} label={de ? "Trainingsplan" : "Training plan"} icon="□" onClick={() => selectTab("plan")} />
+          <NavButton active={tab === "testing"} label={de ? "Laktattests" : "Lactate tests"} icon="⌁" onClick={() => selectTab("testing")} />
+          <NavButton active={tab === "performance"} label={de ? "Leistungstrends" : "Performance trends"} icon="↗" onClick={() => selectTab("performance")} />
+          <NavButton active={tab === "goals"} label={de ? "Ziele" : "Goals"} icon="◇" onClick={() => selectTab("goals")} />
+          <NavButton active={tab === "feedback"} label="Feedback" icon="◌" badge={state.feedback.length ? undefined : "1"} onClick={() => selectTab("feedback")} />
+          <NavButton active={tab === "data"} label={de ? "Daten & Versand" : "Data & delivery"} icon="↻" onClick={() => selectTab("data")} />
         </nav>
         {coach && <div className="athlete-list">
           <div className="section-label">{de ? "DEINE ATHLETEN" : "YOUR ATHLETES"} <button onClick={() => setModal("invite")} aria-label={de ? "Athlet einladen" : "Invite athlete"}>+</button></div>
@@ -116,9 +118,44 @@ export default function DashboardClient() {
         {tab === "feedback" && <FeedbackTab state={state} coach={coach} onAdd={() => setModal("feedback")} act={act} busy={busy} />}
         {tab === "data" && <DataTab state={state} coach={coach} busy={busy} act={act} />}
       </main>
+      <MobileNavigation
+        tab={tab}
+        open={mobileMenuOpen}
+        coach={coach}
+        de={de}
+        athlete={athlete}
+        athletes={state.athletes}
+        user={state.user}
+        loadingAthleteId={loadingAthleteId}
+        onToggle={() => setMobileMenuOpen((open) => !open)}
+        onSelect={selectTab}
+        onSelectAthlete={(id) => { setMobileMenuOpen(false); void load(id); }}
+        onInvite={() => { setMobileMenuOpen(false); setModal("invite"); }}
+        onProfile={() => { setMobileMenuOpen(false); setModal(coach ? "profile" : "onboarding"); }}
+      />
       {modal && <ModalLayer modal={modal} athlete={athlete} close={() => setModal(null)} act={act} busy={busy} />}
     </div>
   );
+}
+
+function MobileNavigation({ tab, open, coach, de, athlete, athletes, user, loadingAthleteId, onToggle, onSelect, onSelectAthlete, onInvite, onProfile }: {
+  tab: Tab; open: boolean; coach: boolean; de: boolean; athlete: AnyRow; athletes: AnyRow[]; user: WorkspaceState["user"]; loadingAthleteId: string;
+  onToggle: () => void; onSelect: (tab: Tab) => void; onSelectAthlete: (id: string) => void; onInvite: () => void; onProfile: () => void;
+}) {
+  const primary: Array<[Tab, string, string]> = [["overview", de ? "Start" : "Home", "⌂"], ["activities", de ? "Aktivität" : "Activity", "◎"], ["plan", de ? "Plan" : "Plan", "□"], ["feedback", "Feedback", "◌"]];
+  const secondary: Array<[Tab, string, string]> = [["testing", de ? "Tests" : "Tests", "⌁"], ["performance", de ? "Leistung" : "Performance", "↗"], ["goals", de ? "Ziele" : "Goals", "◇"], ["data", de ? "Daten" : "Data", "↻"]];
+  return <>
+    {open && <div className="mobile-sheet-backdrop" onClick={onToggle} aria-hidden="true" />}
+    <section className={`mobile-sheet ${open ? "open" : ""}`} aria-label={de ? "Weitere Navigation" : "More navigation"} aria-hidden={!open}>
+      <div className="mobile-sheet-handle" />
+      <div className="mobile-sheet-heading"><div><p className="eyebrow">{de ? "ARBEITSBEREICH" : "WORKSPACE"}</p><h2>{de ? "Mehr für dich" : "More for you"}</h2></div><button className="mobile-sheet-close" onClick={onToggle} aria-label={de ? "Menü schließen" : "Close menu"}>×</button></div>
+      <div className="mobile-section-links">{secondary.map(([key, label, icon]) => <NavButton key={key} active={tab === key} label={label} icon={icon} onClick={() => onSelect(key)} />)}</div>
+      <div className="mobile-account-actions"><button onClick={onProfile}>{coach ? (de ? "Athlet bearbeiten" : "Edit athlete") : (de ? "Profil aktualisieren" : "Update profile")}</button>{coach && <button onClick={onInvite}>+ {de ? "Athlet einladen" : "Invite athlete"}</button>}<a href="/auth/signout">{de ? "Abmelden" : "Sign out"} ↗</a></div>
+      {coach && <div className="mobile-athlete-switcher"><p className="section-label">{de ? "DEINE ATHLETEN" : "YOUR ATHLETES"}</p>{athletes.map((item) => <button className={`athlete-row ${item.id === athlete.id ? "selected" : ""}`} key={item.id} onClick={() => onSelectAthlete(item.id)} disabled={Boolean(loadingAthleteId)}><span className="avatar">{initials(item.displayName)}</span><span><strong>{item.displayName}</strong><small>{item.id === athlete.id ? (de ? "Aktuell ausgewählt" : "Currently selected") : (de ? "Öffnen" : "Open")}</small></span><i aria-hidden="true" /></button>)}</div>}
+      <p className="mobile-user-label">{user.displayName} · {coach ? (de ? "Coach" : "Coach") : (de ? "Athlet:in" : "Athlete")}</p>
+    </section>
+    <nav className="mobile-bottom-nav" aria-label={de ? "Hauptnavigation" : "Primary navigation"}>{primary.map(([key, label, icon]) => <button key={key} className={tab === key ? "active" : ""} onClick={() => onSelect(key)}><span aria-hidden="true">{icon}</span><small>{label}</small></button>)}<button className={open ? "active" : ""} onClick={onToggle} aria-expanded={open}><span aria-hidden="true">•••</span><small>{de ? "Mehr" : "More"}</small></button></nav>
+  </>;
 }
 
 function Overview({ state, assessment, onOpen, language }: { state: WorkspaceState; assessment?: AnyRow; onOpen: (tab: Tab) => void; language: Language }) {
