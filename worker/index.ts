@@ -61,7 +61,7 @@ const worker = {
         method: "POST",
         headers: { authorization: `Bearer ${env.CRON_SECRET}` },
       });
-      ctx.waitUntil(handler.fetch(backgroundRequest, env, ctx).then((result) => result.arrayBuffer()).then(() => undefined));
+      ctx.waitUntil(fetch(backgroundRequest).then((result) => result.arrayBuffer()).then(() => undefined));
     }
     return response;
   },
