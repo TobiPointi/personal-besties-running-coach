@@ -101,10 +101,14 @@ async function logSession(userId: string, athleteId: string, body: Record<string
 
 async function saveGoal(userId: string, athleteId: string, body: Record<string, unknown>) {
   const db = platformEnv().DB; const goalId = optionalText(body.goalId) ?? id("goal");
-  await db.prepare(`INSERT INTO goals (id, athlete_id, title, event_date, distance_km, goal_time_seconds, priority, status, notes, created_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, 'active', ?, ?)
-    ON CONFLICT(id) DO UPDATE SET title=excluded.title, event_date=excluded.event_date, distance_km=excluded.distance_km, goal_time_seconds=excluded.goal_time_seconds, priority=excluded.priority, notes=excluded.notes`)
-    .bind(goalId, athleteId, requiredText(body.title, "title"), requiredDate(body.eventDate), numberOrNull(body.distanceKm), numberOrNull(body.goalTimeSeconds), optionalText(body.priority) ?? "A", optionalText(body.notes), nowIso()).run();
+  const terrainType = optionalText(body.terrainType);
+  const technicality = optionalText(body.technicality);
+  if (terrainType && !["road", "trail", "mixed", "track", "other"].includes(terrainType)) throw new Error("Choose a valid terrain type.");
+  if (technicality && !["smooth", "moderate", "technical"].includes(technicality)) throw new Error("Choose a valid trail technicality.");
+  await db.prepare(`INSERT INTO goals (id, athlete_id, title, event_date, distance_km, elevation_gain_m, terrain_type, technicality, goal_time_seconds, priority, status, notes, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'active', ?, ?)
+    ON CONFLICT(id) DO UPDATE SET title=excluded.title, event_date=excluded.event_date, distance_km=excluded.distance_km, elevation_gain_m=excluded.elevation_gain_m, terrain_type=excluded.terrain_type, technicality=excluded.technicality, goal_time_seconds=excluded.goal_time_seconds, priority=excluded.priority, notes=excluded.notes`)
+    .bind(goalId, athleteId, requiredText(body.title, "title"), requiredDate(body.eventDate), numberOrNull(body.distanceKm), numberOrNull(body.elevationGainM), terrainType, technicality, numberOrNull(body.goalTimeSeconds), optionalText(body.priority) ?? "A", optionalText(body.notes), nowIso()).run();
   await audit({ id: userId } as never, "save", "goal", goalId, athleteId);
 }
 
@@ -167,7 +171,7 @@ async function completeOnboarding(userId: string, athleteId: string, body: Recor
   const availability = { preferredTrainingDays, scheduleNotes: optionalText(body.scheduleNotes), yearsInSport: numberOrNull(body.yearsInSport), longestRecentSessionKm: numberOrNull(body.longestRecentSessionKm), otherEnduranceSports: optionalText(body.otherEnduranceSports), currentRestriction, planReadinessConfirmed: body.planReadinessConfirmed === "yes" };
   await db.prepare(`UPDATE athletes SET primary_sport = ?, weekly_target_km = ?, injury_notes = ?, experience_level = ?, training_days = ?, long_run_day = ?, availability_json = ?, onboarding_completed_at = ?, updated_at = ? WHERE id = ?`)
     .bind(primarySport, numberOrNull(body.weeklyTargetKm), optionalText(body.injuryNotes), optionalText(body.experienceLevel), trainingDays, optionalText(body.longRunDay), JSON.stringify(availability), timestamp, timestamp, athleteId).run();
-  if (optionalText(body.goalTitle) && optionalText(body.eventDate)) await saveGoal(userId, athleteId, { title: body.goalTitle, eventDate: body.eventDate, distanceKm: body.distanceKm, goalTimeSeconds: body.goalTimeSeconds, priority: "A", notes: body.goalNotes });
+  if (optionalText(body.goalTitle) && optionalText(body.eventDate)) await saveGoal(userId, athleteId, { title: body.goalTitle, eventDate: body.eventDate, distanceKm: body.distanceKm, elevationGainM: body.goalElevationGainM, terrainType: body.goalTerrainType, technicality: body.goalTechnicality, goalTimeSeconds: body.goalTimeSeconds, priority: "A", notes: body.goalNotes });
   await audit({ id: userId } as never, "complete", "athlete_onboarding", athleteId, athleteId);
 }
 
@@ -187,13 +191,14 @@ async function updateAthlete(userId: string, athleteId: string, body: Record<str
 async function generatePlan(userId: string, athleteId: string) {
   const db = platformEnv().DB;
   const athlete = await db.prepare("SELECT * FROM athletes WHERE id = ?").bind(athleteId).first<Record<string, unknown>>();
-  const goal = await db.prepare("SELECT * FROM goals WHERE athlete_id = ? AND status = 'active' ORDER BY CASE priority WHEN 'A' THEN 0 WHEN 'B' THEN 1 ELSE 2 END, event_date LIMIT 1").bind(athleteId).first<Record<string, unknown>>();
+  const goals = await db.prepare("SELECT * FROM goals WHERE athlete_id = ? AND status = 'active' AND event_date >= ? ORDER BY CASE priority WHEN 'A' THEN 0 WHEN 'B' THEN 1 ELSE 2 END, event_date").bind(athleteId, todayIso()).all<Record<string, unknown>>();
+  const goal = goals.results?.[0];
   if (!athlete || !goal) throw new Error("Add an active goal before generating a plan.");
   if (!athlete.onboarding_completed_at) throw new Error("Complete the athlete profile before generating a plan.");
   const latestTest = await db.prepare("SELECT * FROM lactate_tests WHERE athlete_id = ? ORDER BY test_date DESC LIMIT 1").bind(athleteId).first<Record<string, unknown>>();
   const recentFeedback = await db.prepare("SELECT * FROM athlete_feedback WHERE athlete_id = ? ORDER BY feedback_date DESC, created_at DESC LIMIT 1").bind(athleteId).first<Record<string, unknown>>();
   const activities = await db.prepare("SELECT * FROM activities WHERE athlete_id = ? ORDER BY activity_date DESC LIMIT 80").bind(athleteId).all<Record<string, unknown>>();
-  const generated = await generateTrainingPlan({ athlete, goal, latestTest, recentFeedback, recentActivities: activities.results ?? [] });
+  const generated = await generateTrainingPlan({ athlete, goal, goals: goals.results ?? [], latestTest, recentFeedback, recentActivities: activities.results ?? [] });
   const versionRow = await db.prepare("SELECT COALESCE(MAX(version), 0) AS version FROM training_plans WHERE athlete_id = ?").bind(athleteId).first<{ version: number }>();
   const version = Number(versionRow?.version ?? 0) + 1; const planId = id("plan"); const timestamp = nowIso();
   await db.prepare("INSERT INTO training_plans (id, athlete_id, goal_id, version, status, start_date, end_date, rationale, created_by, created_at) VALUES (?, ?, ?, ?, 'draft', ?, ?, ?, ?, ?)")

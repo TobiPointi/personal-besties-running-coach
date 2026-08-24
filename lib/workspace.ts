@@ -56,12 +56,17 @@ async function ensureTobiasReferenceData(user: AppUser) {
     const statements = referencePlanDays.map((day) => {
       const actualDistance = Number(day.actual?.distance_km ?? 0);
       const completed = day.status === "completed" || day.status === "completed-rest";
-      const title = day.details.split(/[.;]/)[0] || day.workout_type;
+      const title = conciseReferenceTitle(day);
       return db.prepare("INSERT INTO planned_sessions (id, plan_id, athlete_id, session_date, workout_type, title, details, planned_distance_km, pace_guidance, hr_guidance, purpose, fatigue_modification, major_stimulus, status, actual_distance_km, completed_at) VALUES (?, 'plan_bad_ischl_reference_v2', 'athlete_tobias', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
         .bind(`reference_session_${day.date}`, day.date, day.workout_type, title, day.details, day.planned_distance_km, day.pace_guidance ?? null, day.hr_guidance ?? null, day.purpose ?? null, day.fatigue_modification ?? null, day.major_stimulus ? 1 : 0, completed ? "completed" : "planned", completed ? actualDistance : null, completed ? timestamp : null);
     });
     for (let index = 0; index < statements.length; index += 30) await db.batch(statements.slice(index, index + 30));
   }
+  // Titles are display labels, not shortened workout instructions. Repair the
+  // protected reference plan idempotently without changing its sessions.
+  const titleStatements = referencePlanDays.map((day) => db.prepare("UPDATE planned_sessions SET title = ? WHERE id = ? AND plan_id = 'plan_bad_ischl_reference_v2'")
+    .bind(conciseReferenceTitle(day), `reference_session_${day.date}`));
+  for (let index = 0; index < titleStatements.length; index += 30) await db.batch(titleStatements.slice(index, index + 30));
   // The generic adaptive draft was created from missing logs, not an explicit
   // coaching decision. Keep the imported Bad Ischl plan as Tobias's protected
   // published baseline and remove that misleading draft from review.
@@ -77,6 +82,26 @@ async function ensureTobiasReferenceData(user: AppUser) {
     ON CONFLICT(id) DO UPDATE SET prediction_5k_seconds=excluded.prediction_5k_seconds, prediction_10k_seconds=excluded.prediction_10k_seconds, prediction_half_seconds=excluded.prediction_half_seconds, prediction_marathon_seconds=excluded.prediction_marathon_seconds, created_at=excluded.created_at`)
     .bind(`reference_performance_${date}_${source.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`, date, source, five, ten, half, marathon, timestamp));
   for (let index = 0; index < performanceStatements.length; index += 30) await db.batch(performanceStatements.slice(index, index + 30));
+}
+
+function conciseReferenceTitle(day: { workout_type: string; details: string }): string {
+  const type = String(day.workout_type).toLowerCase();
+  const details = String(day.details);
+  const distanceBlock = details.match(/(\d+\s*[×x]\s*\d+\s*km)/i)?.[1]?.replace(/x/i, "×");
+  if (type === "race") return "Bad Ischl Half Marathon";
+  if (type.includes("hm-specific") && distanceBlock) return `${distanceBlock} at HM effort`;
+  if (type.includes("hm-specific")) return "HM-specific tempo";
+  if (type.includes("long run with")) return "Long run with controlled blocks";
+  if (type === "long run") return "Easy long run";
+  if (type.includes("10k-specific")) return "Controlled 1 km intervals";
+  if (type.includes("threshold")) return distanceBlock ? `${distanceBlock} controlled threshold` : "Controlled threshold intervals";
+  if (type.includes("running economy")) return "Controlled 400 m intervals";
+  if (type.includes("easy + strides")) return "Easy run + relaxed strides";
+  if (type === "recovery") return "Recovery run";
+  if (type === "easy") return "Easy aerobic run";
+  if (type === "rest") return "Rest day";
+  if (type === "shakeout") return "Pre-race shakeout";
+  return String(day.workout_type).replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
 async function ensureTobiasLactateTest(db: D1Database, timestamp: string) {

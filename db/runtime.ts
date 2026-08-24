@@ -38,7 +38,7 @@ const schemaStatements = [
   `CREATE INDEX IF NOT EXISTS idx_coach_athletes_athlete ON coach_athletes(athlete_id)`,
   `CREATE TABLE IF NOT EXISTS invitations (id TEXT PRIMARY KEY, athlete_id TEXT NOT NULL, coach_user_id TEXT NOT NULL, email TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'pending', created_at TEXT NOT NULL, accepted_at TEXT)`,
   `CREATE INDEX IF NOT EXISTS idx_invitations_email_status ON invitations(email, status)`,
-  `CREATE TABLE IF NOT EXISTS goals (id TEXT PRIMARY KEY, athlete_id TEXT NOT NULL, title TEXT NOT NULL, event_date TEXT NOT NULL, distance_km REAL, goal_time_seconds INTEGER, priority TEXT NOT NULL DEFAULT 'A', status TEXT NOT NULL DEFAULT 'active', notes TEXT, created_at TEXT NOT NULL)`,
+  `CREATE TABLE IF NOT EXISTS goals (id TEXT PRIMARY KEY, athlete_id TEXT NOT NULL, title TEXT NOT NULL, event_date TEXT NOT NULL, distance_km REAL, elevation_gain_m REAL, terrain_type TEXT, technicality TEXT, goal_time_seconds INTEGER, priority TEXT NOT NULL DEFAULT 'A', status TEXT NOT NULL DEFAULT 'active', notes TEXT, created_at TEXT NOT NULL)`,
   `CREATE INDEX IF NOT EXISTS idx_goals_athlete_date ON goals(athlete_id, event_date)`,
   `CREATE TABLE IF NOT EXISTS lactate_tests (id TEXT PRIMARY KEY, athlete_id TEXT NOT NULL, test_date TEXT NOT NULL, protocol TEXT NOT NULL, venue TEXT, lt1_lactate REAL, lt1_hr INTEGER, lt1_pace_seconds_km INTEGER, lt2_lactate REAL, lt2_hr INTEGER, lt2_pace_seconds_km INTEGER, interpretation_method TEXT, confidence TEXT NOT NULL DEFAULT 'moderate', notes TEXT, created_at TEXT NOT NULL)`,
   `CREATE INDEX IF NOT EXISTS idx_lactate_tests_athlete_date ON lactate_tests(athlete_id, test_date)`,
@@ -92,6 +92,14 @@ export async function ensureSchema(db = platformEnv().DB): Promise<void> {
   await ensureColumn(db, "athletes", "training_days", "INTEGER");
   await ensureColumn(db, "athletes", "long_run_day", "TEXT");
   await ensureColumn(db, "athletes", "onboarding_completed_at", "TEXT");
+  await ensureColumn(db, "goals", "elevation_gain_m", "REAL");
+  await ensureColumn(db, "goals", "terrain_type", "TEXT");
+  await ensureColumn(db, "goals", "technicality", "TEXT");
+  // Preserve existing goals while promoting recognizable trail context out of
+  // free text. New and edited goals use the dedicated fields directly.
+  await db.prepare(`UPDATE goals SET elevation_gain_m = CAST(substr(notes, instr(lower(notes), 'elevation') - 5, 5) AS REAL)
+    WHERE elevation_gain_m IS NULL AND lower(notes) GLOB '*[0-9]* elevation*'`).run();
+  await db.prepare("UPDATE goals SET terrain_type = 'trail' WHERE terrain_type IS NULL AND lower(notes) LIKE '%trail%'").run();
   await db.prepare("PRAGMA optimize").run();
 }
 

@@ -5,6 +5,18 @@ import { dedupeActivities } from "./activity-dedupe";
 
 type JobRow = { id: string; athlete_id: string; job_type: string; attempts: number; payload_json: string };
 
+export async function queueStaleIntervalsSyncs(maxAgeMinutes = 10): Promise<number> {
+  const db = platformEnv().DB; const timestamp = nowIso(); const cutoff = new Date(Date.now() - maxAgeMinutes * 60_000).toISOString(); const bucket = Math.floor(Date.now() / (maxAgeMinutes * 60_000));
+  const result = await db.prepare("SELECT athlete_id FROM data_connections WHERE provider = 'intervals' AND status = 'active' AND (last_sync_at IS NULL OR last_sync_at <= ?)").bind(cutoff).all<{ athlete_id: string }>();
+  let queued = 0;
+  for (const connection of result.results ?? []) {
+    const inserted = await db.prepare("INSERT OR IGNORE INTO jobs (id, athlete_id, job_type, status, idempotency_key, payload_json, scheduled_at) VALUES (?, ?, 'intervals_sync', 'queued', ?, '{}', ?)")
+      .bind(id("job"), connection.athlete_id, `intervals_sync:${connection.athlete_id}:scheduled:${bucket}`, timestamp).run();
+    queued += Number(inserted.meta.changes ?? 0);
+  }
+  return queued;
+}
+
 export async function processPendingWork(onlyAthleteId?: string): Promise<{ jobs: number; notifications: number }> {
   const db = platformEnv().DB;
   const jobsResult = onlyAthleteId

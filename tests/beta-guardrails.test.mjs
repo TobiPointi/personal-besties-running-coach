@@ -15,11 +15,29 @@ test("activity reviews and completion matching use only the published plan", asy
 });
 
 test("Intervals sync is incremental and dashboard freshness is bounded", async () => {
-  const [route, pipeline] = await Promise.all([source("app/api/workspace/route.ts"), source("lib/pipeline.ts")]);
+  const [route, pipeline, cron] = await Promise.all([source("app/api/workspace/route.ts"), source("lib/pipeline.ts"), source("app/api/cron/route.ts")]);
   assert.match(route, /10 \* 60 \* 1000/);
   assert.match(route, /tenMinuteBucket/);
   assert.match(pipeline, /connection\.last_sync_at \? offsetIsoDate\(-14/);
   assert.match(pipeline, /const newest = offsetIsoDate\(1\)/);
+  assert.match(pipeline, /queueStaleIntervalsSyncs/);
+  assert.match(cron, /queueStaleIntervalsSyncs\(10\)/);
+});
+
+test("goals and generated plans preserve trail terrain and elevation", async () => {
+  const [schema, route, planner, dashboard] = await Promise.all([source("db/schema.ts"), source("app/api/workspace/route.ts"), source("lib/planner.ts"), source("app/DashboardClient.tsx")]);
+  for (const field of ["elevation_gain_m", "terrain_type", "technicality"]) assert.match(schema, new RegExp(field));
+  assert.match(route, /elevationGainM/);
+  assert.match(planner, /trainingAscent/);
+  assert.match(planner, /Controlled uphill intervals/);
+  assert.match(dashboard, /Elevation gain \(m\+\)/);
+});
+
+test("reference-plan titles are concise labels rather than warm-up text", async () => {
+  const workspace = await source("lib/workspace.ts");
+  assert.match(workspace, /conciseReferenceTitle/);
+  assert.match(workspace, /at HM effort/);
+  assert.doesNotMatch(workspace, /day\.details\.split/);
 });
 
 test("reference history is deduplicated once the live Intervals copy exists", async () => {
