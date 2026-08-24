@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
 import { id, nowIso, platformEnv } from "../../../../db/runtime";
-import { processPendingWork } from "../../../../lib/pipeline";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +11,6 @@ export async function POST(request: NextRequest) {
   const rawEvents = Array.isArray(body.events) ? body.events : [body];
   const events = rawEvents.filter((event): event is Record<string, unknown> => Boolean(event) && typeof event === "object");
   const timestamp = nowIso();
-  const athletesToProcess = new Set<string>();
   let queued = 0;
 
   for (const event of events) {
@@ -27,9 +25,9 @@ export async function POST(request: NextRequest) {
     const result = await runtime.DB.prepare("INSERT OR IGNORE INTO jobs (id, athlete_id, job_type, status, idempotency_key, payload_json, scheduled_at) VALUES (?, ?, 'intervals_sync', 'queued', ?, ?, ?)")
       .bind(id("job"), connection.athlete_id, `intervals_webhook:${connection.athlete_id}:${eventId}`, JSON.stringify({ eventType, eventId }), timestamp).run();
     if (result.meta.changes > 0) queued += 1;
-    athletesToProcess.add(connection.athlete_id);
   }
 
-  await Promise.all([...athletesToProcess].map((athleteId) => processPendingWork(athleteId)));
+  // Acknowledge immediately. The outer Worker schedules /api/cron with
+  // ExecutionContext.waitUntil so Intervals.icu never waits on a full import.
   return Response.json({ ok:true, received: events.length, queued, ignored: events.length - queued });
 }

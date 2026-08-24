@@ -55,7 +55,15 @@ const worker = {
       }, allowedWidths);
     }
 
-    return handler.fetch(request, env, ctx);
+    const response = await handler.fetch(request, env, ctx);
+    if (url.pathname === "/api/intervals/webhook" && request.method === "POST" && response.ok && env.CRON_SECRET) {
+      const backgroundRequest = new Request(new URL("/api/cron", request.url), {
+        method: "POST",
+        headers: { authorization: `Bearer ${env.CRON_SECRET}` },
+      });
+      ctx.waitUntil(handler.fetch(backgroundRequest, env, ctx).then((result) => result.arrayBuffer()).then(() => undefined));
+    }
+    return response;
   },
 };
 

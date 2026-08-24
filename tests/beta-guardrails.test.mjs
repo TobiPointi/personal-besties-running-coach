@@ -49,9 +49,12 @@ test("reference history is deduplicated once the live Intervals copy exists", as
 });
 
 test("Intervals webhook uses the nested activity id from the documented payload", async () => {
-  const webhook = await source("app/api/intervals/webhook/route.ts");
+  const [webhook, worker] = await Promise.all([source("app/api/intervals/webhook/route.ts"), source("worker/index.ts")]);
   assert.match(webhook, /activity\?\.id/);
   assert.match(webhook, /intervals_webhook/);
+  assert.doesNotMatch(webhook, /processPendingWork/);
+  assert.match(worker, /ctx\.waitUntil/);
+  assert.match(worker, /\/api\/cron/);
 });
 
 test("automated draft generation has explicit athlete-readiness gates", async () => {
