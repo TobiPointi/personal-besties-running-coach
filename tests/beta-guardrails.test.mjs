@@ -11,15 +11,29 @@ test("activity reviews and completion matching use only the published plan", asy
   const [dashboard, pipeline] = await Promise.all([source("app/DashboardClient.tsx"), source("lib/pipeline.ts")]);
   assert.match(dashboard, /publishedSessions/);
   assert.match(dashboard, /buildActivityReviews\(state\.activities, publishedSessions/);
-  assert.match(pipeline, /tp\.status = 'published'/);
+  assert.match(pipeline, /tp\.status\s*=\s*'published'/);
 });
 
 test("Intervals sync is incremental and dashboard freshness is bounded", async () => {
   const [route, pipeline] = await Promise.all([source("app/api/workspace/route.ts"), source("lib/pipeline.ts")]);
-  assert.match(route, /30 \* 60 \* 1000/);
-  assert.match(route, /halfHourBucket/);
+  assert.match(route, /10 \* 60 \* 1000/);
+  assert.match(route, /tenMinuteBucket/);
   assert.match(pipeline, /connection\.last_sync_at \? offsetIsoDate\(-14/);
   assert.match(pipeline, /const newest = offsetIsoDate\(1\)/);
+});
+
+test("reference history is deduplicated once the live Intervals copy exists", async () => {
+  const [workspace, pipeline, dedupe] = await Promise.all([source("lib/workspace.ts"), source("lib/pipeline.ts"), source("lib/activity-dedupe.ts")]);
+  assert.match(workspace, /dedupeActivities\(rawActivityRows\)/);
+  assert.match(pipeline, /dedupeActivities\(activityResult\.results/);
+  assert.match(dedupe, /isReferencePair/);
+  assert.match(dedupe, /providerPriority/);
+});
+
+test("Intervals webhook uses the nested activity id from the documented payload", async () => {
+  const webhook = await source("app/api/intervals/webhook/route.ts");
+  assert.match(webhook, /activity\?\.id/);
+  assert.match(webhook, /intervals_webhook/);
 });
 
 test("automated draft generation has explicit athlete-readiness gates", async () => {

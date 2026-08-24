@@ -22,7 +22,8 @@ export async function POST(request: NextRequest) {
       .bind(externalId).first<{ athlete_id:string }>();
     if (!connection) continue;
     const eventType = String(event.type ?? event.event_type ?? "activity").toLowerCase();
-    const eventId = String(event.id ?? event.event_id ?? event.activity_id ?? `${eventType}:${timestamp.slice(0,16)}`);
+    const activity = event.activity && typeof event.activity === "object" ? event.activity as Record<string, unknown> : null;
+    const eventId = String(event.id ?? event.event_id ?? event.activity_id ?? activity?.id ?? `${eventType}:${event.timestamp ?? timestamp}`);
     const result = await runtime.DB.prepare("INSERT OR IGNORE INTO jobs (id, athlete_id, job_type, status, idempotency_key, payload_json, scheduled_at) VALUES (?, ?, 'intervals_sync', 'queued', ?, ?, ?)")
       .bind(id("job"), connection.athlete_id, `intervals_webhook:${connection.athlete_id}:${eventId}`, JSON.stringify({ eventType, eventId }), timestamp).run();
     if (result.meta.changes > 0) queued += 1;

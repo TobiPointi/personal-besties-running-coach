@@ -2,6 +2,7 @@ import type { AppUser } from "./auth";
 import { id, nowIso, platformEnv, todayIso } from "../db/runtime";
 import { referenceActivities, referencePerformance, referencePlanDays } from "./tobias-reference";
 import { planningReadiness } from "./planner";
+import { dedupeActivities } from "./activity-dedupe";
 
 type Row = Record<string, unknown>;
 
@@ -116,7 +117,7 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
   const selected = enrichedAthletes.find((row) => row.id === requestedAthleteId) ?? enrichedAthletes[0] ?? null;
   if (!selected) return { user, athletes: [], selectedAthlete: null };
   const athleteId = String(selected.id);
-  const [goalRows, testRows, stageRows, testRequestRows, performanceRows, planRows, sessionRows, activityRows, feedbackRows, assessmentRows, connectionRows, jobRows, notificationRows, noteRows] = await Promise.all([
+  const [goalRows, testRows, stageRows, testRequestRows, performanceRows, planRows, sessionRows, rawActivityRows, feedbackRows, assessmentRows, connectionRows, jobRows, notificationRows, noteRows] = await Promise.all([
     all<Row>("SELECT * FROM goals WHERE athlete_id = ? ORDER BY event_date", athleteId),
     all<Row>("SELECT * FROM lactate_tests WHERE athlete_id = ? ORDER BY test_date DESC", athleteId),
     all<Row>("SELECT ls.* FROM lactate_stages ls JOIN lactate_tests lt ON lt.id = ls.test_id WHERE lt.athlete_id = ? ORDER BY ls.test_id, ls.stage_number", athleteId),
@@ -136,6 +137,7 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
     all<Row>("SELECT * FROM notifications WHERE athlete_id = ? ORDER BY created_at DESC LIMIT 15", athleteId),
     user.role === "coach" ? all<Row>("SELECT * FROM coach_notes WHERE athlete_id = ? ORDER BY created_at DESC LIMIT 20", athleteId) : Promise.resolve([]),
   ]);
+  const activityRows = dedupeActivities(rawActivityRows);
   const recentActivities = activityRows.filter((row) => String(row.activity_date) >= offsetDate(-27));
   const recentRuns = recentActivities.filter((row) => isRunActivity(row.activity_type));
   const volume28 = recentRuns.reduce((sum, row) => sum + Number(row.distance_km ?? 0), 0);
@@ -154,7 +156,7 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
   const dueSessions = visibleSessions.filter((row) => row.plan_id === publishedPlan?.id && row.workout_type !== "rest" && String(row.session_date) <= todayIso());
   const completedSessions = dueSessions.filter((row) => row.status === "completed");
   const adherencePercent = dueSessions.length ? Math.round((completedSessions.length / dueSessions.length) * 100) : null;
-  const upcoming = visibleSessions.filter((row) => String(row.session_date) >= todayIso()).slice(0, 14);
+  const upcoming = (publishedPlan ? sessionRows.filter((row) => row.plan_id === publishedPlan.id) : []).filter((row) => String(row.session_date) >= todayIso()).slice(0, 14);
   const planReadinessReasons = planningReadiness({ athlete: selected, goal: activeGoal ?? {}, latestTest: testRows[0], recentFeedback, recentActivities: activityRows });
   return {
     user,

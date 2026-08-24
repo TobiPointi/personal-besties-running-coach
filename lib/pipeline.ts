@@ -1,6 +1,7 @@
 import { decryptSecret } from "./secrets";
 import { forecastFromActivities } from "./forecast";
 import { id, nowIso, platformEnv, todayIso } from "../db/runtime";
+import { dedupeActivities } from "./activity-dedupe";
 
 type JobRow = { id: string; athlete_id: string; job_type: string; attempts: number; payload_json: string };
 
@@ -87,20 +88,20 @@ async function syncIntervals(athleteId: string) {
       .bind(`wellness_${athleteId}_${date}`, athleteId, date, numberOrNull(row.restingHR ?? row.resting_hr), numberOrNull(row.sleepScore ?? row.sleep_score), numberOrNull(row.fatigue), numberOrNull(row.weight), JSON.stringify(redact(row)));
   });
   for (const statements of chunks([...activityStatements, ...wellnessStatements, ...performanceStatements], 30)) await db.batch(statements);
-  // Mark a planned run as completed when the synchronized activity occurred on that date.
-  // Explicit athlete choices (skipped/completed) are never overwritten.
-  await db.prepare(`UPDATE planned_sessions
-    SET status = 'completed',
-        actual_distance_km = (SELECT ROUND(SUM(a.distance_km), 2) FROM activities a
-          WHERE a.athlete_id = planned_sessions.athlete_id AND a.activity_date = planned_sessions.session_date AND lower(a.activity_type) LIKE '%run%'),
-        actual_duration_minutes = (SELECT ROUND(SUM(a.duration_seconds) / 60.0) FROM activities a
-          WHERE a.athlete_id = planned_sessions.athlete_id AND a.activity_date = planned_sessions.session_date AND lower(a.activity_type) LIKE '%run%'),
-        completed_at = COALESCE(completed_at, ?)
-    WHERE athlete_id = ? AND status = 'planned' AND workout_type != 'rest'
-      AND EXISTS (SELECT 1 FROM training_plans tp WHERE tp.id = planned_sessions.plan_id AND tp.status = 'published')
-      AND EXISTS (SELECT 1 FROM activities a WHERE a.athlete_id = planned_sessions.athlete_id
-        AND a.activity_date = planned_sessions.session_date AND lower(a.activity_type) LIKE '%run%')`)
-    .bind(timestamp, athleteId).run();
+  // Complete only published sessions using the just-received Intervals records.
+  // This avoids summing protected reference copies of the same run.
+  const runsByDate = new Map<string, { distance:number; duration:number }>();
+  for (const row of activities.filter((item) => isRunActivity(item.type))) {
+    const date = String(row.start_date_local ?? row.start_date ?? "").slice(0, 10); if (!date) continue;
+    const current = runsByDate.get(date) ?? { distance:0, duration:0 };
+    current.distance += metricDistanceKm(row.distance) ?? 0; current.duration += numberOrNull(row.moving_time ?? row.elapsed_time) ?? 0; runsByDate.set(date, current);
+  }
+  const completionStatements = [...runsByDate].map(([date, actual]) => db.prepare(`UPDATE planned_sessions
+    SET status='completed', actual_distance_km=?, actual_duration_minutes=?, completed_at=COALESCE(completed_at, ?)
+    WHERE athlete_id=? AND session_date=? AND status='planned' AND workout_type!='rest'
+      AND EXISTS (SELECT 1 FROM training_plans tp WHERE tp.id=planned_sessions.plan_id AND tp.status='published')`)
+    .bind(Math.round(actual.distance * 100) / 100, Math.round(actual.duration / 60), timestamp, athleteId, date));
+  if (completionStatements.length) await db.batch(completionStatements);
   await db.prepare("UPDATE data_connections SET last_sync_at = ?, updated_at = ? WHERE id = ?").bind(timestamp, timestamp, connection.id).run();
   await calculateAssessment(athleteId);
   await backfillWeeklyForecasts(athleteId);
@@ -112,9 +113,9 @@ function offsetIsoDate(days: number, from = nowIso()) {
 
 async function calculateAssessment(athleteId: string) {
   const db = platformEnv().DB;
-  const activityResult = await db.prepare("SELECT activity_date, activity_type, name, distance_km, duration_seconds, elevation_gain_m, training_load FROM activities WHERE athlete_id = ? AND activity_date >= date('now', '-56 day') ORDER BY activity_date")
+  const activityResult = await db.prepare("SELECT provider, provider_activity_id, activity_date, activity_type, name, distance_km, duration_seconds, elevation_gain_m, training_load FROM activities WHERE athlete_id = ? AND activity_date >= date('now', '-56 day') ORDER BY activity_date")
     .bind(athleteId).all<Record<string, unknown>>();
-  const rows = activityResult.results ?? [];
+  const rows = dedupeActivities(activityResult.results ?? []);
   const runningRows = rows.filter((row) => isRunActivity(row.activity_type));
   const distance = runningRows.reduce((sum: number, row: Record<string, unknown>) => sum + Number(row.distance_km ?? 0), 0);
   const load = rows.reduce((sum: number, row: Record<string, unknown>) => sum + Number(row.training_load ?? 0), 0);
@@ -145,10 +146,10 @@ async function maybeCreateAdaptiveDraft(athleteId: string, feedback?: { fatigue:
 async function backfillWeeklyForecasts(athleteId: string) {
   const db = platformEnv().DB;
   const [activityResult, goal] = await Promise.all([
-    db.prepare("SELECT activity_date, activity_type, name, distance_km, duration_seconds, elevation_gain_m FROM activities WHERE athlete_id = ? ORDER BY activity_date").bind(athleteId).all<Record<string, unknown>>(),
+    db.prepare("SELECT provider, provider_activity_id, activity_date, activity_type, name, distance_km, duration_seconds, elevation_gain_m FROM activities WHERE athlete_id = ? ORDER BY activity_date").bind(athleteId).all<Record<string, unknown>>(),
     db.prepare("SELECT distance_km FROM goals WHERE athlete_id = ? AND status = 'active' ORDER BY CASE priority WHEN 'A' THEN 0 WHEN 'B' THEN 1 ELSE 2 END, event_date LIMIT 1").bind(athleteId).first<{ distance_km:number }>(),
   ]);
-  const activities = activityResult.results ?? [];
+  const activities = dedupeActivities(activityResult.results ?? []);
   if (!activities.length) return;
   const dates = [...new Set(activities.map((item) => String(item.activity_date).slice(0, 10)))].filter((date) => /^\d{4}-\d{2}-\d{2}$/.test(date));
   const weeks = [...new Set(dates.map(weekEnding))]; const timestamp = nowIso();

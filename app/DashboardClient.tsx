@@ -51,6 +51,16 @@ export default function DashboardClient() {
     void load();
   }, [load]);
 
+  const selectedAthleteId = state?.selectedAthlete?.id;
+  const selectedHasIntervals = Boolean(state?.connections?.some((item) => item.provider === "intervals" && item.status === "active"));
+  useEffect(() => {
+    if (!selectedAthleteId || !selectedHasIntervals) return;
+    const refresh = () => { if (document.visibilityState === "visible") void load(selectedAthleteId); };
+    const timer = window.setInterval(refresh, 10 * 60 * 1000);
+    document.addEventListener("visibilitychange", refresh);
+    return () => { window.clearInterval(timer); document.removeEventListener("visibilitychange", refresh); };
+  }, [selectedAthleteId, selectedHasIntervals, load]);
+
   function changeLanguage(next: Language) { setLanguage(next); window.localStorage.setItem("pb-language", next); document.documentElement.lang = next; }
   const de = language === "de";
 
