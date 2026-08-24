@@ -1,6 +1,7 @@
 import type { AppUser } from "./auth";
 import { id, nowIso, platformEnv, todayIso } from "../db/runtime";
 import { referenceActivities, referencePerformance, referencePlanDays } from "./tobias-reference";
+import { planningReadiness } from "./planner";
 
 type Row = Record<string, unknown>;
 
@@ -154,6 +155,7 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
   const completedSessions = dueSessions.filter((row) => row.status === "completed");
   const adherencePercent = dueSessions.length ? Math.round((completedSessions.length / dueSessions.length) * 100) : null;
   const upcoming = visibleSessions.filter((row) => String(row.session_date) >= todayIso()).slice(0, 14);
+  const planReadinessReasons = planningReadiness({ athlete: selected, goal: activeGoal ?? {}, latestTest: testRows[0], recentFeedback, recentActivities: activityRows });
   return {
     user,
     athletes: enrichedAthletes.map(publicAthlete),
@@ -188,6 +190,7 @@ export async function getWorkspaceState(user: AppUser, requestedAthleteId?: stri
       completedSessions: completedSessions.length,
       dueSessions: dueSessions.length,
       planAdjustment: pendingPlanAdjustment ? { version: pendingPlanAdjustment.version, rationale: pendingPlanAdjustment.rationale, createdAt: pendingPlanAdjustment.created_at } : null,
+      planReadiness: { ready: planReadinessReasons.length === 0, reasons: planReadinessReasons, sport: selected.primary_sport ?? "running" },
       attention: attentionItems({ recentFeedback, testRows, jobRows, connectionRows, adherencePercent }),
     },
   };

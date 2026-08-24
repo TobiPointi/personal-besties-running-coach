@@ -17,6 +17,7 @@ export async function generateTrainingPlan(input: PlannerInput): Promise<{ ratio
 
 export function planningReadiness(input: PlannerInput, profile = readProfile(input.athlete)): string[] {
   const reasons: string[] = [];
+  if (!input.goal || !String(input.goal.event_date ?? input.goal.eventDate ?? "").trim()) reasons.push("Add an active goal with an event date first.");
   if (String(input.athlete.primary_sport ?? input.athlete.primarySport ?? "running") !== "running") reasons.push("Cycling, triathlon, and other endurance profiles are recorded, but their sport-specific plan generator is not enabled yet.");
   if (!input.athlete.onboarding_completed_at && !input.athlete.onboardingCompletedAt) reasons.push("Complete the training profile first.");
   if (!profile.confirmed) reasons.push("Confirm that the profile reflects current training and health status.");

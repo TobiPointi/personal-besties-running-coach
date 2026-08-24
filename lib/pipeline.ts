@@ -33,11 +33,14 @@ export async function processPendingWork(onlyAthleteId?: string): Promise<{ jobs
 async function syncIntervals(athleteId: string) {
   const db = platformEnv().DB;
   const connection = await db.prepare("SELECT * FROM data_connections WHERE athlete_id = ? AND provider = 'intervals' AND status = 'active'")
-    .bind(athleteId).first<{ id: string; encrypted_access_token: string }>();
+    .bind(athleteId).first<{ id: string; encrypted_access_token: string; last_sync_at: string | null }>();
   if (!connection?.encrypted_access_token) throw new Error("Intervals.icu is not connected for this athlete.");
   const token = await decryptSecret(connection.encrypted_access_token);
-  const newest = new Date().toISOString().slice(0, 10);
-  const oldest = "2000-01-01";
+  // After the first import, re-read a two-week overlap. The overlap catches late
+  // uploads and edits without downloading the athlete's complete history on every
+  // dashboard visit. Requesting through tomorrow also avoids a UTC/local-date gap.
+  const newest = offsetIsoDate(1);
+  const oldest = connection.last_sync_at ? offsetIsoDate(-14, connection.last_sync_at) : "2000-01-01";
   const headers = { Authorization: `Bearer ${token}`, Accept: "application/json" };
   const [activitiesResponse, wellnessResponse, athleteResponse] = await Promise.all([
     fetch(`https://intervals.icu/api/v1/athlete/0/activities?oldest=${oldest}&newest=${newest}&limit=10000`, { headers }),
@@ -94,12 +97,17 @@ async function syncIntervals(athleteId: string) {
           WHERE a.athlete_id = planned_sessions.athlete_id AND a.activity_date = planned_sessions.session_date AND lower(a.activity_type) LIKE '%run%'),
         completed_at = COALESCE(completed_at, ?)
     WHERE athlete_id = ? AND status = 'planned' AND workout_type != 'rest'
+      AND EXISTS (SELECT 1 FROM training_plans tp WHERE tp.id = planned_sessions.plan_id AND tp.status = 'published')
       AND EXISTS (SELECT 1 FROM activities a WHERE a.athlete_id = planned_sessions.athlete_id
         AND a.activity_date = planned_sessions.session_date AND lower(a.activity_type) LIKE '%run%')`)
     .bind(timestamp, athleteId).run();
   await db.prepare("UPDATE data_connections SET last_sync_at = ?, updated_at = ? WHERE id = ?").bind(timestamp, timestamp, connection.id).run();
   await calculateAssessment(athleteId);
   await backfillWeeklyForecasts(athleteId);
+}
+
+function offsetIsoDate(days: number, from = nowIso()) {
+  const date = new Date(from); date.setUTCDate(date.getUTCDate() + days); return date.toISOString().slice(0, 10);
 }
 
 async function calculateAssessment(athleteId: string) {
