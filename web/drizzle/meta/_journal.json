@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1787064004082,
+      "tag": "0000_even_stephen_strange",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1787124899895,
+      "tag": "0001_supreme_captain_midlands",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1787133870942,
+      "tag": "0002_great_hercules",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1787226557993,
+      "tag": "0003_sticky_hiroim",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1787558471358,
+      "tag": "0004_zippy_mystique",
+      "breakpoints": true
+    }
+  ]
+}
