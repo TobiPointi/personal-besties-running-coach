@@ -15,7 +15,10 @@ export async function GET(request: NextRequest) {
     let state = await getWorkspaceState(user, athleteId);
     const selectedId = String(state.selectedAthlete?.id ?? "");
     const connection = state.connections?.find((item: Record<string, unknown>) => item.provider === "intervals" && item.status === "active");
-    const stale = connection && (!connection.last_sync_at || Date.now() - new Date(String(connection.last_sync_at)).getTime() > 24 * 60 * 60 * 1000);
+    // Keep a connected athlete fresh during normal dashboard use. The pipeline
+    // itself performs an incremental overlap sync, so this no longer means a full
+    // history download every time.
+    const stale = connection && (!connection.last_sync_at || Date.now() - new Date(String(connection.last_sync_at)).getTime() > 30 * 60 * 1000);
     if (selectedId && stale) { await queuePipeline(user.id, selectedId); await processPendingWork(selectedId); state = await getWorkspaceState(user, selectedId); }
     return Response.json(state);
   } catch (error) { return apiError(error); }
@@ -216,7 +219,7 @@ async function publishPlan(userId: string, athleteId: string, planId: string) {
 }
 
 async function queuePipeline(userId: string, athleteId: string) {
-  const timestamp = nowIso(); const key = `intervals_sync:${athleteId}:${timestamp.slice(0, 13)}`;
+  const timestamp = nowIso(); const halfHourBucket = Math.floor(new Date(timestamp).getTime() / (30 * 60 * 1000)); const key = `intervals_sync:${athleteId}:${halfHourBucket}`;
   await platformEnv().DB.prepare("INSERT OR IGNORE INTO jobs (id, athlete_id, job_type, status, idempotency_key, payload_json, scheduled_at) VALUES (?, ?, 'intervals_sync', 'queued', ?, '{}', ?)")
     .bind(id("job"), athleteId, key, timestamp).run();
   await audit({ id: userId } as never, "queue", "pipeline", key, athleteId);
