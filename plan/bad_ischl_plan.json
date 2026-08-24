@@ -1,0 +1,1256 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-24T07:17:43.610719+00:00",
+  "as_of_date": "2026-08-24",
+  "race": {
+    "name": "Bad Ischl Half Marathon",
+    "date": "2026-09-27",
+    "goal": "sub 1:15:00",
+    "goal_pace": "approximately 3:33/km"
+  },
+  "read_only_intervals_icu": true,
+  "provisional": false,
+  "volume_basis": "Recent complete-week mean 67.3 km, median 72.8 km, rolling 7 days 82.0 km, recent peak 82.0 km.",
+  "planning_notes": [
+    "One full non-running day every Monday; six run days are enough for the current 72–79 km structure.",
+    "Tuesday is the primary threshold/HM-specific session.",
+    "The second major stimulus alternates: controlled Friday speed with an easy Sunday long run, or an easy Friday with a quality Saturday long run.",
+    "Never combine Tuesday quality, Friday quality and a fast long run in the same week.",
+    "One rolling Z2 run plus the long run provides approximately 500–900 m weekly ascent in the main block without turning hills into races.",
+    "The Vienna Power Trail (24.7 km/1,000 m on 18 October) and Kürnberg Long Trail justify maintaining hills, but Bad Ischl HM remains the primary goal until 27 September.",
+    "Pace ranges are conditional on synchronized fitness, terrain, weather, and recovery.",
+    "Strides are neuromuscular support, not a third metabolic workout.",
+    "Strength is low-volume and consolidated after Tuesday quality, with an optional Thursday microdose; no DOMS is acceptable.",
+    "Completed dates are preserved on adaptive regeneration.",
+    "Recent cycling, hiking, strength and other non-running activity is included in recovery/load context, but never converted into running kilometres."
+  ],
+  "days": [
+    {
+      "date": "2026-08-14",
+      "day": "Friday",
+      "status": "completed",
+      "planned_distance_km": 12,
+      "planned_duration_minutes": null,
+      "workout_type": "easy",
+      "details": "12 km easy Z2 on rolling terrain; no fast running two days after 3 × 3 km.",
+      "pace_guidance": "Conversational effort; typically 4:25–5:05/km, but slow further for heat, hills, or fatigue.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Approximately 200–300 m ascent, all controlled.",
+      "purpose": "Aerobic support and trail-strength maintenance while absorbing the key HM session.",
+      "fatigue_modification": "Reduce to 9 km or take rest if fatigue is abnormal.",
+      "strength": null,
+      "major_stimulus": false,
+      "actual": {
+        "distance_km": 13.33,
+        "activity_ids": [
+          "i175711283"
+        ],
+        "activities": [
+          {
+            "id": "i175711283",
+            "name": "Morning Laufen",
+            "workout_type": "easy",
+            "distance_km": 13.332,
+            "training_load": 46.0
+          }
+        ],
+        "distance_adherence_percent": 111.1
+      }
+    },
+    {
+      "date": "2026-08-15",
+      "day": "Saturday",
+      "status": "completed-rest",
+      "planned_distance_km": 0.0,
+      "planned_duration_minutes": null,
+      "workout_type": "rest",
+      "details": "Full non-running day. Optional 30–45 min walk and 10 min mobility only.",
+      "pace_guidance": "None.",
+      "hr_guidance": "None.",
+      "recovery": "Full recovery day.",
+      "terrain_elevation": "Flat/none.",
+      "purpose": "Create recovery before Sunday’s long run after four consecutive running days.",
+      "fatigue_modification": "Keep the rest day; address any pain rather than cross-training through it.",
+      "strength": null,
+      "major_stimulus": false,
+      "actual": {
+        "distance_km": 0,
+        "activity_ids": [],
+        "activities": [],
+        "distance_adherence_percent": null
+      }
+    },
+    {
+      "date": "2026-08-16",
+      "day": "Sunday",
+      "status": "completed",
+      "planned_distance_km": 20,
+      "planned_duration_minutes": null,
+      "workout_type": "long run",
+      "details": "20 km fully easy on rolling terrain; no fast finish after Wednesday’s 3 × 3 km session.",
+      "pace_guidance": "Easy portions 4:25–5:10/km by feel. Uphill pace is irrelevant; keep breathing controlled.",
+      "hr_guidance": "Use HR as a secondary check with pace, terrain and feel. Ease off if response is unusually high or drift is excessive.",
+      "recovery": "No structured recovery; keep the full run aerobically easy.",
+      "terrain_elevation": "Rolling Z2 route, approximately 300–450 m ascent; runnable surfaces and controlled descents.",
+      "purpose": "Aerobic durability plus trail-strength maintenance without adding a second hard stimulus this partial week.",
+      "fatigue_modification": "Reduce to 16–18 km all easy if residual fatigue from Wednesday is still present.",
+      "strength": null,
+      "major_stimulus": false,
+      "actual": {
+        "distance_km": 23.01,
+        "activity_ids": [
+          "i176313015"
+        ],
+        "activities": [
+          {
+            "id": "i176313015",
+            "name": "OÖ Runderl 🌤️",
+            "workout_type": "long run",
+            "distance_km": 23.008,
+            "training_load": 85.0
+          }
+        ],
+        "distance_adherence_percent": 115.1
+      }
+    },
+    {
+      "date": "2026-08-17",
+      "day": "Monday",
+      "status": "completed-rest",
+      "planned_distance_km": 0.0,
+      "planned_duration_minutes": null,
+      "workout_type": "rest",
+      "details": "Full non-running day. Optional easy walk and 10–15 min mobility.",
+      "pace_guidance": "None.",
+      "hr_guidance": "None.",
+      "recovery": "Full recovery day.",
+      "terrain_elevation": "Flat/none.",
+      "purpose": "Absorb the previous week, keep six run days sustainable, and arrive fresh for Tuesday quality.",
+      "fatigue_modification": "Keep the rest day; do not replace missed mileage here.",
+      "strength": null,
+      "major_stimulus": false,
+      "actual": {
+        "distance_km": 0,
+        "activity_ids": [],
+        "activities": [],
+        "distance_adherence_percent": null
+      }
+    },
+    {
+      "date": "2026-08-18",
+      "day": "Tuesday",
+      "status": "completed",
+      "planned_distance_km": 15.0,
+      "planned_duration_minutes": null,
+      "workout_type": "threshold",
+      "details": "3 km easy; drills + 4 strides; 4 × 2 km @ controlled threshold; 75–90 s easy jog; 2–3 km cool-down.",
+      "pace_guidance": "3:27–3:31/km. Keep rep 1 deliberately controlled and all four even; do not make the final rep a test.",
+      "hr_guidance": "Let HR rise naturally; interpret it with pace, duration, drift, and feel.",
+      "recovery": "75–90 s easy jog after each 2 km rep.",
+      "terrain_elevation": "Flat, accurately measured route with minimal interruptions.",
+      "purpose": "Maintain strong threshold volume with shorter recovery than the 3 × 3 km session, without forcing 10 km of work six days later.",
+      "fatigue_modification": "Do 3 × 2 km if warm-up feel/HR is abnormal; never make fewer reps faster. Recent hike/ride load is material: use the reduced option if legs are heavy in the warm-up.",
+      "strength": "Later the same day: 25–30 min low-volume strength—split squat, RDL, straight- and bent-knee calf work, hip stability and trunk; 2–3 sets, 2–3 reps in reserve.",
+      "major_stimulus": true,
+      "actual": {
+        "distance_km": 12.01,
+        "activity_ids": [
+          "i177002841"
+        ],
+        "activities": [
+          {
+            "id": "i177002841",
+            "name": "Morning 4 × 2000 🦆",
+            "workout_type": "threshold",
+            "distance_km": 12.007,
+            "training_load": 60.0
+          }
+        ],
+        "distance_adherence_percent": 80.1
+      }
+    },
+    {
+      "date": "2026-08-19",
+      "day": "Wednesday",
+      "status": "completed",
+      "planned_distance_km": 9,
+      "planned_duration_minutes": null,
+      "workout_type": "recovery",
+      "details": "9 km relaxed recovery/easy running after Tuesday quality.",
+      "pace_guidance": "Usually 4:45–5:30/km or slower; breathing and legs must remain easy.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Flat to gently rolling, ideally under 120 m ascent.",
+      "purpose": "Restore movement and circulation while absorbing the previous hard day.",
+      "fatigue_modification": "Rest instead if soreness changes mechanics or pain is focal/worsening.",
+      "strength": null,
+      "major_stimulus": false,
+      "actual": {
+        "distance_km": 11.01,
+        "activity_ids": [
+          "i177666812"
+        ],
+        "activities": [
+          {
+            "id": "i177666812",
+            "name": "Evening Run",
+            "workout_type": "recovery",
+            "distance_km": 11.006,
+            "training_load": 34.0
+          }
+        ],
+        "distance_adherence_percent": 122.3
+      }
+    },
+    {
+      "date": "2026-08-20",
+      "day": "Thursday",
+      "status": "completed",
+      "planned_distance_km": 11,
+      "planned_duration_minutes": null,
+      "workout_type": "easy",
+      "details": "11 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+      "pace_guidance": "Conversational effort; typically 4:25–5:05/km, but slow further for heat, hills, or fatigue.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Approximately 250–400 m ascent on comfortable trails/roads; descents smooth and restrained.",
+      "purpose": "Maintain climbing strength and trail tissue tolerance without compromising HM-specific quality.",
+      "fatigue_modification": "Reduce to 8 km or take rest if fatigue is abnormal.",
+      "strength": "15–20 min microdose after the run: soleus/calf, hip stability and trunk; 2 sets, no failure or DOMS.",
+      "major_stimulus": false,
+      "actual": {
+        "distance_km": 11.51,
+        "activity_ids": [
+          "i177801613"
+        ],
+        "activities": [
+          {
+            "id": "i177801613",
+            "name": "Morning Gloriette",
+            "workout_type": "recovery",
+            "distance_km": 11.506,
+            "training_load": 40.0
+          }
+        ],
+        "distance_adherence_percent": 104.6
+      }
+    },
+    {
+      "date": "2026-08-21",
+      "day": "Friday",
+      "status": "completed",
+      "planned_distance_km": 12.0,
+      "planned_duration_minutes": null,
+      "workout_type": "running economy",
+      "details": "3 km easy; drills + 4 strides; 10 × 400 m controlled fast with 200 m easy jog; 2 km cool-down.",
+      "pace_guidance": "78–80 s per 400 m (3:15–3:20/km). Relaxed 5K rhythm, never sprinting.",
+      "hr_guidance": "Let HR rise naturally; interpret it with pace, duration, drift, and feel.",
+      "recovery": "200 m easy jog, normally 65–80 s; begin each rep composed.",
+      "terrain_elevation": "Flat, accurately measured route with minimal interruptions.",
+      "purpose": "Maintain speed reserve and economy with only 4 km of fast running, leaving Sunday’s long run aerobic.",
+      "fatigue_modification": "Replace with 8–10 km easy plus 6 strides. If skipped for fatigue, keep Sunday entirely easy.",
+      "strength": null,
+      "major_stimulus": true,
+      "actual": {
+        "distance_km": 23.51,
+        "activity_ids": [
+          "i178199531",
+          "i178286157"
+        ],
+        "activities": [
+          {
+            "id": "i178199531",
+            "name": "400er zum Frühstück 🍳",
+            "workout_type": "VO2max",
+            "distance_km": 11.005,
+            "training_load": 47.0
+          },
+          {
+            "id": "i178286157",
+            "name": "Lauf mit Sabs 🫰🏼",
+            "workout_type": "recovery",
+            "distance_km": 12.506,
+            "training_load": 27.0
+          }
+        ],
+        "distance_adherence_percent": 195.9
+      }
+    },
+    {
+      "date": "2026-08-22",
+      "day": "Saturday",
+      "status": "missed",
+      "planned_distance_km": 7,
+      "planned_duration_minutes": null,
+      "workout_type": "recovery",
+      "details": "7 km very easy; no pace objective.",
+      "pace_guidance": "Usually 4:45–5:30/km or slower; breathing and legs must remain easy.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Flat/gentle; avoid technical descents.",
+      "purpose": "Restore movement and circulation while absorbing the previous hard day.",
+      "fatigue_modification": "Rest instead if soreness changes mechanics or pain is focal/worsening.",
+      "strength": null,
+      "major_stimulus": false,
+      "actual": {
+        "distance_km": 0,
+        "activity_ids": [],
+        "activities": [],
+        "distance_adherence_percent": 0.0
+      }
+    },
+    {
+      "date": "2026-08-23",
+      "day": "Sunday",
+      "status": "completed",
+      "planned_distance_km": 20,
+      "planned_duration_minutes": null,
+      "workout_type": "long run",
+      "details": "21 km fully easy on rolling terrain; no planned faster kilometres after Friday’s economy session.",
+      "pace_guidance": "Easy portions 4:25–5:10/km by feel. Uphill pace is irrelevant; keep breathing controlled.",
+      "hr_guidance": "Use HR as a secondary check with pace, terrain and feel. Ease off if response is unusually high or drift is excessive.",
+      "recovery": "No structured recovery; keep the full run aerobically easy.",
+      "terrain_elevation": "Approximately 350–500 m ascent. Smooth trails/roads; descents controlled, not raced.",
+      "purpose": "Build HM durability and retain climbing/downhill tolerance while keeping the week to two hard stimuli.",
+      "fatigue_modification": "If Friday cost more than expected, run 17–19 km easy and reduce elevation.",
+      "strength": null,
+      "major_stimulus": false,
+      "actual": {
+        "distance_km": 24.01,
+        "activity_ids": [
+          "i178964931"
+        ],
+        "activities": [
+          {
+            "id": "i178964931",
+            "name": "Lainzer Zoo Runderl 🐗",
+            "workout_type": "long run",
+            "distance_km": 24.009,
+            "training_load": 91.0
+          }
+        ],
+        "distance_adherence_percent": 120.1
+      }
+    },
+    {
+      "date": "2026-08-24",
+      "day": "Monday",
+      "status": "planned",
+      "planned_distance_km": 0.0,
+      "planned_duration_minutes": null,
+      "workout_type": "rest",
+      "details": "Full non-running day. Optional easy walk and 10–15 min mobility.",
+      "pace_guidance": "None.",
+      "hr_guidance": "None.",
+      "recovery": "Full recovery day.",
+      "terrain_elevation": "Flat/none.",
+      "purpose": "Absorb the previous week, keep six run days sustainable, and arrive fresh for Tuesday quality.",
+      "fatigue_modification": "Keep the rest day; do not replace missed mileage here.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-08-25",
+      "day": "Tuesday",
+      "status": "planned",
+      "planned_distance_km": 15.0,
+      "planned_duration_minutes": null,
+      "workout_type": "HM-specific",
+      "details": "3 km easy; drills + strides; 2 × 4 km @ HM effort; 2:00 easy jog; 3 km cool-down.",
+      "pace_guidance": "3:31–3:34/km in normal conditions; effort governs in wind/heat.",
+      "hr_guidance": "Let HR rise naturally; interpret it with pace, duration, drift, and feel.",
+      "recovery": "2:00 easy jog between 4 km blocks.",
+      "terrain_elevation": "Flat, accurately measured route with minimal interruptions.",
+      "purpose": "Extend time near goal intensity without excessive anaerobic contribution.",
+      "fatigue_modification": "Change to 3 × 2 km at the same effort with 90 s jog, or run easy if fatigue is elevated. Recent hike/ride load is material: use the reduced option if legs are heavy in the warm-up.",
+      "strength": "Later the same day: 25–30 min low-volume running strength; avoid grinding repetitions or DOMS.",
+      "major_stimulus": true
+    },
+    {
+      "date": "2026-08-26",
+      "day": "Wednesday",
+      "status": "planned",
+      "planned_distance_km": 10,
+      "planned_duration_minutes": null,
+      "workout_type": "recovery",
+      "details": "10 km relaxed recovery/easy running after Tuesday quality.",
+      "pace_guidance": "Usually 4:45–5:30/km or slower; breathing and legs must remain easy.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Flat to gently rolling, ideally under 120 m ascent.",
+      "purpose": "Restore movement and circulation while absorbing the previous hard day.",
+      "fatigue_modification": "Rest instead if soreness changes mechanics or pain is focal/worsening.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-08-27",
+      "day": "Thursday",
+      "status": "planned",
+      "planned_distance_km": 12,
+      "planned_duration_minutes": null,
+      "workout_type": "easy",
+      "details": "12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+      "pace_guidance": "Conversational effort; typically 4:25–5:05/km, but slow further for heat, hills, or fatigue.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Approximately 250–400 m ascent on comfortable trails/roads; descents smooth and restrained.",
+      "purpose": "Maintain climbing strength and trail tissue tolerance without compromising HM-specific quality.",
+      "fatigue_modification": "Reduce to 9 km or take rest if fatigue is abnormal.",
+      "strength": "15–20 min microdose after the run: soleus/calf, hip stability and trunk; 2 sets, no failure or DOMS.",
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-08-28",
+      "day": "Friday",
+      "status": "planned",
+      "planned_distance_km": 10,
+      "planned_duration_minutes": null,
+      "workout_type": "easy + strides",
+      "details": "10 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery.",
+      "pace_guidance": "Easy running 4:30–5:10/km by feel; strides fast but relaxed, never sprinting.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog after each stride.",
+      "terrain_elevation": "Flat to gently rolling; save climbing and faster aerobic work for the planned weekend session.",
+      "purpose": "Neuromuscular freshness without becoming a third metabolic workout.",
+      "fatigue_modification": "Omit the strides and run 7–9 km easy, or rest if recovery is poor.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-08-29",
+      "day": "Saturday",
+      "status": "planned",
+      "planned_distance_km": 22,
+      "planned_duration_minutes": null,
+      "workout_type": "long run with controlled blocks",
+      "details": "22 km total: 5 km easy, 3 × 3 km @ controlled steady/HM-support effort with 1 km easy jog between, then easy to 22 km.",
+      "pace_guidance": "Fast blocks 3:40–3:45/km—clearly slower than HM pace and never threshold effort.",
+      "hr_guidance": "Use HR as a secondary check with pace, terrain and feel. Ease off if response is unusually high or drift is excessive.",
+      "recovery": "1 km easy jog between 3 km blocks.",
+      "terrain_elevation": "Approximately 300–450 m ascent overall; do the faster blocks on a flat or gently rolling runnable section.",
+      "purpose": "Combine durability and controlled late-run economy; this is the week’s second major stimulus, so Friday stays easy.",
+      "fatigue_modification": "Move the long run to Sunday and rest/run 8 km easy Saturday if needed. If still tired Sunday, run 18–20 km all easy.",
+      "strength": null,
+      "major_stimulus": true
+    },
+    {
+      "date": "2026-08-30",
+      "day": "Sunday",
+      "status": "planned",
+      "planned_distance_km": 8,
+      "planned_duration_minutes": null,
+      "workout_type": "recovery",
+      "details": "8 km very easy recovery after Saturday’s quality long run; no strides.",
+      "pace_guidance": "Usually 4:45–5:30/km or slower; breathing and legs must remain easy.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Flat to gently rolling, ideally under 100 m ascent.",
+      "purpose": "Absorb the controlled long-run work without extending the hard stimulus into a second day.",
+      "fatigue_modification": "Take a full rest day if soreness or fatigue changes mechanics.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-08-31",
+      "day": "Monday",
+      "status": "planned",
+      "planned_distance_km": 0.0,
+      "planned_duration_minutes": null,
+      "workout_type": "rest",
+      "details": "Full non-running day. Optional easy walk and 10–15 min mobility.",
+      "pace_guidance": "None.",
+      "hr_guidance": "None.",
+      "recovery": "Full recovery day.",
+      "terrain_elevation": "Flat/none.",
+      "purpose": "Absorb the previous week, keep six run days sustainable, and arrive fresh for Tuesday quality.",
+      "fatigue_modification": "Keep the rest day; do not replace missed mileage here.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-01",
+      "day": "Tuesday",
+      "status": "planned",
+      "planned_distance_km": 15.0,
+      "planned_duration_minutes": null,
+      "workout_type": "threshold",
+      "details": "3 km easy; drills + strides; 3 × 3 km @ controlled threshold/HM crossover; 90 s easy jog; 2–3 km cool-down.",
+      "pace_guidance": "3:29–3:32/km; smooth, with no faster final rep unless effort remains clearly controlled.",
+      "hr_guidance": "Let HR rise naturally; interpret it with pace, duration, drift, and feel.",
+      "recovery": "90 s easy jog between 3 km reps.",
+      "terrain_elevation": "Flat, accurately measured route with minimal interruptions.",
+      "purpose": "Raise sustainable speed while keeping the stimulus specific and repeatable.",
+      "fatigue_modification": "Stop after 2 reps if pace requires straining; add easy cool-down instead. Recent hike/ride load is material: use the reduced option if legs are heavy in the warm-up.",
+      "strength": "Later the same day: 25 min low-volume running strength, leaving 2–3 reps in reserve.",
+      "major_stimulus": true
+    },
+    {
+      "date": "2026-09-02",
+      "day": "Wednesday",
+      "status": "planned",
+      "planned_distance_km": 10,
+      "planned_duration_minutes": null,
+      "workout_type": "recovery",
+      "details": "10 km relaxed recovery/easy running after Tuesday quality.",
+      "pace_guidance": "Usually 4:45–5:30/km or slower; breathing and legs must remain easy.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Flat to gently rolling, ideally under 120 m ascent.",
+      "purpose": "Restore movement and circulation while absorbing the previous hard day.",
+      "fatigue_modification": "Rest instead if soreness changes mechanics or pain is focal/worsening.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-03",
+      "day": "Thursday",
+      "status": "planned",
+      "planned_distance_km": 12,
+      "planned_duration_minutes": null,
+      "workout_type": "easy",
+      "details": "12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+      "pace_guidance": "Conversational effort; typically 4:25–5:05/km, but slow further for heat, hills, or fatigue.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Approximately 250–400 m ascent on comfortable trails/roads; descents smooth and restrained.",
+      "purpose": "Maintain climbing strength and trail tissue tolerance without compromising HM-specific quality.",
+      "fatigue_modification": "Reduce to 9 km or take rest if fatigue is abnormal.",
+      "strength": "15–20 min microdose after the run: soleus/calf, hip stability and trunk; 2 sets, no failure or DOMS.",
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-04",
+      "day": "Friday",
+      "status": "planned",
+      "planned_distance_km": 13.0,
+      "planned_duration_minutes": null,
+      "workout_type": "10K-specific maintenance",
+      "details": "3 km easy; drills + strides; 6 × 1 km controlled at current 10K effort; 75 s easy jog; 2–3 km cool-down.",
+      "pace_guidance": "3:23–3:27/km. Even reps; stop before strain and do not chase a faster sixth repetition.",
+      "hr_guidance": "Let HR rise naturally; interpret it with pace, duration, drift, and feel.",
+      "recovery": "75 s easy jog after each 1 km rep.",
+      "terrain_elevation": "Flat, accurately measured route with minimal interruptions.",
+      "purpose": "Maintain aerobic power and speed reserve while Tuesday carries the larger threshold stimulus.",
+      "fatigue_modification": "Do 4 × 1 km or replace with 10 km easy plus strides. Sunday then remains easy, not compensatory.",
+      "strength": null,
+      "major_stimulus": true
+    },
+    {
+      "date": "2026-09-05",
+      "day": "Saturday",
+      "status": "planned",
+      "planned_distance_km": 8,
+      "planned_duration_minutes": null,
+      "workout_type": "recovery",
+      "details": "8 km very easy; no pace objective.",
+      "pace_guidance": "Usually 4:45–5:30/km or slower; breathing and legs must remain easy.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Flat/gentle; avoid technical descents.",
+      "purpose": "Restore movement and circulation while absorbing the previous hard day.",
+      "fatigue_modification": "Rest instead if soreness changes mechanics or pain is focal/worsening.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-06",
+      "day": "Sunday",
+      "status": "planned",
+      "planned_distance_km": 20,
+      "planned_duration_minutes": null,
+      "workout_type": "long run",
+      "details": "20 km fully easy on rolling terrain; no fast finish after Friday’s 1 km repetitions.",
+      "pace_guidance": "Easy portions 4:25–5:10/km by feel. Uphill pace is irrelevant; keep breathing controlled.",
+      "hr_guidance": "Use HR as a secondary check with pace, terrain and feel. Ease off if response is unusually high or drift is excessive.",
+      "recovery": "No structured recovery; keep the full run aerobically easy.",
+      "terrain_elevation": "Approximately 400–550 m ascent, mostly comfortable Z2; technical descending stays controlled.",
+      "purpose": "Maintain long-run durability and trail-specific strength without creating a third hard session.",
+      "fatigue_modification": "Reduce to 16–18 km and 250–350 m ascent if Friday was harder than prescribed.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-07",
+      "day": "Monday",
+      "status": "planned",
+      "planned_distance_km": 0.0,
+      "planned_duration_minutes": null,
+      "workout_type": "rest",
+      "details": "Full non-running day. Optional easy walk and 10–15 min mobility.",
+      "pace_guidance": "None.",
+      "hr_guidance": "None.",
+      "recovery": "Full recovery day.",
+      "terrain_elevation": "Flat/none.",
+      "purpose": "Absorb the previous week, keep six run days sustainable, and arrive fresh for Tuesday quality.",
+      "fatigue_modification": "Keep the rest day; do not replace missed mileage here.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-08",
+      "day": "Tuesday",
+      "status": "planned",
+      "planned_distance_km": 16.0,
+      "planned_duration_minutes": null,
+      "workout_type": "HM-specific",
+      "details": "3 km easy; drills + strides; 2 × 5 km @ HM effort; 2:00 easy jog; 3 km cool-down.",
+      "pace_guidance": "3:31–3:34/km; prioritize even effort and a relaxed first block.",
+      "hr_guidance": "Let HR rise naturally; interpret it with pace, duration, drift, and feel.",
+      "recovery": "2:00 easy jog between 5 km blocks.",
+      "terrain_elevation": "Flat, accurately measured route with minimal interruptions.",
+      "purpose": "Build race-specific endurance through longer controlled blocks.",
+      "fatigue_modification": "Run 2 × 4 km instead; never compensate by running the shorter version faster. Recent hike/ride load is material: use the reduced option if legs are heavy in the warm-up.",
+      "strength": "Final normal strength session later the same day: 20–25 min, low volume, no DOMS.",
+      "major_stimulus": true
+    },
+    {
+      "date": "2026-09-09",
+      "day": "Wednesday",
+      "status": "planned",
+      "planned_distance_km": 10,
+      "planned_duration_minutes": null,
+      "workout_type": "recovery",
+      "details": "10 km relaxed recovery/easy running after Tuesday quality.",
+      "pace_guidance": "Usually 4:45–5:30/km or slower; breathing and legs must remain easy.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Flat to gently rolling, ideally under 120 m ascent.",
+      "purpose": "Restore movement and circulation while absorbing the previous hard day.",
+      "fatigue_modification": "Rest instead if soreness changes mechanics or pain is focal/worsening.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-10",
+      "day": "Thursday",
+      "status": "planned",
+      "planned_distance_km": 12,
+      "planned_duration_minutes": null,
+      "workout_type": "easy",
+      "details": "12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+      "pace_guidance": "Conversational effort; typically 4:25–5:05/km, but slow further for heat, hills, or fatigue.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Approximately 250–400 m ascent on comfortable trails/roads; descents smooth and restrained.",
+      "purpose": "Maintain climbing strength and trail tissue tolerance without compromising HM-specific quality.",
+      "fatigue_modification": "Reduce to 9 km or take rest if fatigue is abnormal.",
+      "strength": "15–20 min microdose after the run: soleus/calf, hip stability and trunk; 2 sets, no failure or DOMS.",
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-11",
+      "day": "Friday",
+      "status": "planned",
+      "planned_distance_km": 10,
+      "planned_duration_minutes": null,
+      "workout_type": "easy + strides",
+      "details": "10 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery.",
+      "pace_guidance": "Easy running 4:30–5:10/km by feel; strides fast but relaxed, never sprinting.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog after each stride.",
+      "terrain_elevation": "Flat to gently rolling; save climbing and faster aerobic work for the planned weekend session.",
+      "purpose": "Neuromuscular freshness without becoming a third metabolic workout.",
+      "fatigue_modification": "Omit the strides and run 7–9 km easy, or rest if recovery is poor.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-12",
+      "day": "Saturday",
+      "status": "planned",
+      "planned_distance_km": 21,
+      "planned_duration_minutes": null,
+      "workout_type": "long run with controlled blocks",
+      "details": "21 km total: 5 km easy, 2 × 4 km @ controlled HM-support effort with 1 km easy jog, then easy to 21 km.",
+      "pace_guidance": "Fast blocks 3:38–3:42/km—strong aerobic running, not goal-HM pace.",
+      "hr_guidance": "Use HR as a secondary check with pace, terrain and feel. Ease off if response is unusually high or drift is excessive.",
+      "recovery": "1 km easy jog between 4 km blocks.",
+      "terrain_elevation": "Approximately 350–500 m ascent overall; faster blocks on a smooth, gently rolling segment.",
+      "purpose": "Develop long-run durability and sub-race-pace economy while Friday remains only easy plus strides.",
+      "fatigue_modification": "Move to Sunday if necessary; otherwise shorten to 18 km all easy. Never force the faster blocks on tired legs.",
+      "strength": null,
+      "major_stimulus": true
+    },
+    {
+      "date": "2026-09-13",
+      "day": "Sunday",
+      "status": "planned",
+      "planned_distance_km": 8,
+      "planned_duration_minutes": null,
+      "workout_type": "recovery",
+      "details": "8 km very easy recovery after Saturday’s quality long run; no strides.",
+      "pace_guidance": "Usually 4:45–5:30/km or slower; breathing and legs must remain easy.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Flat to gently rolling, ideally under 100 m ascent.",
+      "purpose": "Absorb the controlled long-run work without extending the hard stimulus into a second day.",
+      "fatigue_modification": "Take a full rest day if soreness or fatigue changes mechanics.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-14",
+      "day": "Monday",
+      "status": "planned",
+      "planned_distance_km": 0.0,
+      "planned_duration_minutes": null,
+      "workout_type": "rest",
+      "details": "Full non-running day. Optional easy walk and 10–15 min mobility.",
+      "pace_guidance": "None.",
+      "hr_guidance": "None.",
+      "recovery": "Full recovery day.",
+      "terrain_elevation": "Flat/none.",
+      "purpose": "Absorb the previous week, keep six run days sustainable, and arrive fresh for Tuesday quality.",
+      "fatigue_modification": "Keep the rest day; do not replace missed mileage here.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-15",
+      "day": "Tuesday",
+      "status": "planned",
+      "planned_distance_km": 14.0,
+      "planned_duration_minutes": null,
+      "workout_type": "HM-specific",
+      "details": "3 km easy; drills + strides; 8 km continuous at controlled HM-specific effort; 3 km cool-down.",
+      "pace_guidance": "Begin 3:34–3:35/km and only settle toward 3:31–3:33/km if controlled. This is not a time trial.",
+      "hr_guidance": "Let HR rise naturally; interpret it with pace, duration, drift, and feel.",
+      "recovery": "Continuous specific block; no standing recovery.",
+      "terrain_elevation": "Flat, accurately measured route with minimal interruptions.",
+      "purpose": "Convert broken HM work into continuous race rhythm without carrying excessive fatigue into the taper.",
+      "fatigue_modification": "Use 2 × 4 km with 2 min jog if continuous work would become a test; stop if mechanics deteriorate. Recent hike/ride load is material: use the reduced option if legs are heavy in the warm-up.",
+      "strength": "Optional 15–20 min maintenance only: calf/soleus, hip stability and trunk; no heavy eccentric work.",
+      "major_stimulus": true
+    },
+    {
+      "date": "2026-09-16",
+      "day": "Wednesday",
+      "status": "planned",
+      "planned_distance_km": 10,
+      "planned_duration_minutes": null,
+      "workout_type": "recovery",
+      "details": "10 km relaxed recovery/easy running after Tuesday quality.",
+      "pace_guidance": "Usually 4:45–5:30/km or slower; breathing and legs must remain easy.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Flat to gently rolling, ideally under 120 m ascent.",
+      "purpose": "Restore movement and circulation while absorbing the previous hard day.",
+      "fatigue_modification": "Rest instead if soreness changes mechanics or pain is focal/worsening.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-17",
+      "day": "Thursday",
+      "status": "planned",
+      "planned_distance_km": 12,
+      "planned_duration_minutes": null,
+      "workout_type": "easy",
+      "details": "12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+      "pace_guidance": "Conversational effort; typically 4:25–5:05/km, but slow further for heat, hills, or fatigue.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Approximately 250–400 m ascent on comfortable trails/roads; descents smooth and restrained.",
+      "purpose": "Maintain climbing strength and trail tissue tolerance without compromising HM-specific quality.",
+      "fatigue_modification": "Reduce to 9 km or take rest if fatigue is abnormal.",
+      "strength": "15–20 min microdose after the run: soleus/calf, hip stability and trunk; 2 sets, no failure or DOMS.",
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-18",
+      "day": "Friday",
+      "status": "planned",
+      "planned_distance_km": 11.0,
+      "planned_duration_minutes": null,
+      "workout_type": "running economy",
+      "details": "3 km easy; drills + strides; 8 × 400 m controlled fast with 200 m easy jog; 2 km cool-down.",
+      "pace_guidance": "78–80 s per 400 m (3:15–3:20/km), relaxed and mechanically clean.",
+      "hr_guidance": "Let HR rise naturally; interpret it with pace, duration, drift, and feel.",
+      "recovery": "200 m easy jog; full control matters more than short recovery.",
+      "terrain_elevation": "Flat, accurately measured route with minimal interruptions.",
+      "purpose": "Preserve economy and leg speed while overall volume and fatigue begin to fall.",
+      "fatigue_modification": "Run 8–10 km easy with 6 × 15 s strides instead; do not force the session during the taper.",
+      "strength": null,
+      "major_stimulus": true
+    },
+    {
+      "date": "2026-09-19",
+      "day": "Saturday",
+      "status": "planned",
+      "planned_distance_km": 8,
+      "planned_duration_minutes": null,
+      "workout_type": "recovery",
+      "details": "8 km very easy; no pace objective.",
+      "pace_guidance": "Usually 4:45–5:30/km or slower; breathing and legs must remain easy.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Flat/gentle; avoid technical descents.",
+      "purpose": "Restore movement and circulation while absorbing the previous hard day.",
+      "fatigue_modification": "Rest instead if soreness changes mechanics or pain is focal/worsening.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-20",
+      "day": "Sunday",
+      "status": "planned",
+      "planned_distance_km": 16,
+      "planned_duration_minutes": null,
+      "workout_type": "long run",
+      "details": "16 km relaxed on gently rolling terrain; no progression and no hard descending.",
+      "pace_guidance": "Easy portions 4:25–5:10/km by feel. Uphill pace is irrelevant; keep breathing controlled.",
+      "hr_guidance": "Use HR as a secondary check with pace, terrain and feel. Ease off if response is unusually high or drift is excessive.",
+      "recovery": "No structured recovery; keep the full run aerobically easy.",
+      "terrain_elevation": "Approximately 200–300 m ascent on non-technical terrain.",
+      "purpose": "Retain endurance and hill familiarity while tapering fatigue seven days before the HM.",
+      "fatigue_modification": "Reduce to 12–14 km flat/easy if legs remain loaded from Tuesday or Friday.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-21",
+      "day": "Monday",
+      "status": "planned",
+      "planned_distance_km": 0.0,
+      "planned_duration_minutes": null,
+      "workout_type": "rest",
+      "details": "Full non-running day. Optional easy walk and 10–15 min mobility.",
+      "pace_guidance": "None.",
+      "hr_guidance": "None.",
+      "recovery": "Full recovery day.",
+      "terrain_elevation": "Flat/none.",
+      "purpose": "Absorb the previous week, keep six run days sustainable, and arrive fresh for Tuesday quality.",
+      "fatigue_modification": "Keep the rest day; do not replace missed mileage here.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-22",
+      "day": "Tuesday",
+      "status": "planned",
+      "planned_distance_km": 12.0,
+      "planned_duration_minutes": null,
+      "workout_type": "HM-specific tune-up",
+      "details": "3 km easy; drills + strides; 3 × 2 km @ goal HM pace; 2:00 easy jog; 2 km cool-down.",
+      "pace_guidance": "3:32–3:34/km. Exact rhythm, never faster than 3:30/km.",
+      "hr_guidance": "Let HR rise naturally; interpret it with pace, duration, drift, and feel.",
+      "recovery": "2:00 easy jog.",
+      "terrain_elevation": "Flat, accurately measured route with minimal interruptions.",
+      "purpose": "Rehearse goal rhythm while reducing total load in race week.",
+      "fatigue_modification": "Do 2 × 2 km, or 4 × 3 min at HM effort if travel/fatigue warrants. Recent hike/ride load is material: use the reduced option if legs are heavy in the warm-up.",
+      "strength": null,
+      "major_stimulus": true
+    },
+    {
+      "date": "2026-09-23",
+      "day": "Wednesday",
+      "status": "planned",
+      "planned_distance_km": 10,
+      "planned_duration_minutes": null,
+      "workout_type": "recovery",
+      "details": "10 km relaxed recovery/easy running after Tuesday quality.",
+      "pace_guidance": "Usually 4:45–5:30/km or slower; breathing and legs must remain easy.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Flat to gently rolling, ideally under 120 m ascent.",
+      "purpose": "Restore movement and circulation while absorbing the previous hard day.",
+      "fatigue_modification": "Rest instead if soreness changes mechanics or pain is focal/worsening.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-24",
+      "day": "Thursday",
+      "status": "planned",
+      "planned_distance_km": 8,
+      "planned_duration_minutes": null,
+      "workout_type": "easy",
+      "details": "8 km easy on gently rolling terrain; no hill sprints.",
+      "pace_guidance": "Conversational effort; typically 4:25–5:05/km, but slow further for heat, hills, or fatigue.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog between optional strides.",
+      "terrain_elevation": "Only 100–150 m ascent; avoid technical trails and eccentric downhill load.",
+      "purpose": "Aerobic volume and musculoskeletal durability without compromising key sessions.",
+      "fatigue_modification": "Reduce to 5 km or take rest if fatigue is abnormal.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-25",
+      "day": "Friday",
+      "status": "planned",
+      "planned_distance_km": 7,
+      "planned_duration_minutes": null,
+      "workout_type": "easy + strides",
+      "details": "7 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery.",
+      "pace_guidance": "Easy running 4:30–5:10/km by feel; strides fast but relaxed, never sprinting.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "60–90 s walk/jog after each stride.",
+      "terrain_elevation": "Flat to gently rolling; save climbing and faster aerobic work for the planned weekend session.",
+      "purpose": "Neuromuscular freshness without becoming a third metabolic workout.",
+      "fatigue_modification": "Omit the strides and run 7–9 km easy, or rest if recovery is poor.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-26",
+      "day": "Saturday",
+      "status": "planned",
+      "planned_distance_km": 5,
+      "planned_duration_minutes": null,
+      "workout_type": "shakeout",
+      "details": "5 km very easy + 4 × 10–12 s relaxed strides if desired.",
+      "pace_guidance": "No pace target; finish fresher than you started.",
+      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
+      "recovery": "Full walk/jog recovery after optional strides.",
+      "terrain_elevation": "Flat/gentle; avoid technical descents.",
+      "purpose": "Stay loose without adding fatigue before race day.",
+      "fatigue_modification": "Rest instead if soreness changes mechanics or pain is focal/worsening.",
+      "strength": null,
+      "major_stimulus": false
+    },
+    {
+      "date": "2026-09-27",
+      "day": "Sunday",
+      "status": "planned",
+      "planned_distance_km": 25.1,
+      "planned_duration_minutes": null,
+      "workout_type": "race",
+      "details": "Race day: 3 km warm-up + drills/strides, Bad Ischl HM, 1 km cool-down only if desired.",
+      "pace_guidance": "Goal pace ~3:33/km. Open controlled; pace by effort on hills/wind and avoid banking time early.",
+      "hr_guidance": "HR is observational, not a pacing target. Use chest strap if comfortable; ignore anomalous values.",
+      "recovery": "No interval recovery. Fuel/hydrate according to rehearsed practice.",
+      "terrain_elevation": "Bad Ischl HM course; arrive familiar with turns and gradients.",
+      "purpose": "Execute the primary race after a progressive, intensity-preserving taper.",
+      "fatigue_modification": "If illness, focal pain, or medical concern is present, do not force the start.",
+      "strength": null,
+      "major_stimulus": true
+    }
+  ],
+  "change_log": [
+    {
+      "changed_at": "2026-08-16T17:05:06.767999+00:00",
+      "effective_date": "2026-08-16",
+      "changes": [
+        {
+          "date": "2026-08-20",
+          "original": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-08-27",
+          "original": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-09-03",
+          "original": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-09-10",
+          "original": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-09-17",
+          "original": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        }
+      ],
+      "reason": "New synchronized training and recovery assessment."
+    },
+    {
+      "changed_at": "2026-08-16T17:28:07.013390+00:00",
+      "effective_date": "2026-08-16",
+      "changes": [
+        {
+          "date": "2026-08-20",
+          "original": "easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-08-27",
+          "original": "easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-09-03",
+          "original": "easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-09-10",
+          "original": "easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-09-17",
+          "original": "easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        }
+      ],
+      "reason": "New synchronized training and recovery assessment."
+    },
+    {
+      "changed_at": "2026-08-18T00:02:41.323328+00:00",
+      "effective_date": "2026-08-18",
+      "changes": [
+        {
+          "date": "2026-08-19",
+          "original": "recovery: 10 km relaxed recovery/easy running after Tuesday quality.",
+          "updated": "recovery: 9 km relaxed recovery/easy running after Tuesday quality."
+        },
+        {
+          "date": "2026-08-20",
+          "original": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 11 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-08-22",
+          "original": "recovery: 8 km very easy; no pace objective.",
+          "updated": "recovery: 7 km very easy; no pace objective."
+        },
+        {
+          "date": "2026-08-23",
+          "original": "long run: 21 km fully easy on rolling terrain; no planned faster kilometres after Friday’s economy session.",
+          "updated": "long run: 21 km fully easy on rolling terrain; no planned faster kilometres after Friday’s economy session."
+        },
+        {
+          "date": "2026-08-26",
+          "original": "recovery: 10 km relaxed recovery/easy running after Tuesday quality.",
+          "updated": "recovery: 9 km relaxed recovery/easy running after Tuesday quality."
+        },
+        {
+          "date": "2026-08-27",
+          "original": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 11 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-08-28",
+          "original": "easy + strides: 10 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery.",
+          "updated": "easy + strides: 9 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery."
+        },
+        {
+          "date": "2026-08-29",
+          "original": "long run with controlled blocks: 22 km total: 5 km easy, 3 × 3 km @ controlled steady/HM-support effort with 1 km easy jog between, then easy to 22 km.",
+          "updated": "long run with controlled blocks: 22 km total: 5 km easy, 3 × 3 km @ controlled steady/HM-support effort with 1 km easy jog between, then easy to 22 km."
+        },
+        {
+          "date": "2026-08-30",
+          "original": "recovery: 8 km very easy recovery after Saturday’s quality long run; no strides.",
+          "updated": "recovery: 7 km very easy recovery after Saturday’s quality long run; no strides."
+        },
+        {
+          "date": "2026-09-02",
+          "original": "recovery: 10 km relaxed recovery/easy running after Tuesday quality.",
+          "updated": "recovery: 9 km relaxed recovery/easy running after Tuesday quality."
+        },
+        {
+          "date": "2026-09-03",
+          "original": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 11 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-09-05",
+          "original": "recovery: 8 km very easy; no pace objective.",
+          "updated": "recovery: 7 km very easy; no pace objective."
+        },
+        {
+          "date": "2026-09-06",
+          "original": "long run: 20 km fully easy on rolling terrain; no fast finish after Friday’s 1 km repetitions.",
+          "updated": "long run: 20 km fully easy on rolling terrain; no fast finish after Friday’s 1 km repetitions."
+        },
+        {
+          "date": "2026-09-09",
+          "original": "recovery: 10 km relaxed recovery/easy running after Tuesday quality.",
+          "updated": "recovery: 9 km relaxed recovery/easy running after Tuesday quality."
+        },
+        {
+          "date": "2026-09-10",
+          "original": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 11 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-09-11",
+          "original": "easy + strides: 10 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery.",
+          "updated": "easy + strides: 9 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery."
+        },
+        {
+          "date": "2026-09-12",
+          "original": "long run with controlled blocks: 21 km total: 5 km easy, 2 × 4 km @ controlled HM-support effort with 1 km easy jog, then easy to 21 km.",
+          "updated": "long run with controlled blocks: 21 km total: 5 km easy, 2 × 4 km @ controlled HM-support effort with 1 km easy jog, then easy to 21 km."
+        },
+        {
+          "date": "2026-09-13",
+          "original": "recovery: 8 km very easy recovery after Saturday’s quality long run; no strides.",
+          "updated": "recovery: 7 km very easy recovery after Saturday’s quality long run; no strides."
+        },
+        {
+          "date": "2026-09-16",
+          "original": "recovery: 10 km relaxed recovery/easy running after Tuesday quality.",
+          "updated": "recovery: 9 km relaxed recovery/easy running after Tuesday quality."
+        },
+        {
+          "date": "2026-09-17",
+          "original": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 11 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-09-19",
+          "original": "recovery: 8 km very easy; no pace objective.",
+          "updated": "recovery: 7 km very easy; no pace objective."
+        },
+        {
+          "date": "2026-09-20",
+          "original": "long run: 16 km relaxed on gently rolling terrain; no progression and no hard descending.",
+          "updated": "long run: 16 km relaxed on gently rolling terrain; no progression and no hard descending."
+        },
+        {
+          "date": "2026-09-23",
+          "original": "recovery: 10 km relaxed recovery/easy running after Tuesday quality.",
+          "updated": "recovery: 9 km relaxed recovery/easy running after Tuesday quality."
+        },
+        {
+          "date": "2026-09-24",
+          "original": "easy: 8 km easy on gently rolling terrain; no hill sprints.",
+          "updated": "easy: 7 km easy on gently rolling terrain; no hill sprints."
+        }
+      ],
+      "reason": "New synchronized training and recovery assessment."
+    },
+    {
+      "changed_at": "2026-08-18T08:59:35.515053+00:00",
+      "effective_date": "2026-08-18",
+      "changes": [
+        {
+          "date": "2026-08-21",
+          "original": "running economy: 3 km easy; drills + 4 strides; 10 × 400 m controlled fast with 200 m easy jog; 2 km cool-down.",
+          "updated": "running economy: 3 km easy; drills + 4 strides; 8 × 400 m controlled fast with 200 m easy jog; 2 km cool-down."
+        }
+      ],
+      "reason": "New synchronized training and recovery assessment."
+    },
+    {
+      "changed_at": "2026-08-18T09:06:26.529187+00:00",
+      "effective_date": "2026-08-18",
+      "changes": [
+        {
+          "date": "2026-08-21",
+          "original": "running economy: 3 km easy; drills + 4 strides; 8 × 400 m controlled fast with 200 m easy jog; 2 km cool-down.",
+          "updated": "running economy: 3 km easy; drills + 4 strides; 10 × 400 m controlled fast with 200 m easy jog; 2 km cool-down."
+        }
+      ],
+      "reason": "New synchronized training and recovery assessment."
+    },
+    {
+      "changed_at": "2026-08-23T18:01:34.036741+00:00",
+      "effective_date": "2026-08-23",
+      "changes": [
+        {
+          "date": "2026-08-26",
+          "original": "recovery: 9 km relaxed recovery/easy running after Tuesday quality.",
+          "updated": "recovery: 10 km relaxed recovery/easy running after Tuesday quality."
+        },
+        {
+          "date": "2026-08-27",
+          "original": "easy: 11 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-08-28",
+          "original": "easy + strides: 9 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery.",
+          "updated": "easy + strides: 10 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery."
+        },
+        {
+          "date": "2026-08-29",
+          "original": "long run with controlled blocks: 22 km total: 5 km easy, 3 × 3 km @ controlled steady/HM-support effort with 1 km easy jog between, then easy to 22 km.",
+          "updated": "long run with controlled blocks: 22 km total: 5 km easy, 3 × 3 km @ controlled steady/HM-support effort with 1 km easy jog between, then easy to 22 km."
+        },
+        {
+          "date": "2026-08-30",
+          "original": "recovery: 7 km very easy recovery after Saturday’s quality long run; no strides.",
+          "updated": "recovery: 8 km very easy recovery after Saturday’s quality long run; no strides."
+        },
+        {
+          "date": "2026-09-02",
+          "original": "recovery: 9 km relaxed recovery/easy running after Tuesday quality.",
+          "updated": "recovery: 10 km relaxed recovery/easy running after Tuesday quality."
+        },
+        {
+          "date": "2026-09-03",
+          "original": "easy: 11 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-09-05",
+          "original": "recovery: 7 km very easy; no pace objective.",
+          "updated": "recovery: 8 km very easy; no pace objective."
+        },
+        {
+          "date": "2026-09-06",
+          "original": "long run: 20 km fully easy on rolling terrain; no fast finish after Friday’s 1 km repetitions.",
+          "updated": "long run: 20 km fully easy on rolling terrain; no fast finish after Friday’s 1 km repetitions."
+        },
+        {
+          "date": "2026-09-09",
+          "original": "recovery: 9 km relaxed recovery/easy running after Tuesday quality.",
+          "updated": "recovery: 10 km relaxed recovery/easy running after Tuesday quality."
+        },
+        {
+          "date": "2026-09-10",
+          "original": "easy: 11 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-09-11",
+          "original": "easy + strides: 9 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery.",
+          "updated": "easy + strides: 10 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery."
+        },
+        {
+          "date": "2026-09-12",
+          "original": "long run with controlled blocks: 21 km total: 5 km easy, 2 × 4 km @ controlled HM-support effort with 1 km easy jog, then easy to 21 km.",
+          "updated": "long run with controlled blocks: 21 km total: 5 km easy, 2 × 4 km @ controlled HM-support effort with 1 km easy jog, then easy to 21 km."
+        },
+        {
+          "date": "2026-09-13",
+          "original": "recovery: 7 km very easy recovery after Saturday’s quality long run; no strides.",
+          "updated": "recovery: 8 km very easy recovery after Saturday’s quality long run; no strides."
+        },
+        {
+          "date": "2026-09-16",
+          "original": "recovery: 9 km relaxed recovery/easy running after Tuesday quality.",
+          "updated": "recovery: 10 km relaxed recovery/easy running after Tuesday quality."
+        },
+        {
+          "date": "2026-09-17",
+          "original": "easy: 11 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-09-19",
+          "original": "recovery: 7 km very easy; no pace objective.",
+          "updated": "recovery: 8 km very easy; no pace objective."
+        },
+        {
+          "date": "2026-09-20",
+          "original": "long run: 16 km relaxed on gently rolling terrain; no progression and no hard descending.",
+          "updated": "long run: 16 km relaxed on gently rolling terrain; no progression and no hard descending."
+        },
+        {
+          "date": "2026-09-23",
+          "original": "recovery: 9 km relaxed recovery/easy running after Tuesday quality.",
+          "updated": "recovery: 10 km relaxed recovery/easy running after Tuesday quality."
+        },
+        {
+          "date": "2026-09-24",
+          "original": "easy: 7 km easy on gently rolling terrain; no hill sprints.",
+          "updated": "easy: 8 km easy on gently rolling terrain; no hill sprints."
+        }
+      ],
+      "reason": "New synchronized training and recovery assessment."
+    }
+  ]
+}

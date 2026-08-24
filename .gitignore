@@ -1,0 +1,24 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/cache/*
+!data/cache/.gitkeep
+
+# The web app is part of this repository; keep its local runtime artifacts and credentials local.
+web/node_modules/
+web/.next/
+web/.vinext/
+web/dist/
+web/.wrangler/
+web/.env*
+!web/.env.example
+web/*.tsbuildinfo
+
+# This contains private operational context and stays outside shared source control.
+PERSONAL_BESTIES_CONFIDENTIAL_HANDOFF.md

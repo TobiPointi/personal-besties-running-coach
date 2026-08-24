@@ -1,0 +1,294 @@
+{
+  "generated_as_of": "2026-08-24",
+  "phases": [
+    {
+      "dates": "2026-08-13 to 2026-09-27",
+      "goal": "Bad Ischl HM sub-1:15",
+      "focus": "HM-specific endurance, threshold, stable 77\u201379 km weeks, modest elevation, taper."
+    },
+    {
+      "dates": "2026-09-28 to 2026-10-18",
+      "goal": "Vienna Trail title defence",
+      "focus": "Recover first, then concentrate hills/downhill skill and one trail long run; fitness comes mainly from HM block."
+    },
+    {
+      "dates": "2026-10-19 to 2026-11-07/08",
+      "goal": "K\u00fcrnberg Long Trail win attempt",
+      "focus": "Recover, rebuild one trail-specific week, sharpen, taper."
+    },
+    {
+      "dates": "2026-11-09 to 2026-12-06",
+      "goal": "Transition",
+      "focus": "2 easy weeks, restore strength, then rebuild frequency; no forced marathon work."
+    },
+    {
+      "dates": "2026-12-07 to 2027-01-17",
+      "goal": "Marathon base",
+      "focus": "Progress sustainable run volume and long-run durability; threshold maintenance; strength 2\u00d7/week."
+    },
+    {
+      "dates": "2027-01-18 to 2027-03-14",
+      "goal": "Linz marathon-specific build",
+      "focus": "Long runs 28\u201335 km, medium-long runs, threshold, progressive blocks around marathon effort; target pace ~3:47.5/km only after fitness validation."
+    },
+    {
+      "dates": "2027-03-15 to 2027-04-11",
+      "goal": "Peak and taper",
+      "focus": "Final specific long runs, then maintain intensity while reducing volume into Linz."
+    }
+  ],
+  "post_hm_days": [
+    {
+      "date": "2026-09-28",
+      "type": "rest",
+      "distance_km": 0,
+      "details": "Full recovery after Bad Ischl."
+    },
+    {
+      "date": "2026-09-29",
+      "type": "rest",
+      "distance_km": 0,
+      "details": "Walk/mobility only; run only if legs are unusually good."
+    },
+    {
+      "date": "2026-09-30",
+      "type": "recovery",
+      "distance_km": 6,
+      "details": "Very easy, flat."
+    },
+    {
+      "date": "2026-10-01",
+      "type": "easy",
+      "distance_km": 8,
+      "details": "Easy rolling, 100\u2013150 m."
+    },
+    {
+      "date": "2026-10-02",
+      "type": "rest",
+      "distance_km": 0,
+      "details": "Recovery and mobility."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "easy",
+      "distance_km": 10,
+      "details": "Easy rolling, 200 m; no hard descents."
+    },
+    {
+      "date": "2026-10-04",
+      "type": "trail easy",
+      "distance_km": 14,
+      "details": "Easy trail, 350\u2013450 m; technique, not intensity."
+    },
+    {
+      "date": "2026-10-05",
+      "type": "rest",
+      "distance_km": 0,
+      "details": "Rest."
+    },
+    {
+      "date": "2026-10-06",
+      "type": "threshold",
+      "distance_km": 13,
+      "details": "3 km easy; 3 \u00d7 8 min controlled threshold on rolling terrain, 2 min jog; cool-down."
+    },
+    {
+      "date": "2026-10-07",
+      "type": "easy",
+      "distance_km": 10,
+      "details": "Easy flat/rolling."
+    },
+    {
+      "date": "2026-10-08",
+      "type": "hills/strength",
+      "distance_km": 12,
+      "details": "Rolling Z2, 300\u2013400 m; short low-volume strength later."
+    },
+    {
+      "date": "2026-10-09",
+      "type": "easy + hills",
+      "distance_km": 10,
+      "details": "Easy plus 6 \u00d7 12 s steep hill sprints, full walk-back."
+    },
+    {
+      "date": "2026-10-10",
+      "type": "recovery",
+      "distance_km": 8,
+      "details": "Very easy."
+    },
+    {
+      "date": "2026-10-11",
+      "type": "trail long",
+      "distance_km": 22,
+      "details": "Trail 700\u2013900 m; controlled climbs and purposeful but non-racing descents."
+    },
+    {
+      "date": "2026-10-12",
+      "type": "rest",
+      "distance_km": 0,
+      "details": "Rest."
+    },
+    {
+      "date": "2026-10-13",
+      "type": "trail quality",
+      "distance_km": 13,
+      "details": "3 km easy; 5 \u00d7 4 min uphill at controlled trail-race effort, easy jog down; cool-down."
+    },
+    {
+      "date": "2026-10-14",
+      "type": "easy",
+      "distance_km": 9,
+      "details": "Easy flat."
+    },
+    {
+      "date": "2026-10-15",
+      "type": "easy + strides",
+      "distance_km": 10,
+      "details": "Easy rolling plus 5 \u00d7 20 s strides."
+    },
+    {
+      "date": "2026-10-16",
+      "type": "recovery",
+      "distance_km": 7,
+      "details": "Very easy."
+    },
+    {
+      "date": "2026-10-17",
+      "type": "shakeout",
+      "distance_km": 5,
+      "details": "Easy plus 4 \u00d7 15 s relaxed strides."
+    },
+    {
+      "date": "2026-10-18",
+      "type": "race",
+      "distance_km": 24.7,
+      "details": "Vienna Trail Power Trail, 1000 m: defend title; race by position/effort, not road pace."
+    },
+    {
+      "date": "2026-10-19",
+      "type": "rest",
+      "distance_km": 0,
+      "details": "Full recovery."
+    },
+    {
+      "date": "2026-10-20",
+      "type": "rest",
+      "distance_km": 0,
+      "details": "Walk/mobility only."
+    },
+    {
+      "date": "2026-10-21",
+      "type": "recovery",
+      "distance_km": 6,
+      "details": "Very easy if normal gait; otherwise rest."
+    },
+    {
+      "date": "2026-10-22",
+      "type": "easy",
+      "distance_km": 8,
+      "details": "Easy flat."
+    },
+    {
+      "date": "2026-10-23",
+      "type": "easy",
+      "distance_km": 10,
+      "details": "Easy rolling."
+    },
+    {
+      "date": "2026-10-24",
+      "type": "easy",
+      "distance_km": 12,
+      "details": "Easy rolling, 250 m."
+    },
+    {
+      "date": "2026-10-25",
+      "type": "trail easy",
+      "distance_km": 16,
+      "details": "Easy trail, 400\u2013500 m."
+    },
+    {
+      "date": "2026-10-26",
+      "type": "rest",
+      "distance_km": 0,
+      "details": "Rest."
+    },
+    {
+      "date": "2026-10-27",
+      "type": "threshold hills",
+      "distance_km": 14,
+      "details": "3 km easy; 4 \u00d7 8 min threshold on rolling terrain, 2 min jog; cool-down."
+    },
+    {
+      "date": "2026-10-28",
+      "type": "easy",
+      "distance_km": 10,
+      "details": "Easy flat."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "rolling + strength",
+      "distance_km": 12,
+      "details": "Rolling Z2, 300\u2013400 m; short strength."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "hill economy",
+      "distance_km": 10,
+      "details": "Easy plus 8 \u00d7 60 s uphill at 5K effort, jog down; controlled."
+    },
+    {
+      "date": "2026-10-31",
+      "type": "recovery",
+      "distance_km": 8,
+      "details": "Very easy."
+    },
+    {
+      "date": "2026-11-01",
+      "type": "trail long",
+      "distance_km": 21,
+      "details": "Trail 650\u2013800 m, comfortable; practise descending rhythm."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "rest",
+      "distance_km": 0,
+      "details": "Rest."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "trail tune-up",
+      "distance_km": 12,
+      "details": "3 km easy; 3 \u00d7 6 min controlled threshold/rolling, 2 min jog; cool-down."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "easy",
+      "distance_km": 9,
+      "details": "Easy flat."
+    },
+    {
+      "date": "2026-11-05",
+      "type": "easy + strides",
+      "distance_km": 8,
+      "details": "Easy plus 4 \u00d7 20 s strides."
+    },
+    {
+      "date": "2026-11-06",
+      "type": "shakeout",
+      "distance_km": 5,
+      "details": "Very easy plus 3 \u00d7 15 s."
+    },
+    {
+      "date": "2026-11-07",
+      "type": "race (date provisional)",
+      "distance_km": 21,
+      "details": "K\u00fcrnberg Long Trail, approximately 700 m; target best possible placing."
+    },
+    {
+      "date": "2026-11-08",
+      "type": "rest",
+      "distance_km": 0,
+      "details": "Rest. Move the race here if the organizer confirms Sunday instead of Saturday."
+    }
+  ]
+}
