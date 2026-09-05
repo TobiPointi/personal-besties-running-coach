@@ -5,125 +5,8 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 X-WR-CALNAME:Bad Ischl HM plan (local)
 BEGIN:VEVENT
-UID:bad-ischl-2026-08-24@local-running-coach
-DTSTAMP:20260824T071743Z
-DTSTART;VALUE=DATE:20260824
-SUMMARY:Rest — 0 km
-DESCRIPTION:Full non-running day. Optional easy walk and 10–15 min mobility.\nPace: None.\nHR: None.\nRecovery: Full recovery day.\nTerrain: Flat/none.\nPurpose: Absorb the previous week\, keep six run days sustainable\, and arrive fresh for Tuesday quality.\nIf fatigued: Keep the rest day\; do not replace missed mileage here.
-CATEGORIES:RUNNING,REST
-STATUS:CONFIRMED
-END:VEVENT
-BEGIN:VEVENT
-UID:bad-ischl-2026-08-25@local-running-coach
-DTSTAMP:20260824T071743Z
-DTSTART;VALUE=DATE:20260825
-SUMMARY:Hm-Specific — 15 km
-DESCRIPTION:3 km easy\; drills + strides\; 2 × 4 km @ HM effort\; 2:00 easy jog\; 3 km cool-down.\nPace: 3:31–3:34/km in normal conditions\; effort governs in wind/heat.\nHR: Let HR rise naturally\; interpret it with pace\, duration\, drift\, and feel.\nRecovery: 2:00 easy jog between 4 km blocks.\nTerrain: Flat\, accurately measured route with minimal interruptions.\nPurpose: Extend time near goal intensity without excessive anaerobic contribution.\nIf fatigued: Change to 3 × 2 km at the same effort with 90 s jog\, or run easy if fatigue is elevated. Recent hike/ride load is material: use the reduced option if legs are heavy in the warm-up.
-CATEGORIES:RUNNING,HM-SPECIFIC
-STATUS:CONFIRMED
-END:VEVENT
-BEGIN:VEVENT
-UID:bad-ischl-2026-08-26@local-running-coach
-DTSTAMP:20260824T071743Z
-DTSTART;VALUE=DATE:20260826
-SUMMARY:Recovery — 10 km
-DESCRIPTION:10 km relaxed recovery/easy running after Tuesday quality.\nPace: Usually 4:45–5:30/km or slower\; breathing and legs must remain easy.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Flat to gently rolling\, ideally under 120 m ascent.\nPurpose: Restore movement and circulation while absorbing the previous hard day.\nIf fatigued: Rest instead if soreness changes mechanics or pain is focal/worsening.
-CATEGORIES:RUNNING,RECOVERY
-STATUS:CONFIRMED
-END:VEVENT
-BEGIN:VEVENT
-UID:bad-ischl-2026-08-27@local-running-coach
-DTSTAMP:20260824T071743Z
-DTSTART;VALUE=DATE:20260827
-SUMMARY:Easy — 12 km
-DESCRIPTION:12 km easy Z2 on rolling terrain. Keep every climb controlled\; this is not a hill workout.\nPace: Conversational effort\; typically 4:25–5:05/km\, but slow further for heat\, hills\, or fatigue.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Approximately 250–400 m ascent on comfortable trails/roads\; descents smooth and restrained.\nPurpose: Maintain climbing strength and trail tissue tolerance without compromising HM-specific quality.\nIf fatigued: Reduce to 9 km or take rest if fatigue is abnormal.
-CATEGORIES:RUNNING,EASY
-STATUS:CONFIRMED
-END:VEVENT
-BEGIN:VEVENT
-UID:bad-ischl-2026-08-28@local-running-coach
-DTSTAMP:20260824T071743Z
-DTSTART;VALUE=DATE:20260828
-SUMMARY:Easy + Strides — 10 km
-DESCRIPTION:10 km easy\, then 6 × 15–20 s relaxed strides on flat ground with full recovery.\nPace: Easy running 4:30–5:10/km by feel\; strides fast but relaxed\, never sprinting.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog after each stride.\nTerrain: Flat to gently rolling\; save climbing and faster aerobic work for the planned weekend session.\nPurpose: Neuromuscular freshness without becoming a third metabolic workout.\nIf fatigued: Omit the strides and run 7–9 km easy\, or rest if recovery is poor.
-CATEGORIES:RUNNING,EASY + STRIDES
-STATUS:CONFIRMED
-END:VEVENT
-BEGIN:VEVENT
-UID:bad-ischl-2026-08-29@local-running-coach
-DTSTAMP:20260824T071743Z
-DTSTART;VALUE=DATE:20260829
-SUMMARY:Long Run With Controlled Blocks — 22 km
-DESCRIPTION:22 km total: 5 km easy\, 3 × 3 km @ controlled steady/HM-support effort with 1 km easy jog between\, then easy to 22 km.\nPace: Fast blocks 3:40–3:45/km—clearly slower than HM pace and never threshold effort.\nHR: Use HR as a secondary check with pace\, terrain and feel. Ease off if response is unusually high or drift is excessive.\nRecovery: 1 km easy jog between 3 km blocks.\nTerrain: Approximately 300–450 m ascent overall\; do the faster blocks on a flat or gently rolling runnable section.\nPurpose: Combine durability and controlled late-run economy\; this is the week’s second major stimulus\, so Friday stays easy.\nIf fatigued: Move the long run to Sunday and rest/run 8 km easy Saturday if needed. If still tired Sunday\, run 18–20 km all easy.
-CATEGORIES:RUNNING,LONG RUN WITH CONTROLLED BLOCKS
-STATUS:CONFIRMED
-END:VEVENT
-BEGIN:VEVENT
-UID:bad-ischl-2026-08-30@local-running-coach
-DTSTAMP:20260824T071743Z
-DTSTART;VALUE=DATE:20260830
-SUMMARY:Recovery — 8 km
-DESCRIPTION:8 km very easy recovery after Saturday’s quality long run\; no strides.\nPace: Usually 4:45–5:30/km or slower\; breathing and legs must remain easy.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Flat to gently rolling\, ideally under 100 m ascent.\nPurpose: Absorb the controlled long-run work without extending the hard stimulus into a second day.\nIf fatigued: Take a full rest day if soreness or fatigue changes mechanics.
-CATEGORIES:RUNNING,RECOVERY
-STATUS:CONFIRMED
-END:VEVENT
-BEGIN:VEVENT
-UID:bad-ischl-2026-08-31@local-running-coach
-DTSTAMP:20260824T071743Z
-DTSTART;VALUE=DATE:20260831
-SUMMARY:Rest — 0 km
-DESCRIPTION:Full non-running day. Optional easy walk and 10–15 min mobility.\nPace: None.\nHR: None.\nRecovery: Full recovery day.\nTerrain: Flat/none.\nPurpose: Absorb the previous week\, keep six run days sustainable\, and arrive fresh for Tuesday quality.\nIf fatigued: Keep the rest day\; do not replace missed mileage here.
-CATEGORIES:RUNNING,REST
-STATUS:CONFIRMED
-END:VEVENT
-BEGIN:VEVENT
-UID:bad-ischl-2026-09-01@local-running-coach
-DTSTAMP:20260824T071743Z
-DTSTART;VALUE=DATE:20260901
-SUMMARY:Threshold — 15 km
-DESCRIPTION:3 km easy\; drills + strides\; 3 × 3 km @ controlled threshold/HM crossover\; 90 s easy jog\; 2–3 km cool-down.\nPace: 3:29–3:32/km\; smooth\, with no faster final rep unless effort remains clearly controlled.\nHR: Let HR rise naturally\; interpret it with pace\, duration\, drift\, and feel.\nRecovery: 90 s easy jog between 3 km reps.\nTerrain: Flat\, accurately measured route with minimal interruptions.\nPurpose: Raise sustainable speed while keeping the stimulus specific and repeatable.\nIf fatigued: Stop after 2 reps if pace requires straining\; add easy cool-down instead. Recent hike/ride load is material: use the reduced option if legs are heavy in the warm-up.
-CATEGORIES:RUNNING,THRESHOLD
-STATUS:CONFIRMED
-END:VEVENT
-BEGIN:VEVENT
-UID:bad-ischl-2026-09-02@local-running-coach
-DTSTAMP:20260824T071743Z
-DTSTART;VALUE=DATE:20260902
-SUMMARY:Recovery — 10 km
-DESCRIPTION:10 km relaxed recovery/easy running after Tuesday quality.\nPace: Usually 4:45–5:30/km or slower\; breathing and legs must remain easy.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Flat to gently rolling\, ideally under 120 m ascent.\nPurpose: Restore movement and circulation while absorbing the previous hard day.\nIf fatigued: Rest instead if soreness changes mechanics or pain is focal/worsening.
-CATEGORIES:RUNNING,RECOVERY
-STATUS:CONFIRMED
-END:VEVENT
-BEGIN:VEVENT
-UID:bad-ischl-2026-09-03@local-running-coach
-DTSTAMP:20260824T071743Z
-DTSTART;VALUE=DATE:20260903
-SUMMARY:Easy — 12 km
-DESCRIPTION:12 km easy Z2 on rolling terrain. Keep every climb controlled\; this is not a hill workout.\nPace: Conversational effort\; typically 4:25–5:05/km\, but slow further for heat\, hills\, or fatigue.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Approximately 250–400 m ascent on comfortable trails/roads\; descents smooth and restrained.\nPurpose: Maintain climbing strength and trail tissue tolerance without compromising HM-specific quality.\nIf fatigued: Reduce to 9 km or take rest if fatigue is abnormal.
-CATEGORIES:RUNNING,EASY
-STATUS:CONFIRMED
-END:VEVENT
-BEGIN:VEVENT
-UID:bad-ischl-2026-09-04@local-running-coach
-DTSTAMP:20260824T071743Z
-DTSTART;VALUE=DATE:20260904
-SUMMARY:10K-Specific Maintenance — 13 km
-DESCRIPTION:3 km easy\; drills + strides\; 6 × 1 km controlled at current 10K effort\; 75 s easy jog\; 2–3 km cool-down.\nPace: 3:23–3:27/km. Even reps\; stop before strain and do not chase a faster sixth repetition.\nHR: Let HR rise naturally\; interpret it with pace\, duration\, drift\, and feel.\nRecovery: 75 s easy jog after each 1 km rep.\nTerrain: Flat\, accurately measured route with minimal interruptions.\nPurpose: Maintain aerobic power and speed reserve while Tuesday carries the larger threshold stimulus.\nIf fatigued: Do 4 × 1 km or replace with 10 km easy plus strides. Sunday then remains easy\, not compensatory.
-CATEGORIES:RUNNING,10K-SPECIFIC MAINTENANCE
-STATUS:CONFIRMED
-END:VEVENT
-BEGIN:VEVENT
-UID:bad-ischl-2026-09-05@local-running-coach
-DTSTAMP:20260824T071743Z
-DTSTART;VALUE=DATE:20260905
-SUMMARY:Recovery — 8 km
-DESCRIPTION:8 km very easy\; no pace objective.\nPace: Usually 4:45–5:30/km or slower\; breathing and legs must remain easy.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Flat/gentle\; avoid technical descents.\nPurpose: Restore movement and circulation while absorbing the previous hard day.\nIf fatigued: Rest instead if soreness changes mechanics or pain is focal/worsening.
-CATEGORIES:RUNNING,RECOVERY
-STATUS:CONFIRMED
-END:VEVENT
-BEGIN:VEVENT
 UID:bad-ischl-2026-09-06@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260906
 SUMMARY:Long Run — 20 km
 DESCRIPTION:20 km fully easy on rolling terrain\; no fast finish after Friday’s 1 km repetitions.\nPace: Easy portions 4:25–5:10/km by feel. Uphill pace is irrelevant\; keep breathing controlled.\nHR: Use HR as a secondary check with pace\, terrain and feel. Ease off if response is unusually high or drift is excessive.\nRecovery: No structured recovery\; keep the full run aerobically easy.\nTerrain: Approximately 400–550 m ascent\, mostly comfortable Z2\; technical descending stays controlled.\nPurpose: Maintain long-run durability and trail-specific strength without creating a third hard session.\nIf fatigued: Reduce to 16–18 km and 250–350 m ascent if Friday was harder than prescribed.
@@ -132,7 +15,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-07@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260907
 SUMMARY:Rest — 0 km
 DESCRIPTION:Full non-running day. Optional easy walk and 10–15 min mobility.\nPace: None.\nHR: None.\nRecovery: Full recovery day.\nTerrain: Flat/none.\nPurpose: Absorb the previous week\, keep six run days sustainable\, and arrive fresh for Tuesday quality.\nIf fatigued: Keep the rest day\; do not replace missed mileage here.
@@ -141,16 +24,16 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-08@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260908
 SUMMARY:Hm-Specific — 16 km
-DESCRIPTION:3 km easy\; drills + strides\; 2 × 5 km @ HM effort\; 2:00 easy jog\; 3 km cool-down.\nPace: 3:31–3:34/km\; prioritize even effort and a relaxed first block.\nHR: Let HR rise naturally\; interpret it with pace\, duration\, drift\, and feel.\nRecovery: 2:00 easy jog between 5 km blocks.\nTerrain: Flat\, accurately measured route with minimal interruptions.\nPurpose: Build race-specific endurance through longer controlled blocks.\nIf fatigued: Run 2 × 4 km instead\; never compensate by running the shorter version faster. Recent hike/ride load is material: use the reduced option if legs are heavy in the warm-up.
+DESCRIPTION:3 km easy\; drills + strides\; 2 × 5 km @ HM effort\; 2:00 easy jog\; 3 km cool-down.\nPace: 3:31–3:34/km\; prioritize even effort and a relaxed first block.\nHR: Let HR rise naturally\; interpret it with pace\, duration\, drift\, and feel.\nRecovery: 2:00 easy jog between 5 km blocks.\nTerrain: Flat\, accurately measured route with minimal interruptions.\nPurpose: Build race-specific endurance through longer controlled blocks.\nIf fatigued: Run 2 × 4 km instead\; never compensate by running the shorter version faster.
 CATEGORIES:RUNNING,HM-SPECIFIC
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-09@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260909
 SUMMARY:Recovery — 10 km
 DESCRIPTION:10 km relaxed recovery/easy running after Tuesday quality.\nPace: Usually 4:45–5:30/km or slower\; breathing and legs must remain easy.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Flat to gently rolling\, ideally under 120 m ascent.\nPurpose: Restore movement and circulation while absorbing the previous hard day.\nIf fatigued: Rest instead if soreness changes mechanics or pain is focal/worsening.
@@ -159,16 +42,16 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-10@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260910
-SUMMARY:Easy — 12 km
-DESCRIPTION:12 km easy Z2 on rolling terrain. Keep every climb controlled\; this is not a hill workout.\nPace: Conversational effort\; typically 4:25–5:05/km\, but slow further for heat\, hills\, or fatigue.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Approximately 250–400 m ascent on comfortable trails/roads\; descents smooth and restrained.\nPurpose: Maintain climbing strength and trail tissue tolerance without compromising HM-specific quality.\nIf fatigued: Reduce to 9 km or take rest if fatigue is abnormal.
+SUMMARY:Easy — 13 km
+DESCRIPTION:13 km easy Z2 on rolling terrain. Keep every climb controlled\; this is not a hill workout.\nPace: Conversational effort\; typically 4:25–5:05/km\, but slow further for heat\, hills\, or fatigue.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Approximately 250–400 m ascent on comfortable trails/roads\; descents smooth and restrained.\nPurpose: Maintain climbing strength and trail tissue tolerance without compromising HM-specific quality.\nIf fatigued: Reduce to 10 km or take rest if fatigue is abnormal.
 CATEGORIES:RUNNING,EASY
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-11@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260911
 SUMMARY:Easy + Strides — 10 km
 DESCRIPTION:10 km easy\, then 6 × 15–20 s relaxed strides on flat ground with full recovery.\nPace: Easy running 4:30–5:10/km by feel\; strides fast but relaxed\, never sprinting.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog after each stride.\nTerrain: Flat to gently rolling\; save climbing and faster aerobic work for the planned weekend session.\nPurpose: Neuromuscular freshness without becoming a third metabolic workout.\nIf fatigued: Omit the strides and run 7–9 km easy\, or rest if recovery is poor.
@@ -177,7 +60,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-12@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260912
 SUMMARY:Long Run With Controlled Blocks — 21 km
 DESCRIPTION:21 km total: 5 km easy\, 2 × 4 km @ controlled HM-support effort with 1 km easy jog\, then easy to 21 km.\nPace: Fast blocks 3:38–3:42/km—strong aerobic running\, not goal-HM pace.\nHR: Use HR as a secondary check with pace\, terrain and feel. Ease off if response is unusually high or drift is excessive.\nRecovery: 1 km easy jog between 4 km blocks.\nTerrain: Approximately 350–500 m ascent overall\; faster blocks on a smooth\, gently rolling segment.\nPurpose: Develop long-run durability and sub-race-pace economy while Friday remains only easy plus strides.\nIf fatigued: Move to Sunday if necessary\; otherwise shorten to 18 km all easy. Never force the faster blocks on tired legs.
@@ -186,7 +69,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-13@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260913
 SUMMARY:Recovery — 8 km
 DESCRIPTION:8 km very easy recovery after Saturday’s quality long run\; no strides.\nPace: Usually 4:45–5:30/km or slower\; breathing and legs must remain easy.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Flat to gently rolling\, ideally under 100 m ascent.\nPurpose: Absorb the controlled long-run work without extending the hard stimulus into a second day.\nIf fatigued: Take a full rest day if soreness or fatigue changes mechanics.
@@ -195,7 +78,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-14@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260914
 SUMMARY:Rest — 0 km
 DESCRIPTION:Full non-running day. Optional easy walk and 10–15 min mobility.\nPace: None.\nHR: None.\nRecovery: Full recovery day.\nTerrain: Flat/none.\nPurpose: Absorb the previous week\, keep six run days sustainable\, and arrive fresh for Tuesday quality.\nIf fatigued: Keep the rest day\; do not replace missed mileage here.
@@ -204,16 +87,16 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-15@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260915
 SUMMARY:Hm-Specific — 14 km
-DESCRIPTION:3 km easy\; drills + strides\; 8 km continuous at controlled HM-specific effort\; 3 km cool-down.\nPace: Begin 3:34–3:35/km and only settle toward 3:31–3:33/km if controlled. This is not a time trial.\nHR: Let HR rise naturally\; interpret it with pace\, duration\, drift\, and feel.\nRecovery: Continuous specific block\; no standing recovery.\nTerrain: Flat\, accurately measured route with minimal interruptions.\nPurpose: Convert broken HM work into continuous race rhythm without carrying excessive fatigue into the taper.\nIf fatigued: Use 2 × 4 km with 2 min jog if continuous work would become a test\; stop if mechanics deteriorate. Recent hike/ride load is material: use the reduced option if legs are heavy in the warm-up.
+DESCRIPTION:3 km easy\; drills + strides\; 8 km continuous at controlled HM-specific effort\; 3 km cool-down.\nPace: Begin 3:34–3:35/km and only settle toward 3:31–3:33/km if controlled. This is not a time trial.\nHR: Let HR rise naturally\; interpret it with pace\, duration\, drift\, and feel.\nRecovery: Continuous specific block\; no standing recovery.\nTerrain: Flat\, accurately measured route with minimal interruptions.\nPurpose: Convert broken HM work into continuous race rhythm without carrying excessive fatigue into the taper.\nIf fatigued: Use 2 × 4 km with 2 min jog if continuous work would become a test\; stop if mechanics deteriorate.
 CATEGORIES:RUNNING,HM-SPECIFIC
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-16@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260916
 SUMMARY:Recovery — 10 km
 DESCRIPTION:10 km relaxed recovery/easy running after Tuesday quality.\nPace: Usually 4:45–5:30/km or slower\; breathing and legs must remain easy.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Flat to gently rolling\, ideally under 120 m ascent.\nPurpose: Restore movement and circulation while absorbing the previous hard day.\nIf fatigued: Rest instead if soreness changes mechanics or pain is focal/worsening.
@@ -222,16 +105,16 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-17@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260917
-SUMMARY:Easy — 12 km
-DESCRIPTION:12 km easy Z2 on rolling terrain. Keep every climb controlled\; this is not a hill workout.\nPace: Conversational effort\; typically 4:25–5:05/km\, but slow further for heat\, hills\, or fatigue.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Approximately 250–400 m ascent on comfortable trails/roads\; descents smooth and restrained.\nPurpose: Maintain climbing strength and trail tissue tolerance without compromising HM-specific quality.\nIf fatigued: Reduce to 9 km or take rest if fatigue is abnormal.
+SUMMARY:Easy — 13 km
+DESCRIPTION:13 km easy Z2 on rolling terrain. Keep every climb controlled\; this is not a hill workout.\nPace: Conversational effort\; typically 4:25–5:05/km\, but slow further for heat\, hills\, or fatigue.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Approximately 250–400 m ascent on comfortable trails/roads\; descents smooth and restrained.\nPurpose: Maintain climbing strength and trail tissue tolerance without compromising HM-specific quality.\nIf fatigued: Reduce to 10 km or take rest if fatigue is abnormal.
 CATEGORIES:RUNNING,EASY
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-18@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260918
 SUMMARY:Running Economy — 11 km
 DESCRIPTION:3 km easy\; drills + strides\; 8 × 400 m controlled fast with 200 m easy jog\; 2 km cool-down.\nPace: 78–80 s per 400 m (3:15–3:20/km)\, relaxed and mechanically clean.\nHR: Let HR rise naturally\; interpret it with pace\, duration\, drift\, and feel.\nRecovery: 200 m easy jog\; full control matters more than short recovery.\nTerrain: Flat\, accurately measured route with minimal interruptions.\nPurpose: Preserve economy and leg speed while overall volume and fatigue begin to fall.\nIf fatigued: Run 8–10 km easy with 6 × 15 s strides instead\; do not force the session during the taper.
@@ -240,7 +123,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-19@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260919
 SUMMARY:Recovery — 8 km
 DESCRIPTION:8 km very easy\; no pace objective.\nPace: Usually 4:45–5:30/km or slower\; breathing and legs must remain easy.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Flat/gentle\; avoid technical descents.\nPurpose: Restore movement and circulation while absorbing the previous hard day.\nIf fatigued: Rest instead if soreness changes mechanics or pain is focal/worsening.
@@ -249,7 +132,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-20@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260920
 SUMMARY:Long Run — 16 km
 DESCRIPTION:16 km relaxed on gently rolling terrain\; no progression and no hard descending.\nPace: Easy portions 4:25–5:10/km by feel. Uphill pace is irrelevant\; keep breathing controlled.\nHR: Use HR as a secondary check with pace\, terrain and feel. Ease off if response is unusually high or drift is excessive.\nRecovery: No structured recovery\; keep the full run aerobically easy.\nTerrain: Approximately 200–300 m ascent on non-technical terrain.\nPurpose: Retain endurance and hill familiarity while tapering fatigue seven days before the HM.\nIf fatigued: Reduce to 12–14 km flat/easy if legs remain loaded from Tuesday or Friday.
@@ -258,7 +141,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-21@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260921
 SUMMARY:Rest — 0 km
 DESCRIPTION:Full non-running day. Optional easy walk and 10–15 min mobility.\nPace: None.\nHR: None.\nRecovery: Full recovery day.\nTerrain: Flat/none.\nPurpose: Absorb the previous week\, keep six run days sustainable\, and arrive fresh for Tuesday quality.\nIf fatigued: Keep the rest day\; do not replace missed mileage here.
@@ -267,16 +150,16 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-22@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260922
 SUMMARY:Hm-Specific Tune-Up — 12 km
-DESCRIPTION:3 km easy\; drills + strides\; 3 × 2 km @ goal HM pace\; 2:00 easy jog\; 2 km cool-down.\nPace: 3:32–3:34/km. Exact rhythm\, never faster than 3:30/km.\nHR: Let HR rise naturally\; interpret it with pace\, duration\, drift\, and feel.\nRecovery: 2:00 easy jog.\nTerrain: Flat\, accurately measured route with minimal interruptions.\nPurpose: Rehearse goal rhythm while reducing total load in race week.\nIf fatigued: Do 2 × 2 km\, or 4 × 3 min at HM effort if travel/fatigue warrants. Recent hike/ride load is material: use the reduced option if legs are heavy in the warm-up.
+DESCRIPTION:3 km easy\; drills + strides\; 3 × 2 km @ goal HM pace\; 2:00 easy jog\; 2 km cool-down.\nPace: 3:32–3:34/km. Exact rhythm\, never faster than 3:30/km.\nHR: Let HR rise naturally\; interpret it with pace\, duration\, drift\, and feel.\nRecovery: 2:00 easy jog.\nTerrain: Flat\, accurately measured route with minimal interruptions.\nPurpose: Rehearse goal rhythm while reducing total load in race week.\nIf fatigued: Do 2 × 2 km\, or 4 × 3 min at HM effort if travel/fatigue warrants.
 CATEGORIES:RUNNING,HM-SPECIFIC TUNE-UP
 STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-23@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260923
 SUMMARY:Recovery — 10 km
 DESCRIPTION:10 km relaxed recovery/easy running after Tuesday quality.\nPace: Usually 4:45–5:30/km or slower\; breathing and legs must remain easy.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Flat to gently rolling\, ideally under 120 m ascent.\nPurpose: Restore movement and circulation while absorbing the previous hard day.\nIf fatigued: Rest instead if soreness changes mechanics or pain is focal/worsening.
@@ -285,7 +168,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-24@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260924
 SUMMARY:Easy — 8 km
 DESCRIPTION:8 km easy on gently rolling terrain\; no hill sprints.\nPace: Conversational effort\; typically 4:25–5:05/km\, but slow further for heat\, hills\, or fatigue.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog between optional strides.\nTerrain: Only 100–150 m ascent\; avoid technical trails and eccentric downhill load.\nPurpose: Aerobic volume and musculoskeletal durability without compromising key sessions.\nIf fatigued: Reduce to 5 km or take rest if fatigue is abnormal.
@@ -294,7 +177,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-25@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260925
 SUMMARY:Easy + Strides — 7 km
 DESCRIPTION:7 km easy\, then 6 × 15–20 s relaxed strides on flat ground with full recovery.\nPace: Easy running 4:30–5:10/km by feel\; strides fast but relaxed\, never sprinting.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: 60–90 s walk/jog after each stride.\nTerrain: Flat to gently rolling\; save climbing and faster aerobic work for the planned weekend session.\nPurpose: Neuromuscular freshness without becoming a third metabolic workout.\nIf fatigued: Omit the strides and run 7–9 km easy\, or rest if recovery is poor.
@@ -303,7 +186,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-26@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260926
 SUMMARY:Shakeout — 5 km
 DESCRIPTION:5 km very easy + 4 × 10–12 s relaxed strides if desired.\nPace: No pace target\; finish fresher than you started.\nHR: Use HR as a cap/secondary check\, not a target. No threshold inference from HR alone.\nRecovery: Full walk/jog recovery after optional strides.\nTerrain: Flat/gentle\; avoid technical descents.\nPurpose: Stay loose without adding fatigue before race day.\nIf fatigued: Rest instead if soreness changes mechanics or pain is focal/worsening.
@@ -312,7 +195,7 @@ STATUS:CONFIRMED
 END:VEVENT
 BEGIN:VEVENT
 UID:bad-ischl-2026-09-27@local-running-coach
-DTSTAMP:20260824T071743Z
+DTSTAMP:20260905T131742Z
 DTSTART;VALUE=DATE:20260927
 SUMMARY:Race — 25.1 km
 DESCRIPTION:Race day: 3 km warm-up + drills/strides\, Bad Ischl HM\, 1 km cool-down only if desired.\nPace: Goal pace ~3:33/km. Open controlled\; pace by effort on hills/wind and avoid banking time early.\nHR: HR is observational\, not a pacing target. Use chest strap if comfortable\; ignore anomalous values.\nRecovery: No interval recovery. Fuel/hydrate according to rehearsed practice.\nTerrain: Bad Ischl HM course\; arrive familiar with turns and gradients.\nPurpose: Execute the primary race after a progressive\, intensity-preserving taper.\nIf fatigued: If illness\, focal pain\, or medical concern is present\, do not force the start.

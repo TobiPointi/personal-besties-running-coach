@@ -632,3 +632,22 @@
 - Original: easy: 7 km easy on gently rolling terrain; no hill sprints.
 - Updated: easy: 8 km easy on gently rolling terrain; no hill sprints.
 - Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+## PLAN CHANGE — 29 Aug 2026
+
+### 2026-09-03
+
+- Original: easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.
+- Updated: easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-10
+
+- Original: easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.
+- Updated: easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-17
+
+- Original: easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.
+- Updated: easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.

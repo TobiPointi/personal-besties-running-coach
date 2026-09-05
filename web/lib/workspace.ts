@@ -67,6 +67,7 @@ async function ensureTobiasReferenceData(user: AppUser) {
   const titleStatements = referencePlanDays.map((day) => db.prepare("UPDATE planned_sessions SET title = ? WHERE id = ? AND plan_id = 'plan_bad_ischl_reference_v2'")
     .bind(conciseReferenceTitle(day), `reference_session_${day.date}`));
   for (let index = 0; index < titleStatements.length; index += 30) await db.batch(titleStatements.slice(index, index + 30));
+  await ensureTobiasPlanUpdateV3(db, user, timestamp);
   // The generic adaptive draft was created from missing logs, not an explicit
   // coaching decision. Keep the imported Bad Ischl plan as Tobias's protected
   // published baseline and remove that misleading draft from review.
@@ -82,6 +83,37 @@ async function ensureTobiasReferenceData(user: AppUser) {
     ON CONFLICT(id) DO UPDATE SET prediction_5k_seconds=excluded.prediction_5k_seconds, prediction_10k_seconds=excluded.prediction_10k_seconds, prediction_half_seconds=excluded.prediction_half_seconds, prediction_marathon_seconds=excluded.prediction_marathon_seconds, created_at=excluded.created_at`)
     .bind(`reference_performance_${date}_${source.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`, date, source, five, ten, half, marathon, timestamp));
   for (let index = 0; index < performanceStatements.length; index += 30) await db.batch(performanceStatements.slice(index, index + 30));
+}
+
+async function ensureTobiasPlanUpdateV3(db: D1Database, user: AppUser, timestamp: string) {
+  const planId = "plan_bad_ischl_reference_v3";
+  const alreadyImported = await db.prepare("SELECT id FROM training_plans WHERE id = ?").bind(planId).first();
+  if (alreadyImported) return;
+
+  await db.batch([
+    db.prepare("UPDATE training_plans SET status = 'archived' WHERE athlete_id = 'athlete_tobias' AND status = 'published'"),
+    db.prepare(`INSERT INTO training_plans
+      (id, athlete_id, goal_id, version, status, start_date, end_date, rationale, created_by, created_at, published_at)
+      VALUES (?, 'athlete_tobias', 'goal_bad_ischl_2026', 3, 'published', '2026-08-14', '2026-09-27', ?, ?, ?, ?)`)
+      .bind(planId, "Bad Ischl plan updated from the local coaching review through 1 September 2026. Completed and missed sessions are retained; the remaining approved sessions stay unchanged.", user.id, timestamp, timestamp),
+  ]);
+
+  const statements = referencePlanDays.map((day) => {
+    const status = referenceSessionStatus(day.status);
+    const actualDistance = Number(day.actual?.distance_km ?? 0);
+    return db.prepare(`INSERT INTO planned_sessions
+      (id, plan_id, athlete_id, session_date, workout_type, title, details, planned_distance_km, pace_guidance, hr_guidance, purpose, fatigue_modification, major_stimulus, status, actual_distance_km, completed_at)
+      VALUES (?, ?, 'athlete_tobias', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+      .bind(`reference_v3_session_${day.date}`, planId, day.date, day.workout_type, conciseReferenceTitle(day), day.details, day.planned_distance_km, day.pace_guidance ?? null, day.hr_guidance ?? null, day.purpose ?? null, day.fatigue_modification ?? null, day.major_stimulus ? 1 : 0, status, status === "completed" ? actualDistance : null, status === "completed" ? timestamp : null);
+  });
+  for (let index = 0; index < statements.length; index += 30) await db.batch(statements.slice(index, index + 30));
+}
+
+function referenceSessionStatus(status: string): string {
+  if (status === "completed" || status === "completed-rest") return "completed";
+  if (status === "missed") return "missed";
+  if (status === "skipped") return "skipped";
+  return "planned";
 }
 
 function conciseReferenceTitle(day: { workout_type: string; details: string }): string {

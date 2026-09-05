@@ -6,8 +6,8 @@ Running determines race-specific durability; cycling, swimming and hiking add ae
 
 | Sport | Sessions | Hours | Distance | Elevation | Intervals load |
 |---|---:|---:|---:|---:|---:|
-| Run | 419 | 401.7 | 4869.9 km | 55668 m | 24624 |
-| Ride | 44 | 99.1 | 2052.0 km | 18105 m | 1980 |
+| Run | 425 | 408.8 | 4959.4 km | 57013 m | 24785 |
+| Ride | 44 | 99.8 | 2068.6 km | 18422 m | 1999 |
 | Hike | 31 | 97.2 | 375.9 km | 24362 m | 1446 |
 | TrailRun | 24 | 49.1 | 388.6 km | 16544 m | 2324 |
 | BackcountrySki | 19 | 47.9 | 200.0 km | 16181 m | 429 |
@@ -25,8 +25,6 @@ Running determines race-specific durability; cycling, swimming and hiking add ae
 
 | Week | Run km | Run vert | Ride h | Swim h | Hike h | Strength | Total h | Total load |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| 2026-05-18 | 40.3 | 363 m | 1.8 | 1.2 | 5.7 | 1 | 14.1 | 486 |
-| 2026-05-25 | 48.8 | 501 m | 0.0 | 0.0 | 0.0 | 1 | 5.1 | 259 |
 | 2026-06-01 | 59.4 | 559 m | 2.0 | 0.0 | 7.5 | 0 | 14.1 | 394 |
 | 2026-06-08 | 65.6 | 725 m | 2.5 | 1.7 | 0.0 | 1 | 10.3 | 387 |
 | 2026-06-15 | 72.9 | 807 m | 0.0 | 1.0 | 0.0 | 1 | 7.5 | 301 |
@@ -39,6 +37,8 @@ Running determines race-specific durability; cycling, swimming and hiking add ae
 | 2026-08-03 | 67.3 | 900 m | 0.0 | 0.0 | 0.0 | 0 | 5.8 | 242 |
 | 2026-08-10 | 78.2 | 910 m | 0.0 | 0.0 | 3.3 | 0 | 9.4 | 313 |
 | 2026-08-17 | 82.0 | 1094 m | 1.2 | 0.0 | 1.7 | 0 | 9.6 | 357 |
+| 2026-08-24 | 66.8 | 579 m | 0.0 | 0.0 | 0.0 | 0 | 5.1 | 231 |
+| 2026-08-31 | 54.8 | 997 m | 1.5 | 0.0 | 0.0 | 0 | 5.9 | 242 |
 
 ## Coaching implication
 

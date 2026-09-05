@@ -40,6 +40,21 @@ test("reference-plan titles are concise labels rather than warm-up text", async 
   assert.doesNotMatch(workspace, /day\.details\.split/);
 });
 
+test("the reviewed Tobias plan is published as a new immutable revision", async () => {
+  const workspace = await source("lib/workspace.ts");
+  assert.match(workspace, /plan_bad_ischl_reference_v3/);
+  assert.match(workspace, /referenceSessionStatus/);
+  assert.match(workspace, /status === "missed"/);
+});
+
+test("race sessions and synchronized race activities receive distinct styling", async () => {
+  const [dashboard, styles] = await Promise.all([source("app/DashboardClient.tsx"), source("app/globals.css")]);
+  assert.match(dashboard, /raw\.race===true/);
+  assert.match(dashboard, /session-race-label/);
+  assert.match(styles, /activity-review\.race/);
+  assert.match(styles, /session\.race/);
+});
+
 test("reference history is deduplicated once the live Intervals copy exists", async () => {
   const [workspace, pipeline, dedupe] = await Promise.all([source("lib/workspace.ts"), source("lib/pipeline.ts"), source("lib/activity-dedupe.ts")]);
   assert.match(workspace, /dedupeActivities\(rawActivityRows\)/);
