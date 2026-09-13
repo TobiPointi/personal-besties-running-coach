@@ -22,3 +22,9 @@ web/*.tsbuildinfo
 
 # This contains private operational context and stays outside shared source control.
 PERSONAL_BESTIES_CONFIDENTIAL_HANDOFF.md
+
+# Legacy standalone web client artifacts.
+node_modules/
+dist/
+*.local
+.DS_Store
