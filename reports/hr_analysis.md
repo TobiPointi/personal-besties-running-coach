@@ -6,7 +6,6 @@ HR is interpreted with pace, terrain, repeat structure and recovery. The tables 
 
 | Date | Session | Work paces | Rep avg HR | Rep max HR | Recovery HR drops |
 |---|---|---|---|---|---|
-| 2026-07-14 | Morning Session ♨️ | 3:32/km, 3:27/km, 3:29/km, 3:24/km, 3:25/km, 3:27/km, 3:29/km, 3:36/km | 165, 178, 182, 181, 184, 183, 186, 182 | 182, 188, 198, 192, 196, 194, 198, 193 | 39, 20, 9, 14, 27, 20, 20 bpm |
 | 2026-07-21 | Morning Session | 3:31/km, 3:33/km, 3:23/km | 173, 180, 177 | 183, 187, 183 | 26, 27 bpm |
 | 2026-07-29 | Tempo Tuesday 🔆 | 3:36/km, 3:31/km, 3:32/km, 3:33/km, 3:23/km, 3:23/km, 3:24/km, 3:22/km | 152, 167, 172, 173, 172, 173, 174, 174 | 168, 177, 179, 182, 179, 180, 179, 182 | 27, 27, 26, 29, 26, 23, 27 bpm |
 | 2026-08-12 | Windfluss Intervalle 💨 | 3:31/km, 3:32/km, 3:26/km | 171, 180, 176 | 187, 188, 182 | 40, 36 bpm |
@@ -15,6 +14,7 @@ HR is interpreted with pace, terrain, repeat structure and recovery. The tables 
 | 2026-08-29 | Morning Windfluss 💨 | 3:35/km, 3:33/km, 3:29/km | 168, 174, 171 | 177, 179, 176 | 20, 25 bpm |
 | 2026-09-01 | Feel the Tuscany heat! ☀️ | 3:33/km, 3:32/km, 3:38/km | 170, 179, 182 | 179, 184, 186 | 26, 27 bpm |
 | 2026-09-05 | Morning Run 🔆 | 3:31/km, 3:29/km, 3:26/km, 3:22/km | 167, 172, 173, 176 | 172, 181, 181, 184 | 19, 33, 29 bpm |
+| 2026-09-11 | Danube Canal Relays '26 | 3:34/km, 3:06/km, 3:34/km, 3:33/km | 176, 181, 175, 180 | 181, 190, 184, 185 | 65, 51, 34 bpm |
 
 ## 12 August — 3 × 3 km
 
@@ -43,8 +43,6 @@ Average HR rose by about +15.4 bpm from the first to final recorded segment. At 
 
 | Date | Distance | Pace | Avg HR | Drift | Interpretation |
 |---|---:|---:|---:|---:|---|
-| 2026-07-11 | 20.0 km | 5:02/km | 133.0 | -1.0% | low |
-| 2026-07-17 | 16.2 km | 4:48/km | 140.0 | -3.0% | low |
 | 2026-07-18 | 21.2 km | 5:02/km | 144.0 | +2.7% | low |
 | 2026-07-26 | 11.5 km | 5:08/km | 136.0 | -1.7% | low |
 | 2026-07-28 | 15.7 km | 4:48/km | 135.0 | -2.2% | low |

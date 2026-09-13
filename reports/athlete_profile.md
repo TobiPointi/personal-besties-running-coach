@@ -11,7 +11,7 @@
 - Marathon PB: 2:47:15, Vienna Marathon 2025
 - Half marathon PB: 1:16:40 official net time, 2. VCM Winterlauf Wien, 25 January 2026 (Strava replacement description: 1:16:39)
 - Current objective: Improve half-marathon-specific fitness sufficiently to run sub 1:15.
-- Future races: Vienna Trail Run Power Trail on 18 October 2026 (24.7 km / 1000 m ascent; defend title), Kürnberg Trail Run Long Trail in November (target first place; current course reference approximately 21 km / 700 m; confirm final 2026 date), then Linz Marathon on 11 April 2027 with a development goal of sub 2:40.
+- Future races: Vienna Night Run on 17 September 2026 (5 km controlled B-race during the Bad Ischl HM taper; do not chase a PB), Vienna Trail Run Power Trail on 18 October 2026 (24.7 km / 1000 m ascent; defend title), Kürnberg Trail Run Long Trail in November (target first place; current course reference approximately 21 km / 700 m; confirm final 2026 date), then Linz Marathon on 11 April 2027 with a development goal of sub 2:40.
 - HR context: Heart-rate measurements during important workouts are generally recorded using a chest strap when specified.
 
 Old PBs are context only; synchronized current training controls the analysis and plan.

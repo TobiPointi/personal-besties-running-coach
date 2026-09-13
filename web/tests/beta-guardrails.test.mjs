@@ -43,6 +43,9 @@ test("reference-plan titles are concise labels rather than warm-up text", async 
 test("the reviewed Tobias plan is published as a new immutable revision", async () => {
   const workspace = await source("lib/workspace.ts");
   assert.match(workspace, /plan_bad_ischl_reference_v3/);
+  assert.match(workspace, /COALESCE\(MAX\(version\), 0\)/);
+  assert.match(workspace, /INSERT OR IGNORE INTO training_plans/);
+  assert.match(workspace, /id != \?/);
   assert.match(workspace, /referenceSessionStatus/);
   assert.match(workspace, /status === "missed"/);
 });

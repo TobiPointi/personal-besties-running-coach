@@ -218,6 +218,72 @@ POST_QUALITY_LONG_RECOVERY = {
 }
 
 
+# Athlete-specific late-taper adjustment. The Udine–Brenner bike transfer
+# (6–10 Sep) supplied substantial aerobic work but also 17.5 h / 228 load of
+# non-running stress. The Danube Canal Relays on 11 Sep then supplied the
+# final long HM-specific stimulus. The 5 km Vienna Night Run is deliberately
+# used as a controlled B-race, replacing rather than supplementing 400 m work.
+SPECIAL_TAPER_DAYS = {
+    date(2026, 9, 12): {
+        "workout_type": "rest",
+        "details": "Full non-running recovery day after the bike transfer and Friday relay session. Optional walking and 10–15 min gentle mobility only.",
+        "pace_guidance": "None.", "hr_guidance": "None.", "recovery": "Full recovery day.", "terrain_elevation": "Flat/none.",
+        "purpose": "Absorb accumulated cycling and running load; no missed mileage is made up.",
+        "fatigue_modification": "Keep this as rest if legs are heavy, sleep is poor, or any soreness alters mechanics.",
+    },
+    date(2026, 9, 13): {
+        "planned_distance_km": 14, "workout_type": "easy endurance",
+        "details": "14 km genuinely easy and mostly flat; no strides, hills, fast finish, or pace objective.",
+        "pace_guidance": "4:40–5:20/km or slower by feel; keep breathing clearly easy.", "hr_guidance": "Use HR only as a cap/secondary check.",
+        "recovery": "No structured recovery.", "terrain_elevation": "Flat to gently rolling, under 150 m ascent.",
+        "purpose": "Retain running endurance 14 days before the HM without turning a tired-quads day into another stimulus.",
+        "fatigue_modification": "Reduce to 8–10 km or rest if stiffness changes mechanics, pain is focal, or the stride does not loosen after 10 minutes.",
+    },
+    date(2026, 9, 15): {
+        "planned_distance_km": 11, "workout_type": "HM-specific primer",
+        "details": "3 km easy; drills + 4 strides; 2 × 2 km at controlled HM effort with 1 km easy jog; 3 km cool-down.",
+        "pace_guidance": "3:33–3:35/km. This is a rhythm check after Friday's 4 × 2 km session, not a test or a substitute for missed 2 × 5 km work.",
+        "hr_guidance": "Let HR rise naturally; stop after one rep if the warm-up or first block feels laboured.",
+        "recovery": "1 km genuinely easy jog between the 2 km blocks.", "terrain_elevation": "Flat, accurately measured route with minimal interruptions.",
+        "purpose": "Re-establish goal-HM rhythm before the Night Run without stacking a second maximal session.",
+        "fatigue_modification": "Use 1 × 2 km at HM effort, or run 8–10 km easy, if legs remain loaded.", "major_stimulus": False,
+    },
+    date(2026, 9, 16): {
+        "planned_distance_km": 7, "workout_type": "recovery", "details": "7 km very easy, flat recovery; no strides.",
+        "pace_guidance": "4:50–5:30/km or slower by feel.", "hr_guidance": "Use HR only as a cap/secondary check.",
+        "recovery": "No structured recovery.", "terrain_elevation": "Flat/gentle; avoid hard descents.",
+        "purpose": "Arrive fresh for Thursday rather than accumulating mileage.", "fatigue_modification": "Rest if legs are not springy.",
+    },
+    date(2026, 9, 17): {
+        "planned_distance_km": 9, "workout_type": "Vienna Night Run — controlled 5 km B-race",
+        "details": "2 km warm-up; drills + 4 strides; 5 km Vienna Night Run; 2 km cool-down if convenient. Run it progressively: first km 3:25–3:27/km, km 2–4 at 3:20–3:22/km, then hold form through the final km without a finishing sprint.",
+        "pace_guidance": "Target 16:40–16:55: approximately 97–98% effort, hard but below an all-out PB attempt.",
+        "hr_guidance": "Race HR is observational only. Control the first kilometre; effort is about 9/10, not a final-kilometre sprint.",
+        "recovery": "No interval recovery. Rehydrate and refuel after the evening event.", "terrain_elevation": "Vienna Ringstraße 5 km circuit; allow for start congestion and bends.",
+        "purpose": "A sanctioned sharpening stimulus that replaces the planned 400 m economy session.",
+        "fatigue_modification": "If Tuesday was laboured or legs remain heavy, run 17:05–17:15 with no final-kilometre push, or jog the event socially.", "major_stimulus": True,
+    },
+    date(2026, 9, 18): {
+        "workout_type": "rest", "details": "Full rest from running after the Night Run. Optional walking and gentle mobility only.",
+        "pace_guidance": "None.", "hr_guidance": "None.", "recovery": "Full recovery day.", "terrain_elevation": "Flat/none.",
+        "purpose": "Absorb the B-race and protect the final HM taper.", "fatigue_modification": "Keep the rest day; do not add the former 400 m session.",
+    },
+    date(2026, 9, 20): {
+        "planned_distance_km": 14, "workout_type": "long run", "details": "14 km relaxed and mostly flat; no progression, fast finish, or hard descending.",
+        "pace_guidance": "4:25–5:10/km by feel; keep it fully aerobic.", "hr_guidance": "Use HR as a secondary check with pace and feel.",
+        "recovery": "No structured recovery.", "terrain_elevation": "Flat to gently rolling, approximately 100–200 m ascent.",
+        "purpose": "Maintain running durability while allowing Night Run fatigue to clear.", "fatigue_modification": "Reduce to 10–12 km easy if Thursday cost more than intended.",
+    },
+    date(2026, 9, 22): {
+        "planned_distance_km": 10, "workout_type": "HM-specific tune-up",
+        "details": "3 km easy; drills + strides; 2 × 2 km at goal HM pace with 2:00 easy jog; 2–3 km cool-down.",
+        "pace_guidance": "3:32–3:34/km. Exact rhythm, never faster than 3:30/km.", "hr_guidance": "Let HR rise naturally; it is a rehearsal, not a fitness test.",
+        "recovery": "2:00 easy jog between the 2 km blocks.", "terrain_elevation": "Flat, accurately measured route with minimal interruptions.",
+        "purpose": "Rehearse HM rhythm while preserving freshness after the Night Run.", "fatigue_modification": "Run only 1 × 2 km at HM pace, or 6–8 km easy, if fatigue persists.", "major_stimulus": True,
+    },
+}
+
+
 LONG_RUNS = {
     date(2026, 8, 16): {
         "distance_km": 20,
@@ -329,6 +395,8 @@ def generate_plan(
                 fatigue_modification="If illness, focal pain, or medical concern is present, do not force the start.",
                 major_stimulus=True,
             )
+        elif cursor in SPECIAL_TAPER_DAYS and as_of >= date(2026, 9, 12):
+            day = _day_template(cursor, **SPECIAL_TAPER_DAYS[cursor])
         elif cursor in PRIMARY_SESSIONS:
             spec = PRIMARY_SESSIONS[cursor]
             day = _quality(cursor, spec)

@@ -134,6 +134,21 @@ def test_revised_plan_has_one_rest_day_and_two_major_stimuli_per_full_week():
         assert sum(bool(item["major_stimulus"]) for item in week) == 2
 
 
+def test_late_taper_override_uses_night_run_and_extra_recovery():
+    assessment = {
+        "as_of_date": "2026-09-12",
+        "rolling_volume": {"rolling_7_km": 55},
+        "recent_weeks": [{"week_start": "2026-09-01", "week_end": "2026-09-07", "distance_km": 43}],
+        "fatigue": {"status": "elevated"},
+    }
+    plan = generate_plan(assessment, date(2026, 9, 12))
+    days = {item["date"]: item for item in plan["days"]}
+    assert days["2026-09-12"]["workout_type"] == "rest"
+    assert "Vienna Night Run" in days["2026-09-17"]["workout_type"]
+    assert days["2026-09-18"]["workout_type"] == "rest"
+    assert "2 × 2 km" in days["2026-09-22"]["details"]
+
+
 def test_reconcile_attaches_actual_without_changing_prescription():
     existing = {
         "days": [{"date": "2026-08-13", "planned_distance_km": 10, "details": "Original workout", "status": "planned"}]

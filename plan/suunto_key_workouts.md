@@ -2,50 +2,23 @@
 
 Create only these major planned sessions in the Suunto app, then sync the watch. Copy the workout structure exactly; keep easy and long runs guided by the plan rather than over-programmed.
 
-## Tuesday — 2026-09-08 — HM-specific
+## Thursday — 2026-09-17 — Vienna Night Run — controlled 5 km B-race
 
-- Planned: 16 km
-- Structure: 3 km easy; drills + strides; 2 × 5 km @ HM effort; 2:00 easy jog; 3 km cool-down.
-- Pace: 3:31–3:34/km; prioritize even effort and a relaxed first block.
-- Recovery: 2:00 easy jog between 5 km blocks.
-- Purpose: Build race-specific endurance through longer controlled blocks.
-- If fatigued: Run 2 × 4 km instead; never compensate by running the shorter version faster.
-
-## Saturday — 2026-09-12 — long run with controlled blocks
-
-- Planned: 21 km
-- Structure: 21 km total: 5 km easy, 2 × 4 km @ controlled HM-support effort with 1 km easy jog, then easy to 21 km.
-- Pace: Fast blocks 3:38–3:42/km—strong aerobic running, not goal-HM pace.
-- Recovery: 1 km easy jog between 4 km blocks.
-- Purpose: Develop long-run durability and sub-race-pace economy while Friday remains only easy plus strides.
-- If fatigued: Move to Sunday if necessary; otherwise shorten to 18 km all easy. Never force the faster blocks on tired legs.
-
-## Tuesday — 2026-09-15 — HM-specific
-
-- Planned: 14 km
-- Structure: 3 km easy; drills + strides; 8 km continuous at controlled HM-specific effort; 3 km cool-down.
-- Pace: Begin 3:34–3:35/km and only settle toward 3:31–3:33/km if controlled. This is not a time trial.
-- Recovery: Continuous specific block; no standing recovery.
-- Purpose: Convert broken HM work into continuous race rhythm without carrying excessive fatigue into the taper.
-- If fatigued: Use 2 × 4 km with 2 min jog if continuous work would become a test; stop if mechanics deteriorate.
-
-## Friday — 2026-09-18 — running economy
-
-- Planned: 11 km
-- Structure: 3 km easy; drills + strides; 8 × 400 m controlled fast with 200 m easy jog; 2 km cool-down.
-- Pace: 78–80 s per 400 m (3:15–3:20/km), relaxed and mechanically clean.
-- Recovery: 200 m easy jog; full control matters more than short recovery.
-- Purpose: Preserve economy and leg speed while overall volume and fatigue begin to fall.
-- If fatigued: Run 8–10 km easy with 6 × 15 s strides instead; do not force the session during the taper.
+- Planned: 9 km
+- Structure: 2 km warm-up; drills + 4 strides; 5 km Vienna Night Run; 2 km cool-down if convenient. Run it progressively: first km 3:25–3:27/km, km 2–4 at 3:20–3:22/km, then hold form through the final km without a finishing sprint.
+- Pace: Target 16:40–16:55: approximately 97–98% effort, hard but below an all-out PB attempt.
+- Recovery: No interval recovery. Rehydrate and refuel after the evening event.
+- Purpose: A sanctioned sharpening stimulus that replaces the planned 400 m economy session.
+- If fatigued: If Tuesday was laboured or legs remain heavy, run 17:05–17:15 with no final-kilometre push, or jog the event socially.
 
 ## Tuesday — 2026-09-22 — HM-specific tune-up
 
-- Planned: 12 km
-- Structure: 3 km easy; drills + strides; 3 × 2 km @ goal HM pace; 2:00 easy jog; 2 km cool-down.
+- Planned: 10 km
+- Structure: 3 km easy; drills + strides; 2 × 2 km at goal HM pace with 2:00 easy jog; 2–3 km cool-down.
 - Pace: 3:32–3:34/km. Exact rhythm, never faster than 3:30/km.
-- Recovery: 2:00 easy jog.
-- Purpose: Rehearse goal rhythm while reducing total load in race week.
-- If fatigued: Do 2 × 2 km, or 4 × 3 min at HM effort if travel/fatigue warrants.
+- Recovery: 2:00 easy jog between the 2 km blocks.
+- Purpose: Rehearse HM rhythm while preserving freshness after the Night Run.
+- If fatigued: Run only 1 × 2 km at HM pace, or 6–8 km easy, if fatigue persists.
 
 ## Sunday — 2026-09-27 — race
 

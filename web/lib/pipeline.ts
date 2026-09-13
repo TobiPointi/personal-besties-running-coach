@@ -100,6 +100,9 @@ async function syncIntervals(athleteId: string) {
       .bind(`wellness_${athleteId}_${date}`, athleteId, date, numberOrNull(row.restingHR ?? row.resting_hr), numberOrNull(row.sleepScore ?? row.sleep_score), numberOrNull(row.fatigue), numberOrNull(row.weight), JSON.stringify(redact(row)));
   });
   for (const statements of chunks([...activityStatements, ...wellnessStatements, ...performanceStatements], 30)) await db.batch(statements);
+  // The activity list API contains only summaries. Cache compact pace and HR
+  // histograms from source streams, not full GPS traces, for true time-in-zone.
+  await cacheRecentActivityStreams(db, athleteId, headers, timestamp);
   // Complete only published sessions using the just-received Intervals records.
   // This avoids summing protected reference copies of the same run.
   const runsByDate = new Map<string, { distance:number; duration:number }>();
@@ -122,6 +125,36 @@ async function syncIntervals(athleteId: string) {
 function offsetIsoDate(days: number, from = nowIso()) {
   const date = new Date(from); date.setUTCDate(date.getUTCDate() + days); return date.toISOString().slice(0, 10);
 }
+
+type StreamActivity = { id:string; provider_activity_id:string; raw_summary_json:string | null };
+async function cacheRecentActivityStreams(db:D1Database, athleteId:string, headers:Record<string,string>, timestamp:string) {
+  const result=await db.prepare(`SELECT id, provider_activity_id, raw_summary_json FROM activities
+    WHERE athlete_id=? AND provider='intervals' AND activity_date >= date('now', '-365 day')
+      ORDER BY activity_date DESC LIMIT 1000`).bind(athleteId).all<StreamActivity>();
+  const pending=(result.results??[]).filter((item)=>!hasActivityStreamCache(item.raw_summary_json)).slice(0,40);
+  if(!pending.length)return;
+  const updates=(await Promise.all(pending.map(async(item)=>{
+    try {
+      const response=await fetch(`https://intervals.icu/api/v1/activity/${encodeURIComponent(item.provider_activity_id)}/streams.json?types=time,velocity_smooth,heartrate`,{headers});
+      if(!response.ok)return response.status===404?streamCacheUpdate(db,item,"unavailable",null,timestamp):null;
+      const histograms=streamHistograms(await response.json() as Record<string,unknown>);
+      return streamCacheUpdate(db,item,histograms.pace.length||histograms.heartRate.length?"ready":"unavailable",histograms,timestamp);
+    } catch { return null; }
+  }))).filter((statement):statement is D1PreparedStatement=>Boolean(statement));
+  for(const group of chunks(updates,30))await db.batch(group);
+}
+function hasActivityStreamCache(raw:string|null) { try { const value=JSON.parse(raw??"{}"); return value.pb_activity_stream_v2?.status==="ready"||value.pb_activity_stream_v2?.status==="unavailable"; } catch { return false; } }
+function streamCacheUpdate(db:D1Database,activity:StreamActivity,status:"ready"|"unavailable",histograms:{pace:number[][];heartRate:number[][]}|null,timestamp:string) { let raw:Record<string,unknown>; try { raw=JSON.parse(activity.raw_summary_json??"{}"); } catch { raw={}; } raw.pb_activity_stream_v2={status,pace_histogram:histograms?.pace??null,heart_rate_histogram:histograms?.heartRate??null,updated_at:timestamp}; return db.prepare("UPDATE activities SET raw_summary_json=?, updated_at=? WHERE id=?").bind(JSON.stringify(raw),timestamp,activity.id); }
+function streamHistograms(payload:Record<string,unknown>) {
+  const velocity=streamValues(payload,"velocity_smooth"),heartRate=streamValues(payload,"heartrate"),times=streamValues(payload,"time"); const pace=new Map<number,number>(),hr=new Map<number,number>(); const length=Math.max(velocity.length,heartRate.length);
+  for(let index=0;index<length;index++){
+    const next=Number(times[index+1]),current=Number(times[index]); const seconds=Number.isFinite(next)&&Number.isFinite(current)?Math.max(1,Math.min(10,Math.round(next-current))):1;
+    const metersPerSecond=Number(velocity[index]); if(metersPerSecond>.7&&metersPerSecond<10){ const value=Math.round(1000/metersPerSecond); if(value>=120&&value<=900)pace.set(value,(pace.get(value)??0)+seconds); }
+    const bpm=Math.round(Number(heartRate[index])); if(bpm>=40&&bpm<=240)hr.set(bpm,(hr.get(bpm)??0)+seconds);
+  }
+  return {pace:[...pace.entries()].sort(([a],[b])=>a-b),heartRate:[...hr.entries()].sort(([a],[b])=>a-b)};
+}
+function streamValues(payload:Record<string,unknown>,key:string):unknown[] { const candidate=payload[key]??(payload.streams as Record<string,unknown>|undefined)?.[key]; if(Array.isArray(candidate))return candidate; if(candidate&&typeof candidate==="object"&&Array.isArray((candidate as Record<string,unknown>).data))return (candidate as Record<string,unknown>).data as unknown[]; return []; }
 
 async function calculateAssessment(athleteId: string) {
   const db = platformEnv().DB;

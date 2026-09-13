@@ -87,21 +87,33 @@ async function ensureTobiasReferenceData(user: AppUser) {
 
 async function ensureTobiasPlanUpdateV3(db: D1Database, user: AppUser, timestamp: string) {
   const planId = "plan_bad_ischl_reference_v3";
-  const alreadyImported = await db.prepare("SELECT id FROM training_plans WHERE id = ?").bind(planId).first();
-  if (alreadyImported) return;
+  let referencePlan = await db.prepare("SELECT id FROM training_plans WHERE id = ?").bind(planId).first();
+  if (!referencePlan) {
+    // An earlier adaptive draft can already own the next numeric version. Keep
+    // that audit history and allocate the reviewed reference plan a new one.
+    const latestVersion = await db.prepare("SELECT COALESCE(MAX(version), 0) AS version FROM training_plans WHERE athlete_id = 'athlete_tobias'")
+      .first<{ version: number }>();
+    const version = Number(latestVersion?.version ?? 0) + 1;
+    await db.prepare(`INSERT OR IGNORE INTO training_plans
+      (id, athlete_id, goal_id, version, status, start_date, end_date, rationale, created_by, created_at, published_at)
+      VALUES (?, 'athlete_tobias', 'goal_bad_ischl_2026', ?, 'draft', '2026-08-14', '2026-09-27', ?, ?, ?, NULL)`)
+      .bind(planId, version, "Bad Ischl plan updated from the local coaching review through 1 September 2026. Completed and missed sessions are retained; the remaining approved sessions stay unchanged.", user.id, timestamp)
+      .run();
+    referencePlan = await db.prepare("SELECT id FROM training_plans WHERE id = ?").bind(planId).first();
+  }
+  // A conflicting concurrent insert must not archive the current published
+  // plan. A later workspace load will retry with the next available version.
+  if (!referencePlan) return;
 
   await db.batch([
-    db.prepare("UPDATE training_plans SET status = 'archived' WHERE athlete_id = 'athlete_tobias' AND status = 'published'"),
-    db.prepare(`INSERT INTO training_plans
-      (id, athlete_id, goal_id, version, status, start_date, end_date, rationale, created_by, created_at, published_at)
-      VALUES (?, 'athlete_tobias', 'goal_bad_ischl_2026', 3, 'published', '2026-08-14', '2026-09-27', ?, ?, ?, ?)`)
-      .bind(planId, "Bad Ischl plan updated from the local coaching review through 1 September 2026. Completed and missed sessions are retained; the remaining approved sessions stay unchanged.", user.id, timestamp, timestamp),
+    db.prepare("UPDATE training_plans SET status = 'archived' WHERE athlete_id = 'athlete_tobias' AND status = 'published' AND id != ?").bind(planId),
+    db.prepare("UPDATE training_plans SET status = 'published', published_at = COALESCE(published_at, ?) WHERE id = ?").bind(timestamp, planId),
   ]);
 
   const statements = referencePlanDays.map((day) => {
     const status = referenceSessionStatus(day.status);
     const actualDistance = Number(day.actual?.distance_km ?? 0);
-    return db.prepare(`INSERT INTO planned_sessions
+    return db.prepare(`INSERT OR IGNORE INTO planned_sessions
       (id, plan_id, athlete_id, session_date, workout_type, title, details, planned_distance_km, pace_guidance, hr_guidance, purpose, fatigue_modification, major_stimulus, status, actual_distance_km, completed_at)
       VALUES (?, ?, 'athlete_tobias', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
       .bind(`reference_v3_session_${day.date}`, planId, day.date, day.workout_type, conciseReferenceTitle(day), day.details, day.planned_distance_km, day.pace_guidance ?? null, day.hr_guidance ?? null, day.purpose ?? null, day.fatigue_modification ?? null, day.major_stimulus ? 1 : 0, status, status === "completed" ? actualDistance : null, status === "completed" ? timestamp : null);

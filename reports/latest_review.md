@@ -2,57 +2,55 @@
 
 ## Training completed since last review
 
-- 2026-09-01: Feel the Tuscany heat! ☀️ — 16.0 km, HM-specific, load 84.0; planned 15.0 km / threshold
-- 2026-09-02: Morning Run 🇮🇹 — 10.0 km, recovery, load 30.0; planned 10 km / recovery
-- 2026-09-05: Morning Run 🔆 — 16.0 km, easy, load 67.0; planned 8 km / recovery
+- No newly synchronized run was found.
 
 ## Fitness signal
 
 Current HM range: **1:15:11–1:16:50** (high confidence).
-Conditional race-day range: **1:14:56–1:16:22**.
+Conditional race-day range: **1:15:01–1:16:31**.
 
 ## Coach verdict
 
-**Progressing** — The weekly structure supports HM progress without a clear recovery warning.
-**Next decision:** Keep the next planned quality session controlled; progress by completing it well, not by running faster.
-- 66.8 km running (95% of the preceding four-week mean).
-- 2 major quality session(s); longest run 20.0 km.
-- Non-running context: 1 session(s), 30 load, 0 m hiking ascent.
+**Reduce** — Recovery/load signals outweigh the benefit of adding work this week.
+**Next decision:** Keep the rest day, reduce the next quality session to its stated fallback, and do not replace missed kilometres.
+- 54.8 km running (74% of the preceding four-week mean).
+- 1 major quality session(s); longest run 16.0 km.
+- Non-running context: 6 session(s), 228 load, 0 m hiking ascent.
 
 ## Latest quality-session assessment
 
-2026-09-05: **Morning Run 🔆** — 4 km detected work.
-- Rep pace: 3:31/km, 3:29/km, 3:26/km, 3:22/km
-- Rep average HR: 167, 172, 173, 176 bpm; raw sample maximum: 184 bpm; final-rep 20 s HR: 183.6 bpm.
-- Recovery HR drops: 19, 33, 29 bpm. Evaluate rep HR against pace/structure; whole-activity drift is not used for an interval workout.
+2026-09-11: **Danube Canal Relays '26** — 7.9 km detected work.
+- Rep pace: 3:34/km, 3:06/km, 3:34/km, 3:33/km
+- Rep average HR: 176, 181, 175, 180 bpm; raw sample maximum: 190 bpm; final-rep 20 s HR: 184.2 bpm.
+- Recovery HR drops: 65, 51, 34 bpm. Evaluate rep HR against pace/structure; whole-activity drift is not used for an interval workout.
 - Coach interpretation: Recent repetition pacing/HR does not show a clear overreach flag; interpret pace variation with wind, grade and perceived effort.
 
 ## Fatigue/recovery signal
 
-Status: **normal/uncertain**. No strong warning in the available fields; missing wellness still limits certainty.
-Recent non-running context: 1 sessions, 30 load, 1.5 h, 0 m hiking ascent (caution: low).
+Status: **elevated**. Recent non-running training is high (228 load, 17.5 h, 0 m hiking ascent); reduce the next running stimulus.
+Recent non-running context: 6 sessions, 228 load, 17.5 h, 0 m hiking ascent (caution: high).
 
 Goal trajectory: **sub-1:15 confidence = moderate**
 
 # Next 3 Days
 
-## Sunday — 2026-09-06
+## Saturday — 2026-09-12
 
-**long run — 20 km.** 20 km fully easy on rolling terrain; no fast finish after Friday’s 1 km repetitions.
-Purpose: Maintain long-run durability and trail-specific strength without creating a third hard session.
-If fatigued: Reduce to 16–18 km and 250–350 m ascent if Friday was harder than prescribed.
+**rest — 0 km.** Full non-running recovery day after the bike transfer and Friday relay session. Optional walking and 10–15 min gentle mobility only.
+Purpose: Absorb accumulated cycling and running load; no missed mileage is made up.
+If fatigued: Keep this as rest if legs are heavy, sleep is poor, or any soreness alters mechanics.
 
-## Monday — 2026-09-07
+## Sunday — 2026-09-13
+
+**easy endurance — 14 km.** 14 km genuinely easy and mostly flat; no strides, hills, fast finish, or pace objective.
+Purpose: Retain running endurance 14 days before the HM without turning a tired-quads day into another stimulus.
+If fatigued: Reduce to 8–10 km or rest if stiffness changes mechanics, pain is focal, or the stride does not loosen after 10 minutes.
+
+## Monday — 2026-09-14
 
 **rest — 0 km.** Full non-running day. Optional easy walk and 10–15 min mobility.
 Purpose: Absorb the previous week, keep six run days sustainable, and arrive fresh for Tuesday quality.
 If fatigued: Keep the rest day; do not replace missed mileage here.
-
-## Tuesday — 2026-09-08
-
-**HM-specific — 16 km.** 3 km easy; drills + strides; 2 × 5 km @ HM effort; 2:00 easy jog; 3 km cool-down.
-Purpose: Build race-specific endurance through longer controlled blocks.
-If fatigued: Run 2 × 4 km instead; never compensate by running the shorter version faster.
 
 # Changes to Plan
 

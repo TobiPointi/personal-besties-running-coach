@@ -19,13 +19,13 @@
 - Likely range: **1:15:11–1:16:50**
 - Confidence: **high**
 - Supporting evidence: specific/threshold session 2026-07-07 (8.0 km work); specific/threshold session 2026-08-12 (9.0 km work); specific/threshold session 2026-08-18 (8.0 km work); specific/threshold session 2026-08-25 (8.0 km work); specific/threshold session 2026-08-29 (9.1 km work); specific/threshold session 2026-09-01 (8.9 km work); historical context: official race 2026-01-25 — 2. VCM Winterlauf Wien (21.1 km in 1:16:40)
-- Evidence against / uncertainty: Recent complete-week volume averages 65.8 km, which may limit HM durability.
+- Evidence against / uncertainty: Recent complete-week volume averages 62.4 km, which may limit HM durability.
 
 ## Sub-1:15 feasibility
 
 **moderate confidence (high evidence quality).** Today's multi-signal HM range is 1:15:11–1:16:50 versus the 1:15:00 target.
 
-Conditional race-day range: **1:14:56–1:16:22**. Healthy completion of the specific block, normal recovery, a competent taper, and reasonable race conditions.
+Conditional race-day range: **1:15:01–1:16:31**. Healthy completion of the specific block, normal recovery, a competent taper, and reasonable race conditions.
 
 These estimates combine recent races and sustained interval/HM-specific work when available. They are not based on one equivalence calculator or old PBs alone.
 

@@ -2,13 +2,12 @@
 
 Synchronized running activities: **487**
 
-Available date range: **2024-09-06 to 2026-09-05**
+Available date range: **2024-09-16 to 2026-09-11**
 
 ## Recent weekly detail
 
 | Week | km | Hours | Elevation | Days | Longest | Quality km | HM-specific | Threshold | Faster | Load |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 2026-05-18 | 40.3 | 4.3 | 363 m | 3 | 12.7 | 0.0 | 0.0 | 0.0 | 0.0 | 347 |
 | 2026-05-25 | 48.8 | 4.4 | 501 m | 4 | 25.7 | 3.6 | 0.2 | 0.7 | 2.8 | 255 |
 | 2026-06-01 | 59.4 | 4.6 | 559 m | 5 | 16.0 | 7.4 | 8.7 | 0.8 | 0.1 | 273 |
 | 2026-06-08 | 65.6 | 5.1 | 725 m | 5 | 15.0 | 7.9 | 4.9 | 4.5 | 0.5 | 263 |
@@ -24,13 +23,14 @@ Available date range: **2024-09-06 to 2026-09-05**
 | 2026-08-17 | 82.0 | 6.7 | 1094 m | 5 | 24.0 | 12.7 | 3.6 | 4.5 | 4.7 | 299 |
 | 2026-08-24 | 66.8 | 5.1 | 579 m | 4 | 20.0 | 16.7 | 12.1 | 4.3 | 0.2 | 231 |
 | 2026-08-31 | 54.8 | 4.3 | 997 m | 4 | 16.0 | 8.9 | 6.7 | 5.0 | 0.6 | 212 |
+| 2026-09-07 | 22.1 | 2.9 | 242 m | 2 | 13.4 | 7.2 | 4.7 | 0.8 | 2.0 | 111 |
 
 Pace-derived intensity is an estimate. Lap data are preferred; whole-run pace is used only when detailed laps are unavailable.
 
 ## Long-term context
 
 - Historical peak complete week in the synchronized window: 132.7 km (week of 2026-03-16).
-- Mean complete-week volume over the last 52 weeks available: 61.6 km.
+- Mean complete-week volume over the last 52 weeks available: 61.4 km.
 - Consistency: 40/51 complete weeks in the last year had at least four running days.
 
 ### Recent long runs

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-05T13:17:42.615252+00:00",
-  "as_of_date": "2026-09-05",
+  "generated_at": "2026-09-12T18:01:32.060240+00:00",
+  "as_of_date": "2026-09-12",
   "race": {
     "name": "Bad Ischl Half Marathon",
     "date": "2026-09-27",
@@ -10,7 +10,7 @@
   },
   "read_only_intervals_icu": true,
   "provisional": false,
-  "volume_basis": "Recent complete-week mean 67.4 km, median 72.8 km, rolling 7 days 54.8 km, recent peak 82.0 km.",
+  "volume_basis": "Recent complete-week mean 64.4 km, median 67.0 km, rolling 7 days 22.1 km, recent peak 82.0 km.",
   "planning_notes": [
     "One full non-running day every Monday; six run days are enough for the current 72–79 km structure.",
     "Tuesday is the primary threshold/HM-specific session.",
@@ -723,7 +723,7 @@
     {
       "date": "2026-09-06",
       "day": "Sunday",
-      "status": "planned",
+      "status": "missed",
       "planned_distance_km": 20,
       "planned_duration_minutes": null,
       "workout_type": "long run",
@@ -735,12 +735,18 @@
       "purpose": "Maintain long-run durability and trail-specific strength without creating a third hard session.",
       "fatigue_modification": "Reduce to 16–18 km and 250–350 m ascent if Friday was harder than prescribed.",
       "strength": null,
-      "major_stimulus": false
+      "major_stimulus": false,
+      "actual": {
+        "distance_km": 0,
+        "activity_ids": [],
+        "activities": [],
+        "distance_adherence_percent": 0.0
+      }
     },
     {
       "date": "2026-09-07",
       "day": "Monday",
-      "status": "planned",
+      "status": "completed-rest",
       "planned_distance_km": 0.0,
       "planned_duration_minutes": null,
       "workout_type": "rest",
@@ -752,12 +758,18 @@
       "purpose": "Absorb the previous week, keep six run days sustainable, and arrive fresh for Tuesday quality.",
       "fatigue_modification": "Keep the rest day; do not replace missed mileage here.",
       "strength": null,
-      "major_stimulus": false
+      "major_stimulus": false,
+      "actual": {
+        "distance_km": 0,
+        "activity_ids": [],
+        "activities": [],
+        "distance_adherence_percent": null
+      }
     },
     {
       "date": "2026-09-08",
       "day": "Tuesday",
-      "status": "planned",
+      "status": "missed",
       "planned_distance_km": 16.0,
       "planned_duration_minutes": null,
       "workout_type": "HM-specific",
@@ -769,12 +781,18 @@
       "purpose": "Build race-specific endurance through longer controlled blocks.",
       "fatigue_modification": "Run 2 × 4 km instead; never compensate by running the shorter version faster.",
       "strength": "Final normal strength session later the same day: 20–25 min, low volume, no DOMS.",
-      "major_stimulus": true
+      "major_stimulus": true,
+      "actual": {
+        "distance_km": 0,
+        "activity_ids": [],
+        "activities": [],
+        "distance_adherence_percent": 0.0
+      }
     },
     {
       "date": "2026-09-09",
       "day": "Wednesday",
-      "status": "planned",
+      "status": "missed",
       "planned_distance_km": 10,
       "planned_duration_minutes": null,
       "workout_type": "recovery",
@@ -786,12 +804,18 @@
       "purpose": "Restore movement and circulation while absorbing the previous hard day.",
       "fatigue_modification": "Rest instead if soreness changes mechanics or pain is focal/worsening.",
       "strength": null,
-      "major_stimulus": false
+      "major_stimulus": false,
+      "actual": {
+        "distance_km": 0,
+        "activity_ids": [],
+        "activities": [],
+        "distance_adherence_percent": 0.0
+      }
     },
     {
       "date": "2026-09-10",
       "day": "Thursday",
-      "status": "planned",
+      "status": "completed",
       "planned_distance_km": 13,
       "planned_duration_minutes": null,
       "workout_type": "easy",
@@ -803,12 +827,28 @@
       "purpose": "Maintain climbing strength and trail tissue tolerance without compromising HM-specific quality.",
       "fatigue_modification": "Reduce to 10 km or take rest if fatigue is abnormal.",
       "strength": "15–20 min microdose after the run: soleus/calf, hip stability and trunk; 2 sets, no failure or DOMS.",
-      "major_stimulus": false
+      "major_stimulus": false,
+      "actual": {
+        "distance_km": 6.68,
+        "activity_ids": [
+          "i185347572"
+        ],
+        "activities": [
+          {
+            "id": "i185347572",
+            "name": "Evening Laufen",
+            "workout_type": "recovery",
+            "distance_km": 6.682,
+            "training_load": 16.0
+          }
+        ],
+        "distance_adherence_percent": 51.4
+      }
     },
     {
       "date": "2026-09-11",
       "day": "Friday",
-      "status": "planned",
+      "status": "completed",
       "planned_distance_km": 10,
       "planned_duration_minutes": null,
       "workout_type": "easy + strides",
@@ -820,39 +860,63 @@
       "purpose": "Neuromuscular freshness without becoming a third metabolic workout.",
       "fatigue_modification": "Omit the strides and run 7–9 km easy, or rest if recovery is poor.",
       "strength": null,
-      "major_stimulus": false
+      "major_stimulus": false,
+      "actual": {
+        "distance_km": 15.42,
+        "activity_ids": [
+          "i185476389",
+          "i185686289"
+        ],
+        "activities": [
+          {
+            "id": "i185476389",
+            "name": "Morning Laufen",
+            "workout_type": "recovery",
+            "distance_km": 2.019,
+            "training_load": 10.0
+          },
+          {
+            "id": "i185686289",
+            "name": "Danube Canal Relays '26",
+            "workout_type": "HM-specific",
+            "distance_km": 13.405,
+            "training_load": 85.0
+          }
+        ],
+        "distance_adherence_percent": 154.2
+      }
     },
     {
       "date": "2026-09-12",
       "day": "Saturday",
       "status": "planned",
-      "planned_distance_km": 21,
+      "planned_distance_km": 0.0,
       "planned_duration_minutes": null,
-      "workout_type": "long run with controlled blocks",
-      "details": "21 km total: 5 km easy, 2 × 4 km @ controlled HM-support effort with 1 km easy jog, then easy to 21 km.",
-      "pace_guidance": "Fast blocks 3:38–3:42/km—strong aerobic running, not goal-HM pace.",
-      "hr_guidance": "Use HR as a secondary check with pace, terrain and feel. Ease off if response is unusually high or drift is excessive.",
-      "recovery": "1 km easy jog between 4 km blocks.",
-      "terrain_elevation": "Approximately 350–500 m ascent overall; faster blocks on a smooth, gently rolling segment.",
-      "purpose": "Develop long-run durability and sub-race-pace economy while Friday remains only easy plus strides.",
-      "fatigue_modification": "Move to Sunday if necessary; otherwise shorten to 18 km all easy. Never force the faster blocks on tired legs.",
+      "workout_type": "rest",
+      "details": "Full non-running recovery day after the bike transfer and Friday relay session. Optional walking and 10–15 min gentle mobility only.",
+      "pace_guidance": "None.",
+      "hr_guidance": "None.",
+      "recovery": "Full recovery day.",
+      "terrain_elevation": "Flat/none.",
+      "purpose": "Absorb accumulated cycling and running load; no missed mileage is made up.",
+      "fatigue_modification": "Keep this as rest if legs are heavy, sleep is poor, or any soreness alters mechanics.",
       "strength": null,
-      "major_stimulus": true
+      "major_stimulus": false
     },
     {
       "date": "2026-09-13",
       "day": "Sunday",
       "status": "planned",
-      "planned_distance_km": 8,
+      "planned_distance_km": 14,
       "planned_duration_minutes": null,
-      "workout_type": "recovery",
-      "details": "8 km very easy recovery after Saturday’s quality long run; no strides.",
-      "pace_guidance": "Usually 4:45–5:30/km or slower; breathing and legs must remain easy.",
-      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
-      "recovery": "60–90 s walk/jog between optional strides.",
-      "terrain_elevation": "Flat to gently rolling, ideally under 100 m ascent.",
-      "purpose": "Absorb the controlled long-run work without extending the hard stimulus into a second day.",
-      "fatigue_modification": "Take a full rest day if soreness or fatigue changes mechanics.",
+      "workout_type": "easy endurance",
+      "details": "14 km genuinely easy and mostly flat; no strides, hills, fast finish, or pace objective.",
+      "pace_guidance": "4:40–5:20/km or slower by feel; keep breathing clearly easy.",
+      "hr_guidance": "Use HR only as a cap/secondary check.",
+      "recovery": "No structured recovery.",
+      "terrain_elevation": "Flat to gently rolling, under 150 m ascent.",
+      "purpose": "Retain running endurance 14 days before the HM without turning a tired-quads day into another stimulus.",
+      "fatigue_modification": "Reduce to 8–10 km or rest if stiffness changes mechanics, pain is focal, or the stride does not loosen after 10 minutes.",
       "strength": null,
       "major_stimulus": false
     },
@@ -877,33 +941,33 @@
       "date": "2026-09-15",
       "day": "Tuesday",
       "status": "planned",
-      "planned_distance_km": 14.0,
+      "planned_distance_km": 11,
       "planned_duration_minutes": null,
-      "workout_type": "HM-specific",
-      "details": "3 km easy; drills + strides; 8 km continuous at controlled HM-specific effort; 3 km cool-down.",
-      "pace_guidance": "Begin 3:34–3:35/km and only settle toward 3:31–3:33/km if controlled. This is not a time trial.",
-      "hr_guidance": "Let HR rise naturally; interpret it with pace, duration, drift, and feel.",
-      "recovery": "Continuous specific block; no standing recovery.",
+      "workout_type": "HM-specific primer",
+      "details": "3 km easy; drills + 4 strides; 2 × 2 km at controlled HM effort with 1 km easy jog; 3 km cool-down.",
+      "pace_guidance": "3:33–3:35/km. This is a rhythm check after Friday's 4 × 2 km session, not a test or a substitute for missed 2 × 5 km work.",
+      "hr_guidance": "Let HR rise naturally; stop after one rep if the warm-up or first block feels laboured.",
+      "recovery": "1 km genuinely easy jog between the 2 km blocks.",
       "terrain_elevation": "Flat, accurately measured route with minimal interruptions.",
-      "purpose": "Convert broken HM work into continuous race rhythm without carrying excessive fatigue into the taper.",
-      "fatigue_modification": "Use 2 × 4 km with 2 min jog if continuous work would become a test; stop if mechanics deteriorate.",
-      "strength": "Optional 15–20 min maintenance only: calf/soleus, hip stability and trunk; no heavy eccentric work.",
-      "major_stimulus": true
+      "purpose": "Re-establish goal-HM rhythm before the Night Run without stacking a second maximal session.",
+      "fatigue_modification": "Use 1 × 2 km at HM effort, or run 8–10 km easy, if legs remain loaded.",
+      "strength": null,
+      "major_stimulus": false
     },
     {
       "date": "2026-09-16",
       "day": "Wednesday",
       "status": "planned",
-      "planned_distance_km": 10,
+      "planned_distance_km": 7,
       "planned_duration_minutes": null,
       "workout_type": "recovery",
-      "details": "10 km relaxed recovery/easy running after Tuesday quality.",
-      "pace_guidance": "Usually 4:45–5:30/km or slower; breathing and legs must remain easy.",
-      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
-      "recovery": "60–90 s walk/jog between optional strides.",
-      "terrain_elevation": "Flat to gently rolling, ideally under 120 m ascent.",
-      "purpose": "Restore movement and circulation while absorbing the previous hard day.",
-      "fatigue_modification": "Rest instead if soreness changes mechanics or pain is focal/worsening.",
+      "details": "7 km very easy, flat recovery; no strides.",
+      "pace_guidance": "4:50–5:30/km or slower by feel.",
+      "hr_guidance": "Use HR only as a cap/secondary check.",
+      "recovery": "No structured recovery.",
+      "terrain_elevation": "Flat/gentle; avoid hard descents.",
+      "purpose": "Arrive fresh for Thursday rather than accumulating mileage.",
+      "fatigue_modification": "Rest if legs are not springy.",
       "strength": null,
       "major_stimulus": false
     },
@@ -911,44 +975,44 @@
       "date": "2026-09-17",
       "day": "Thursday",
       "status": "planned",
-      "planned_distance_km": 13,
+      "planned_distance_km": 9,
       "planned_duration_minutes": null,
-      "workout_type": "easy",
-      "details": "13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
-      "pace_guidance": "Conversational effort; typically 4:25–5:05/km, but slow further for heat, hills, or fatigue.",
-      "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
-      "recovery": "60–90 s walk/jog between optional strides.",
-      "terrain_elevation": "Approximately 250–400 m ascent on comfortable trails/roads; descents smooth and restrained.",
-      "purpose": "Maintain climbing strength and trail tissue tolerance without compromising HM-specific quality.",
-      "fatigue_modification": "Reduce to 10 km or take rest if fatigue is abnormal.",
-      "strength": "15–20 min microdose after the run: soleus/calf, hip stability and trunk; 2 sets, no failure or DOMS.",
-      "major_stimulus": false
+      "workout_type": "Vienna Night Run — controlled 5 km B-race",
+      "details": "2 km warm-up; drills + 4 strides; 5 km Vienna Night Run; 2 km cool-down if convenient. Run it progressively: first km 3:25–3:27/km, km 2–4 at 3:20–3:22/km, then hold form through the final km without a finishing sprint.",
+      "pace_guidance": "Target 16:40–16:55: approximately 97–98% effort, hard but below an all-out PB attempt.",
+      "hr_guidance": "Race HR is observational only. Control the first kilometre; effort is about 9/10, not a final-kilometre sprint.",
+      "recovery": "No interval recovery. Rehydrate and refuel after the evening event.",
+      "terrain_elevation": "Vienna Ringstraße 5 km circuit; allow for start congestion and bends.",
+      "purpose": "A sanctioned sharpening stimulus that replaces the planned 400 m economy session.",
+      "fatigue_modification": "If Tuesday was laboured or legs remain heavy, run 17:05–17:15 with no final-kilometre push, or jog the event socially.",
+      "strength": null,
+      "major_stimulus": true
     },
     {
       "date": "2026-09-18",
       "day": "Friday",
       "status": "planned",
-      "planned_distance_km": 11.0,
+      "planned_distance_km": 0.0,
       "planned_duration_minutes": null,
-      "workout_type": "running economy",
-      "details": "3 km easy; drills + strides; 8 × 400 m controlled fast with 200 m easy jog; 2 km cool-down.",
-      "pace_guidance": "78–80 s per 400 m (3:15–3:20/km), relaxed and mechanically clean.",
-      "hr_guidance": "Let HR rise naturally; interpret it with pace, duration, drift, and feel.",
-      "recovery": "200 m easy jog; full control matters more than short recovery.",
-      "terrain_elevation": "Flat, accurately measured route with minimal interruptions.",
-      "purpose": "Preserve economy and leg speed while overall volume and fatigue begin to fall.",
-      "fatigue_modification": "Run 8–10 km easy with 6 × 15 s strides instead; do not force the session during the taper.",
+      "workout_type": "rest",
+      "details": "Full rest from running after the Night Run. Optional walking and gentle mobility only.",
+      "pace_guidance": "None.",
+      "hr_guidance": "None.",
+      "recovery": "Full recovery day.",
+      "terrain_elevation": "Flat/none.",
+      "purpose": "Absorb the B-race and protect the final HM taper.",
+      "fatigue_modification": "Keep the rest day; do not add the former 400 m session.",
       "strength": null,
-      "major_stimulus": true
+      "major_stimulus": false
     },
     {
       "date": "2026-09-19",
       "day": "Saturday",
       "status": "planned",
-      "planned_distance_km": 8,
+      "planned_distance_km": 7,
       "planned_duration_minutes": null,
       "workout_type": "recovery",
-      "details": "8 km very easy; no pace objective.",
+      "details": "7 km very easy; no pace objective.",
       "pace_guidance": "Usually 4:45–5:30/km or slower; breathing and legs must remain easy.",
       "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
       "recovery": "60–90 s walk/jog between optional strides.",
@@ -962,16 +1026,16 @@
       "date": "2026-09-20",
       "day": "Sunday",
       "status": "planned",
-      "planned_distance_km": 16,
+      "planned_distance_km": 14,
       "planned_duration_minutes": null,
       "workout_type": "long run",
-      "details": "16 km relaxed on gently rolling terrain; no progression and no hard descending.",
-      "pace_guidance": "Easy portions 4:25–5:10/km by feel. Uphill pace is irrelevant; keep breathing controlled.",
-      "hr_guidance": "Use HR as a secondary check with pace, terrain and feel. Ease off if response is unusually high or drift is excessive.",
-      "recovery": "No structured recovery; keep the full run aerobically easy.",
-      "terrain_elevation": "Approximately 200–300 m ascent on non-technical terrain.",
-      "purpose": "Retain endurance and hill familiarity while tapering fatigue seven days before the HM.",
-      "fatigue_modification": "Reduce to 12–14 km flat/easy if legs remain loaded from Tuesday or Friday.",
+      "details": "14 km relaxed and mostly flat; no progression, fast finish, or hard descending.",
+      "pace_guidance": "4:25–5:10/km by feel; keep it fully aerobic.",
+      "hr_guidance": "Use HR as a secondary check with pace and feel.",
+      "recovery": "No structured recovery.",
+      "terrain_elevation": "Flat to gently rolling, approximately 100–200 m ascent.",
+      "purpose": "Maintain running durability while allowing Night Run fatigue to clear.",
+      "fatigue_modification": "Reduce to 10–12 km easy if Thursday cost more than intended.",
       "strength": null,
       "major_stimulus": false
     },
@@ -996,16 +1060,16 @@
       "date": "2026-09-22",
       "day": "Tuesday",
       "status": "planned",
-      "planned_distance_km": 12.0,
+      "planned_distance_km": 10,
       "planned_duration_minutes": null,
       "workout_type": "HM-specific tune-up",
-      "details": "3 km easy; drills + strides; 3 × 2 km @ goal HM pace; 2:00 easy jog; 2 km cool-down.",
+      "details": "3 km easy; drills + strides; 2 × 2 km at goal HM pace with 2:00 easy jog; 2–3 km cool-down.",
       "pace_guidance": "3:32–3:34/km. Exact rhythm, never faster than 3:30/km.",
-      "hr_guidance": "Let HR rise naturally; interpret it with pace, duration, drift, and feel.",
-      "recovery": "2:00 easy jog.",
+      "hr_guidance": "Let HR rise naturally; it is a rehearsal, not a fitness test.",
+      "recovery": "2:00 easy jog between the 2 km blocks.",
       "terrain_elevation": "Flat, accurately measured route with minimal interruptions.",
-      "purpose": "Rehearse goal rhythm while reducing total load in race week.",
-      "fatigue_modification": "Do 2 × 2 km, or 4 × 3 min at HM effort if travel/fatigue warrants.",
+      "purpose": "Rehearse HM rhythm while preserving freshness after the Night Run.",
+      "fatigue_modification": "Run only 1 × 2 km at HM pace, or 6–8 km easy, if fatigue persists.",
       "strength": null,
       "major_stimulus": true
     },
@@ -1013,10 +1077,10 @@
       "date": "2026-09-23",
       "day": "Wednesday",
       "status": "planned",
-      "planned_distance_km": 10,
+      "planned_distance_km": 9,
       "planned_duration_minutes": null,
       "workout_type": "recovery",
-      "details": "10 km relaxed recovery/easy running after Tuesday quality.",
+      "details": "9 km relaxed recovery/easy running after Tuesday quality.",
       "pace_guidance": "Usually 4:45–5:30/km or slower; breathing and legs must remain easy.",
       "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
       "recovery": "60–90 s walk/jog between optional strides.",
@@ -1030,10 +1094,10 @@
       "date": "2026-09-24",
       "day": "Thursday",
       "status": "planned",
-      "planned_distance_km": 8,
+      "planned_distance_km": 7,
       "planned_duration_minutes": null,
       "workout_type": "easy",
-      "details": "8 km easy on gently rolling terrain; no hill sprints.",
+      "details": "7 km easy on gently rolling terrain; no hill sprints.",
       "pace_guidance": "Conversational effort; typically 4:25–5:05/km, but slow further for heat, hills, or fatigue.",
       "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
       "recovery": "60–90 s walk/jog between optional strides.",
@@ -1047,10 +1111,10 @@
       "date": "2026-09-25",
       "day": "Friday",
       "status": "planned",
-      "planned_distance_km": 7,
+      "planned_distance_km": 6,
       "planned_duration_minutes": null,
       "workout_type": "easy + strides",
-      "details": "7 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery.",
+      "details": "6 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery.",
       "pace_guidance": "Easy running 4:30–5:10/km by feel; strides fast but relaxed, never sprinting.",
       "hr_guidance": "Use HR as a cap/secondary check, not a target. No threshold inference from HR alone.",
       "recovery": "60–90 s walk/jog after each stride.",
@@ -1436,6 +1500,134 @@
           "date": "2026-09-17",
           "original": "easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
           "updated": "easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        }
+      ],
+      "reason": "New synchronized training and recovery assessment."
+    },
+    {
+      "changed_at": "2026-09-12T11:44:33.833653+00:00",
+      "effective_date": "2026-09-12",
+      "changes": [
+        {
+          "date": "2026-09-12",
+          "original": "long run with controlled blocks: 21 km total: 5 km easy, 2 × 4 km @ controlled HM-support effort with 1 km easy jog, then easy to 21 km.",
+          "updated": "long run with controlled blocks: 21 km total: 5 km easy, 2 × 4 km @ controlled HM-support effort with 1 km easy jog, then easy to 21 km."
+        },
+        {
+          "date": "2026-09-13",
+          "original": "recovery: 8 km very easy recovery after Saturday’s quality long run; no strides.",
+          "updated": "recovery: 7 km very easy recovery after Saturday’s quality long run; no strides."
+        },
+        {
+          "date": "2026-09-16",
+          "original": "recovery: 10 km relaxed recovery/easy running after Tuesday quality.",
+          "updated": "recovery: 9 km relaxed recovery/easy running after Tuesday quality."
+        },
+        {
+          "date": "2026-09-17",
+          "original": "easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "easy: 10 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout."
+        },
+        {
+          "date": "2026-09-19",
+          "original": "recovery: 8 km very easy; no pace objective.",
+          "updated": "recovery: 7 km very easy; no pace objective."
+        },
+        {
+          "date": "2026-09-20",
+          "original": "long run: 16 km relaxed on gently rolling terrain; no progression and no hard descending.",
+          "updated": "long run: 16 km relaxed on gently rolling terrain; no progression and no hard descending."
+        },
+        {
+          "date": "2026-09-23",
+          "original": "recovery: 10 km relaxed recovery/easy running after Tuesday quality.",
+          "updated": "recovery: 9 km relaxed recovery/easy running after Tuesday quality."
+        },
+        {
+          "date": "2026-09-24",
+          "original": "easy: 8 km easy on gently rolling terrain; no hill sprints.",
+          "updated": "easy: 7 km easy on gently rolling terrain; no hill sprints."
+        },
+        {
+          "date": "2026-09-25",
+          "original": "easy + strides: 7 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery.",
+          "updated": "easy + strides: 6 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery."
+        }
+      ],
+      "reason": "New synchronized training and recovery assessment."
+    },
+    {
+      "changed_at": "2026-09-12T11:52:30.951972+00:00",
+      "effective_date": "2026-09-12",
+      "changes": [
+        {
+          "date": "2026-09-12",
+          "original": "long run with controlled blocks: 21 km total: 5 km easy, 2 × 4 km @ controlled HM-support effort with 1 km easy jog, then easy to 21 km.",
+          "updated": "rest: Full non-running recovery day after the bike transfer and Friday relay session. Optional walking and 10–15 min gentle mobility only."
+        },
+        {
+          "date": "2026-09-13",
+          "original": "recovery: 7 km very easy recovery after Saturday’s quality long run; no strides.",
+          "updated": "recovery: 8 km very easy and flat; no strides, hills, or pace objective."
+        },
+        {
+          "date": "2026-09-15",
+          "original": "HM-specific: 3 km easy; drills + strides; 8 km continuous at controlled HM-specific effort; 3 km cool-down.",
+          "updated": "HM-specific primer: 3 km easy; drills + 4 strides; 2 × 3 km at controlled HM effort with 1 km easy jog; 3 km cool-down."
+        },
+        {
+          "date": "2026-09-16",
+          "original": "recovery: 9 km relaxed recovery/easy running after Tuesday quality.",
+          "updated": "recovery: 7 km very easy, flat recovery; no strides."
+        },
+        {
+          "date": "2026-09-17",
+          "original": "easy: 10 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.",
+          "updated": "Vienna Night Run — controlled 5 km B-race: 2 km warm-up; drills + 4 strides; 5 km Vienna Night Run; 2 km cool-down if convenient. Run it progressively: first km 3:27–3:30/km, km 2–4 at 3:23–3:25/km, then only press the final km if mechanics stay smooth."
+        },
+        {
+          "date": "2026-09-18",
+          "original": "running economy: 3 km easy; drills + strides; 8 × 400 m controlled fast with 200 m easy jog; 2 km cool-down.",
+          "updated": "rest: Full rest from running after the Night Run. Optional walking and gentle mobility only."
+        },
+        {
+          "date": "2026-09-20",
+          "original": "long run: 16 km relaxed on gently rolling terrain; no progression and no hard descending.",
+          "updated": "long run: 14 km relaxed and mostly flat; no progression, fast finish, or hard descending."
+        },
+        {
+          "date": "2026-09-22",
+          "original": "HM-specific tune-up: 3 km easy; drills + strides; 3 × 2 km @ goal HM pace; 2:00 easy jog; 2 km cool-down.",
+          "updated": "HM-specific tune-up: 3 km easy; drills + strides; 2 × 2 km at goal HM pace with 2:00 easy jog; 2–3 km cool-down."
+        }
+      ],
+      "reason": "New synchronized training and recovery assessment."
+    },
+    {
+      "changed_at": "2026-09-12T12:25:52.417167+00:00",
+      "effective_date": "2026-09-12",
+      "changes": [
+        {
+          "date": "2026-09-15",
+          "original": "HM-specific primer: 3 km easy; drills + 4 strides; 2 × 3 km at controlled HM effort with 1 km easy jog; 3 km cool-down.",
+          "updated": "HM-specific primer: 3 km easy; drills + 4 strides; 2 × 2 km at controlled HM effort with 1 km easy jog; 3 km cool-down."
+        },
+        {
+          "date": "2026-09-17",
+          "original": "Vienna Night Run — controlled 5 km B-race: 2 km warm-up; drills + 4 strides; 5 km Vienna Night Run; 2 km cool-down if convenient. Run it progressively: first km 3:27–3:30/km, km 2–4 at 3:23–3:25/km, then only press the final km if mechanics stay smooth.",
+          "updated": "Vienna Night Run — controlled 5 km B-race: 2 km warm-up; drills + 4 strides; 5 km Vienna Night Run; 2 km cool-down if convenient. Run it progressively: first km 3:25–3:27/km, km 2–4 at 3:20–3:22/km, then hold form through the final km without a finishing sprint."
+        }
+      ],
+      "reason": "New synchronized training and recovery assessment."
+    },
+    {
+      "changed_at": "2026-09-12T12:30:25.638011+00:00",
+      "effective_date": "2026-09-12",
+      "changes": [
+        {
+          "date": "2026-09-13",
+          "original": "recovery: 8 km very easy and flat; no strides, hills, or pace objective.",
+          "updated": "easy endurance: 14 km genuinely easy and mostly flat; no strides, hills, fast finish, or pace objective."
         }
       ],
       "reason": "New synchronized training and recovery assessment."

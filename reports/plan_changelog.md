@@ -651,3 +651,127 @@
 - Original: easy: 12 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.
 - Updated: easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.
 - Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+## PLAN CHANGE — 12 Sep 2026
+
+### 2026-09-12
+
+- Original: long run with controlled blocks: 21 km total: 5 km easy, 2 × 4 km @ controlled HM-support effort with 1 km easy jog, then easy to 21 km.
+- Updated: long run with controlled blocks: 21 km total: 5 km easy, 2 × 4 km @ controlled HM-support effort with 1 km easy jog, then easy to 21 km.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-13
+
+- Original: recovery: 8 km very easy recovery after Saturday’s quality long run; no strides.
+- Updated: recovery: 7 km very easy recovery after Saturday’s quality long run; no strides.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-16
+
+- Original: recovery: 10 km relaxed recovery/easy running after Tuesday quality.
+- Updated: recovery: 9 km relaxed recovery/easy running after Tuesday quality.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-17
+
+- Original: easy: 13 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.
+- Updated: easy: 10 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-19
+
+- Original: recovery: 8 km very easy; no pace objective.
+- Updated: recovery: 7 km very easy; no pace objective.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-20
+
+- Original: long run: 16 km relaxed on gently rolling terrain; no progression and no hard descending.
+- Updated: long run: 16 km relaxed on gently rolling terrain; no progression and no hard descending.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-23
+
+- Original: recovery: 10 km relaxed recovery/easy running after Tuesday quality.
+- Updated: recovery: 9 km relaxed recovery/easy running after Tuesday quality.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-24
+
+- Original: easy: 8 km easy on gently rolling terrain; no hill sprints.
+- Updated: easy: 7 km easy on gently rolling terrain; no hill sprints.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-25
+
+- Original: easy + strides: 7 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery.
+- Updated: easy + strides: 6 km easy, then 6 × 15–20 s relaxed strides on flat ground with full recovery.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+## PLAN CHANGE — 12 Sep 2026
+
+### 2026-09-12
+
+- Original: long run with controlled blocks: 21 km total: 5 km easy, 2 × 4 km @ controlled HM-support effort with 1 km easy jog, then easy to 21 km.
+- Updated: rest: Full non-running recovery day after the bike transfer and Friday relay session. Optional walking and 10–15 min gentle mobility only.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-13
+
+- Original: recovery: 7 km very easy recovery after Saturday’s quality long run; no strides.
+- Updated: recovery: 8 km very easy and flat; no strides, hills, or pace objective.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-15
+
+- Original: HM-specific: 3 km easy; drills + strides; 8 km continuous at controlled HM-specific effort; 3 km cool-down.
+- Updated: HM-specific primer: 3 km easy; drills + 4 strides; 2 × 3 km at controlled HM effort with 1 km easy jog; 3 km cool-down.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-16
+
+- Original: recovery: 9 km relaxed recovery/easy running after Tuesday quality.
+- Updated: recovery: 7 km very easy, flat recovery; no strides.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-17
+
+- Original: easy: 10 km easy Z2 on rolling terrain. Keep every climb controlled; this is not a hill workout.
+- Updated: Vienna Night Run — controlled 5 km B-race: 2 km warm-up; drills + 4 strides; 5 km Vienna Night Run; 2 km cool-down if convenient. Run it progressively: first km 3:27–3:30/km, km 2–4 at 3:23–3:25/km, then only press the final km if mechanics stay smooth.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-18
+
+- Original: running economy: 3 km easy; drills + strides; 8 × 400 m controlled fast with 200 m easy jog; 2 km cool-down.
+- Updated: rest: Full rest from running after the Night Run. Optional walking and gentle mobility only.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-20
+
+- Original: long run: 16 km relaxed on gently rolling terrain; no progression and no hard descending.
+- Updated: long run: 14 km relaxed and mostly flat; no progression, fast finish, or hard descending.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-22
+
+- Original: HM-specific tune-up: 3 km easy; drills + strides; 3 × 2 km @ goal HM pace; 2:00 easy jog; 2 km cool-down.
+- Updated: HM-specific tune-up: 3 km easy; drills + strides; 2 × 2 km at goal HM pace with 2:00 easy jog; 2–3 km cool-down.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+## PLAN CHANGE — 12 Sep 2026
+
+### 2026-09-15
+
+- Original: HM-specific primer: 3 km easy; drills + 4 strides; 2 × 3 km at controlled HM effort with 1 km easy jog; 3 km cool-down.
+- Updated: HM-specific primer: 3 km easy; drills + 4 strides; 2 × 2 km at controlled HM effort with 1 km easy jog; 3 km cool-down.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+
+### 2026-09-17
+
+- Original: Vienna Night Run — controlled 5 km B-race: 2 km warm-up; drills + 4 strides; 5 km Vienna Night Run; 2 km cool-down if convenient. Run it progressively: first km 3:27–3:30/km, km 2–4 at 3:23–3:25/km, then only press the final km if mechanics stay smooth.
+- Updated: Vienna Night Run — controlled 5 km B-race: 2 km warm-up; drills + 4 strides; 5 km Vienna Night Run; 2 km cool-down if convenient. Run it progressively: first km 3:25–3:27/km, km 2–4 at 3:20–3:22/km, then hold form through the final km without a finishing sprint.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
+## PLAN CHANGE — 12 Sep 2026
+
+### 2026-09-13
+
+- Original: recovery: 8 km very easy and flat; no strides, hills, or pace objective.
+- Updated: easy endurance: 14 km genuinely easy and mostly flat; no strides, hills, fast finish, or pace objective.
+- Reason: Recalculated from actual completion, load, fitness and fatigue signals.
